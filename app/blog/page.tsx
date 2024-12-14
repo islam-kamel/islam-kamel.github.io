@@ -1,9 +1,9 @@
-import { title } from "@/components/primitives";
+import ComingSoon from "@/components/ComingSoon";
 
 export default function BlogPage() {
   return (
-    <div>
-      <h1 className={title()}>Blog</h1>
+    <div className={"flex-col flex justify-center items-center h-full"}>
+      <ComingSoon />
     </div>
   );
 }

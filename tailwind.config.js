@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/theme"
+import { nextui } from "@nextui-org/theme";
 
 /** @type {import("tailwindcss").Config} */
 export default {
@@ -49,6 +49,7 @@ export default {
           800: "#212828",
           900: "#151919",
         },
+        linkedin: "#0077B5",
         black: "#000000",
         white: "#FFFFFF",
       },
@@ -60,9 +61,5 @@ export default {
     },
   },
   darkMode: "class",
-  plugins: [
-    nextui({
-      themes: {},
-    }),
-  ],
-}
+  plugins: [nextui()],
+};
