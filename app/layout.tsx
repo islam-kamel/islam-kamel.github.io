@@ -16,6 +16,8 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
   },
+  keywords:
+    "Islam Kamel, Frontend Developer, Full-Stack Developer, React Developer, Next.js Developer, TypeScript Developer, Django Developer, Web Developer CV, Web Developer Resume, ReactJS, Next.js, TypeScript, Django, Flask, ECharts, Chart.js, react-pdf, SheetJS, Vite, Web Workers, socket.io, Responsive Web Design, UI Developer, Portfolio",
   description: siteConfig.description,
   icons: [
     {
@@ -58,13 +60,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="min-h-screen w-full relative">
-            <div
-              className="absolute inset-0 z-0 bg-[radial-gradient(125%_125%_at_50%_10%,theme(colors.black)_40%,theme(colors.zinc.900)_100%)]"
-              // style={{
-              //   background:
-              //     "radial-gradient(125% 125% at 50% 10%, hsla(var(--ik-background)) 40%, #2b0707 100%)",
-              // }}
-            />
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(125%_125%_at_50%_10%,theme(colors.black)_40%,theme(colors.zinc.900)_100%)]" />
 
             <div className="relative grid auto-rows-max gap-4  ">
               <Navbar />
