@@ -15,5 +15,5 @@ export const Signature = (props: ImageProps) => {
     return null;
   }
 
-  return <Image src={`logo-${theme?.toString()}.svg`} width={34} {...props} />;
+  return <Image src={`logo-${theme?.toString()}.svg`} width={50} {...props} />;
 };

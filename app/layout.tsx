@@ -1,14 +1,13 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
-import { Image } from "@nextui-org/image";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontLogo, fontSans, fontTitle } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
-import { Signature } from "@/components/Signature";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -16,16 +15,28 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  icons: {
-    icon: "/favicon.ico",
-  },
+  manifest: "/manifest.json",
+  icons: [
+    {
+      url: "/favicon.png",
+      rel: "icon",
+      type: "image/png",
+    },
+    {
+      url: "/favicon.svg",
+      rel: "alternate icon",
+      type: "image/svg+xml",
+    },
+    {
+      url: "/apple-icon.png",
+      rel: "apple-touch-icon",
+      sizes: "192x192",
+    },
+  ],
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "black" }],
 };
 
 export default function RootLayout({
@@ -44,36 +55,21 @@ export default function RootLayout({
           fontLogo.variable
         )}
       >
-        <div
-          className={
-            "fixed hidden dark:md:block dark:opacity-70 -top-[15%] -left-[10%] 2xl:-top-[20%]   z-0 rotate-12"
-          }
-        >
-          <Image
-            className={
-              "relative z-10 opacity-0 shadow-black/5 data-[loaded=true]:opacity-55 shadow-none transition-transform-opacity motion-reduce:transition-none !duration-300 rounded-large "
-            }
-            src={"landing-bg.png"}
-          />
-        </div>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+          <div className="min-h-screen w-full relative">
+            <div
+              className="absolute inset-0 z-0"
+              style={{
+                background:
+                  "radial-gradient(125% 125% at 50% 10%, hsla(var(--ik-background)) 40%, #2b0707 100%)",
+              }}
+            />
+
+            <div className="relative grid auto-rows-max gap-4  ">
+              <Navbar />
               {children}
-            </main>
-            <footer className="w-full flex items-center justify-end py-3 px-3">
-              <div className="flex items-center gap-1 text-current min-h-[32.38px]">
-                <span className="text-default-600">Powered by</span>
-                <div className={"min-w-[34px]"}>
-                  <Signature
-                    className={
-                      "data-[loaded=true]:opacity-100 opacity-0  transition-transform-opacity motion-reduce:transition-none"
-                    }
-                  />
-                </div>
-              </div>
-            </footer>
+              <Footer />
+            </div>
           </div>
         </Providers>
       </body>

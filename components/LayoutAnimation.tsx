@@ -1,23 +1,34 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useId } from "react";
+import { AnimatePresence, motion, MotionProps } from "framer-motion";
 
-interface LayoutAnimationProps {
+interface LayoutAnimationProps extends MotionProps {
   children: React.ReactNode;
   className?: string;
 }
 
-const LayoutAnimation = ({ children, className }: LayoutAnimationProps) => {
+const LayoutAnimation = ({
+  children,
+  className,
+  ...props
+}: LayoutAnimationProps) => {
+  const id = useId();
+
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      className={className}
-      exit={{ opacity: 0 }}
-      initial={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-    >
-      {children}
-    </motion.div>
+    <AnimatePresence>
+      <motion.div
+        key={id}
+        className={className}
+        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true, amount: 0.5 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        {...props}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

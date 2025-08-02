@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+    scroll-padding-top: 70px; /* Replace 64px with your navbar height */
+}
+
+
+.draw {
+    stroke-dasharray: 445.7563781738281;
+    stroke-dashoffset: 445.7563781738281;
+    animation: drawText 2s ease forwards;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-duration: 60s;
+}
+
+.logo:hover {
+    .draw {
+        stroke: theme("colors.primary.500");
+        transition: all 0.2s ease;
+    }
+}
+
+
+
+@keyframes drawText {
+    0% {
+        stroke-dashoffset: 445.7563781738281;
+    }
+
+    3% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
