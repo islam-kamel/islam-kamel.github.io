@@ -1,6 +1,8 @@
 import "@/styles/globals.css";
+import "@/styles/scrollbar.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 import { Providers } from "./providers";
 
@@ -15,7 +17,6 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  manifest: "/manifest.json",
   icons: [
     {
       url: "/favicon.png",
@@ -58,11 +59,11 @@ export default function RootLayout({
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="min-h-screen w-full relative">
             <div
-              className="absolute inset-0 z-0"
-              style={{
-                background:
-                  "radial-gradient(125% 125% at 50% 10%, hsla(var(--ik-background)) 40%, #2b0707 100%)",
-              }}
+              className="absolute inset-0 z-0 bg-[radial-gradient(125%_125%_at_50%_10%,theme(colors.black)_40%,theme(colors.zinc.900)_100%)]"
+              // style={{
+              //   background:
+              //     "radial-gradient(125% 125% at 50% 10%, hsla(var(--ik-background)) 40%, #2b0707 100%)",
+              // }}
             />
 
             <div className="relative grid auto-rows-max gap-4  ">
@@ -72,6 +73,7 @@ export default function RootLayout({
             </div>
           </div>
         </Providers>
+        <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
       </body>
     </html>
   );

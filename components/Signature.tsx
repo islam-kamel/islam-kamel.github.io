@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Image, ImageProps } from "@nextui-org/image";
+import { Image, ImageProps } from "@heroui/image";
 import { useTheme } from "next-themes";
 
 export const Signature = (props: ImageProps) => {

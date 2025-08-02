@@ -76,6 +76,7 @@ const cv = {
       "ReactJS / Next.js",
       "TypeScript",
       "Vite",
+      "Monorepo",
       "State Management & Custom Hooks",
       "Data Visualization (ECharts, Chart.js)",
       "PDF Generation & Dynamic Reports (react-pdf, react-pdf-html)",
@@ -95,7 +96,7 @@ const cv = {
       company: "Femto Security",
       role: "Frontend Developer",
       duration: "April 2023 – Present",
-      location: "United Arab Emirates",
+      location: "UAE",
       details: [
         "Designed and implemented complex interactive data visualizations using ECharts and Chart.js to surface security metrics and engagement statistics.",
         "Built and optimized dynamic PDF reports (e.g., engagement reports, VAT invoices) using react-pdf and custom HTML-to-PDF conversion pipelines, ensuring accurate pagination, table of contents, and performance under large data.",

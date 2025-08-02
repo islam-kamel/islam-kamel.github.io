@@ -1,11 +1,12 @@
-import { Link } from "@nextui-org/link";
-import { button as buttonStyles } from "@nextui-org/theme";
+import { Link } from "@heroui/link";
+import { button as buttonStyles } from "@heroui/theme";
 import { Icon } from "@iconify/react";
 
 import { subtitle, title } from "@/components/primitives";
 import Animate from "@/components/animate";
 import { cv } from "@/config/cv";
 import DownPageIndicator from "@/components/down-page-indicator";
+import WorkDetails from "@/components/work-details";
 
 export default function Home() {
   return (
@@ -181,7 +182,16 @@ export default function Home() {
               {cv.experience.map((exp, idx) => (
                 <li key={idx} className={idx > 0 ? "mt-2" : ""}>
                   <Animate transition={{ delay: idx * 0.1 }}>
-                    <strong>{exp.company}</strong>
+                    <WorkDetails
+                      className={"flex gap-1 items-center justify-center"}
+                      company={exp.company}
+                      details={exp.details}
+                    >
+                      <div className={" hover:text-primary transition"}>
+                        <strong className={""}>{exp.company}</strong>
+                      </div>
+                      <Icon icon={"mynaui:click-solid"} />
+                    </WorkDetails>
                   </Animate>
                   <Animate transition={{ delay: idx * 0.2 }}>
                     {exp.role}

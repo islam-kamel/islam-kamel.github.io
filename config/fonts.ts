@@ -1,4 +1,8 @@
-import { Nunito as FontMono, Roboto as FontSans, Sacramento as FontLogo } from "next/font/google";
+import {
+  Nunito as FontMono,
+  Roboto as FontSans,
+  Sacramento as FontLogo,
+} from "next/font/google";
 
 export const fontTitle = FontSans({
   subsets: ["latin"],
@@ -15,5 +19,5 @@ export const fontSans = FontMono({
 export const fontLogo = FontLogo({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-logo"
-})
+  variable: "--font-logo",
+});
