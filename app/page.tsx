@@ -11,7 +11,7 @@ import WorkDetails from "@/components/work-details";
 export default function Home() {
   return (
     <div className={"container"}>
-      <div
+      <section
         className={
           "grid grid-rows-1 auto-rows-max max-h-[900px] h-[calc(100svh-64px)]"
         }
@@ -20,7 +20,7 @@ export default function Home() {
           <div className="inline-block max-w-xl text-center justify-center">
             <Animate
               animate={{ opacity: 1 }}
-              as={"span"}
+              as={"h1"}
               className={title()}
               initial={{ opacity: 0 }}
             >
@@ -29,7 +29,7 @@ export default function Home() {
             <div>
               <Animate
                 animate={{ opacity: 1 }}
-                as={"span"}
+                as={"p"}
                 className={title({ color: "yellow" })}
                 initial={{ opacity: 0 }}
                 transition={{ delay: 0.1 }}
@@ -38,11 +38,11 @@ export default function Home() {
               </Animate>
             </div>
             <Animate transition={{ delay: 0.2 }}>
-              <div className={subtitle()}>
+              <p className={subtitle()}>
                 Passionate about continuous learning and skill development,
                 always striving to achieve the best results through teamwork and
                 collaboration.
-              </div>
+              </p>
             </Animate>
           </div>
 
@@ -56,6 +56,7 @@ export default function Home() {
                   class: "text-white bg-linkedin",
                 })}
                 href="https://www.linkedin.com/in/islam-al-saghir/"
+                title={"linkedin"}
               >
                 <Icon
                   className={"text-xl"}
@@ -70,6 +71,7 @@ export default function Home() {
                   radius: "full",
                 })}
                 href="https://github.com/islam-kamel"
+                title={"github"}
               >
                 <Icon className={"text-2xl"} icon={"mdi:github"} />
                 GitHub
@@ -79,7 +81,7 @@ export default function Home() {
 
           <DownPageIndicator />
         </Animate>
-      </div>
+      </section>
       <Animate as={"main"} className={"mx-auto max-w-3xl mt-5"}>
         <div
           className="bg-content1/40 shadow rounded-lg p-6 backdrop-blur-2xl border border-default"
