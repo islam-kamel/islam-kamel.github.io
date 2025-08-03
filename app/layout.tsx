@@ -50,7 +50,6 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head />
-      <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
@@ -59,6 +58,7 @@ export default function RootLayout({
           fontLogo.variable
         )}
       >
+        <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="min-h-screen w-full relative">
             <div className="absolute inset-0 z-0 bg-[radial-gradient(125%_125%_at_50%_10%,theme(colors.black)_40%,theme(colors.zinc.900)_100%)]" />
