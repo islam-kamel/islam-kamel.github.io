@@ -7,6 +7,7 @@ import Animate from "@/components/animate";
 import { cv } from "@/config/cv";
 import DownPageIndicator from "@/components/down-page-indicator";
 import WorkDetails from "@/components/work-details";
+import { siteConfig } from "@/config/site";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
               as={"h1"}
               className={title()}
               initial={{ opacity: 0 }}
+              title={siteConfig.name}
             >
               Islam Kamel
             </Animate>

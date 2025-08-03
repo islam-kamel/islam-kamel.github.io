@@ -50,6 +50,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head />
+      <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
@@ -69,7 +70,6 @@ export default function RootLayout({
             </div>
           </div>
         </Providers>
-        <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
       </body>
     </html>
   );

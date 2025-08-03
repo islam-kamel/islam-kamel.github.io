@@ -10,10 +10,10 @@ html {
 .draw {
     stroke-dasharray: 445.7563781738281;
     stroke-dashoffset: 445.7563781738281;
-    animation: drawText 2s ease forwards;
+    animation: drawText 4s ease forwards;
     animation-delay: 0s;
     animation-iteration-count: infinite;
-    animation-duration: 60s;
+    animation-duration: 30s;
 }
 
 .logo:hover {
@@ -30,7 +30,7 @@ html {
         stroke-dashoffset: 445.7563781738281;
     }
 
-    3% {
+    10% {
         stroke-dashoffset: 0;
     }
     100% {
