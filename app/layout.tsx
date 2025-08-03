@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import "@/styles/scrollbar.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
-import { GoogleTagManager } from "@next/third-parties/google";
 
 import { Providers } from "./providers";
 
@@ -58,7 +57,17 @@ export default function RootLayout({
           fontLogo.variable
         )}
       >
-        <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
+        {/*Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            height="0"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-T3GSTK22"
+            style={{ display: "none", visibility: "hidden" }}
+            width="0"
+          />
+        </noscript>
+        {/*End Google Tag Manager (noscript)*/}
+        {/*<GoogleTagManager gtmId={"GTM-T3GSTK22"} />*/}
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="min-h-screen w-full relative">
             <div className="absolute inset-0 z-0 bg-[radial-gradient(125%_125%_at_50%_10%,theme(colors.black)_40%,theme(colors.zinc.900)_100%)]" />
