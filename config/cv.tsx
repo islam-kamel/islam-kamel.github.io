@@ -68,7 +68,7 @@ const cv = {
   },
   summary: {
     label: "Summary",
-    value: `Software Engineer with professional experience building scalable, performant, and maintainable web applications end to end. Currently at Femto Security, working across the stack: complex React/Next.js interfaces, LLM-powered automation pipelines, technical SEO and structured data, real-time features, and backend performance diagnostics. Strong foundation in TypeScript, Python, state management, asynchronous patterns (web workers, sockets), and backend integration with Django/Flask. Skilled in designing interactive data visualizations, optimizing PDF/report pipelines, and improving UX in data-heavy admin tools. Comfortable working in agile environments, debugging intricate UI/UX issues, and collaborating across teams to ship secure, user-focused features.`,
+    value: `Software Engineer with professional experience building scalable, performant, and maintainable web applications end to end. Currently working across the stack: React/Next.js interfaces, LLM-powered automation pipelines, technical SEO and structured data, real-time features, and backend performance diagnostics. Strong foundation in TypeScript, Python, state management, asynchronous patterns (web workers, sockets), and backend integration with Django/Flask. Skilled in designing interactive data visualizations, optimizing PDF/report pipelines, and improving UX in data-heavy admin tools. Comfortable working in agile environments, debugging intricate UI/UX issues, and collaborating across teams to ship secure, user-focused features.`,
   },
   skills: {
     label: "Skills",
