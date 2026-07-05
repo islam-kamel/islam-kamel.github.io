@@ -1,6 +1,0 @@
-#User-Agent: *
-#Disallow: /
-User-Agent: *
-Allow: /
-Disallow: /_next/
-Disallow: /_cdn-cgi/

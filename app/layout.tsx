@@ -3,7 +3,6 @@ import "@/styles/scrollbar.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 import { GoogleTagManager } from "@next/third-parties/google";
-import Script from "next/script";
 
 import { Providers } from "./providers";
 
@@ -136,12 +135,11 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head>
-        <Script
+        <script
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(LD_JSON).replace(/</g, "\\u003c"),
           }}
           id="ld-json-person"
-          strategy="afterInteractive"
           type="application/ld+json"
         />
       </head>
