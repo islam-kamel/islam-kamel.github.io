@@ -68,13 +68,16 @@ const cv = {
   },
   summary: {
     label: "Summary",
-    value: `Full-stack web developer with professional experience building scalable, performant, and maintainable applications. Currently contributing as a Frontend Developer at Femto Security, delivering complex interfaces and document generation tooling using React, Next.js, ECharts, react-pdf, and modern build tooling like Vite. Strong foundation in TypeScript, state management, asynchronous patterns (web workers, sockets), and backend integration with Django/Flask. Skilled in designing interactive data visualizations, optimizing PDF/report pipelines, and improving UX in data-heavy admin tools. Comfortable working in agile environments, debugging intricate UI/UX issues, and collaborating across teams to ship secure, user-focused features.`,
+    value: `Software Engineer with professional experience building scalable, performant, and maintainable web applications end to end. Currently at Femto Security, working across the stack: complex React/Next.js interfaces, LLM-powered automation pipelines, technical SEO and structured data, real-time features, and backend performance diagnostics. Strong foundation in TypeScript, Python, state management, asynchronous patterns (web workers, sockets), and backend integration with Django/Flask. Skilled in designing interactive data visualizations, optimizing PDF/report pipelines, and improving UX in data-heavy admin tools. Comfortable working in agile environments, debugging intricate UI/UX issues, and collaborating across teams to ship secure, user-focused features.`,
   },
   skills: {
     label: "Skills",
     items: [
       "ReactJS / Next.js",
       "TypeScript",
+      "Python",
+      "LLM Integration & Automation Pipelines",
+      "Next.js App Router & Technical SEO",
       "Vite",
       "Monorepo",
       "State Management & Custom Hooks",
@@ -94,18 +97,20 @@ const cv = {
   experience: [
     {
       company: "Femto Security",
-      role: "Frontend Developer",
+      role: "Software Engineer",
       duration: "April 2023 – Present",
       location: "UAE",
       details: [
         "Designed and implemented complex interactive data visualizations using ECharts and Chart.js to surface security metrics and engagement statistics.",
         "Built and optimized dynamic PDF reports (e.g., engagement reports, VAT invoices) using react-pdf and custom HTML-to-PDF conversion pipelines, ensuring accurate pagination, table of contents, and performance under large data.",
-        "Developed reusable custom React hooks for data fetching, state synchronization, and UI behavior; resolved edge cases like label disappearance in tree charts and managed background chart rendering without visible mounts.",
-        "Improved user experience in admin dashboards by enabling seamless row expansion in data tables, handling touch events, and ensuring consistent behavior across custom cell contents.",
-        "Integrated real-time features with socket.io-client to support live updates in phishing simulation campaigns and attack surface monitoring.",
+        "Built LLM-powered automation pipelines with multi-agent research and review workflows for content generation and enrichment.",
+        "Implemented technical SEO for the company web platform: dynamic sitemaps, JSON-LD structured data, and improved indexing.",
+        "Worked across the backend: audited real-time Socket.IO event flows, configured CORS policies, and diagnosed server performance.",
+        "Optimized production builds across Next.js and Vite — bundling strategy (modern/legacy), bundle-size reduction — and resolved SSR hydration issues.",
+        "Developed reusable custom React hooks for data fetching, state synchronization, and UI behavior; improved UX in data-heavy admin dashboards (seamless row expansion, touch events, consistent custom cell behavior).",
+        "Integrated real-time features with socket.io-client to support live updates across product dashboards.",
         "Automated Excel exports with styling and alignment using SheetJS, including conditional formatting and compatibility adjustments.",
-        "Worked on performance tuning, bundling strategy (modern/legacy), and build optimization using Vite and related tooling to reduce bundle size and improve load times.",
-        "Collaborated across backend and product teams to enforce type safety, centralized field renaming conventions, and handled complex forms triggered by plan selection workflows.",
+        "Collaborated across backend and product teams to enforce type safety, centralized field naming conventions, and complex plan-driven form workflows.",
       ],
     },
     {

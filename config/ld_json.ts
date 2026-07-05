@@ -11,7 +11,12 @@ export const LD_JSON: Graph = {
       "@id": `${siteConfig.url}#person`,
       name: "Islam Kamel",
       alternateName: "إسلام كامل",
-      jobTitle: "Frontend & Full-Stack Web Developer",
+      jobTitle: "Software Engineer",
+      worksFor: {
+        "@type": "Organization",
+        name: "Femto Security",
+        url: "https://femtosec.io",
+      },
       telephone: "+201066373279",
       image: `${siteConfig.url}/personal.JPG`,
       address: {
@@ -24,12 +29,11 @@ export const LD_JSON: Graph = {
       url: siteConfig.url,
       email: "mailto:dev.islam.kamel@gmail.com",
       sameAs: [
-        "https://github.com/islam-kamel",
-        "https://www.linkedin.com/in/islam-al-saghir",
+        siteConfig.links.github,
+        siteConfig.links.linkedin,
         "https://x.com/IslamKamelLl",
       ],
-      description:
-        "Frontend & Full-Stack Developer skilled in React, Next.js, TypeScript & Django.",
+      description: siteConfig.description,
       knowsAbout: cv.skills.items,
     },
     {
@@ -42,10 +46,15 @@ export const LD_JSON: Graph = {
       },
       inLanguage: "en",
       image: `${siteConfig.url}/opengraph.png`,
-      sameAs: [
-        "https://github.com/islam-kamel",
-        "https://www.linkedin.com/in/islam-al-saghir",
-      ],
+      sameAs: [siteConfig.links.github, siteConfig.links.linkedin],
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${siteConfig.url}#profilepage`,
+      url: siteConfig.url,
+      name: siteConfig.name,
+      inLanguage: "en",
+      mainEntity: { "@id": `${siteConfig.url}#person` },
     },
   ],
 };

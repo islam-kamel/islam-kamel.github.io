@@ -15,10 +15,10 @@ export interface SiteConfig {
 type Links = "github" | "linkedin";
 
 export const siteConfig: SiteConfig = {
-  name: "Islam Kamel | Frontend & Full-Stack Web Developer CV",
+  name: "Islam Kamel | Software Engineer CV",
   url: "https://islam-kamel.github.io",
   description:
-    "Frontend & Full-Stack Developer skilled in React, Next.js, TypeScript & Django. View Islam Kamel’s CV, skills, projects, and achievements.",
+    "Software Engineer building React, Next.js, TypeScript, LLM-powered pipelines, technical SEO, Python automation, and backend-integrated web apps.",
   navItems: [],
   navMenuItems: [],
   links: {

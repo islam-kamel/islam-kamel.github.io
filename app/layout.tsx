@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   keywords:
-    "Islam Kamel, Frontend Developer, Full-Stack Developer, React Developer, Next.js Developer, TypeScript Developer, Django Developer, Web Developer CV, Web Developer Resume, ReactJS, Next.js, TypeScript, Django, Flask, ECharts, Chart.js, react-pdf, SheetJS, Vite, Web Workers, socket.io, Responsive Web Design, UI Developer, Portfolio",
+    "Islam Kamel, Software Engineer, Full-Stack Developer, React Developer, Next.js Developer, TypeScript Developer, Python Developer, LLM Integration, AI Automation Pipelines, Technical SEO, Django Developer, Web Developer CV, Web Developer Resume, ReactJS, Next.js, TypeScript, Django, Flask, ECharts, Chart.js, react-pdf, SheetJS, Vite, Web Workers, socket.io, Responsive Web Design, UI Developer, Portfolio",
   description: siteConfig.description,
   appleWebApp: {
     title: "Islam Kamel",
