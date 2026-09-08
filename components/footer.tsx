@@ -4,11 +4,13 @@ import { siteConfig } from "@/config/site";
 import { GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
 
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="w-full bg-[#000000] border-t border-[#1A2234] py-8 text-sm text-[#8899A6]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-xs sm:text-sm text-[#8899A6]">
-          Copyright © 2026 Islam Kamel. All rights reserved.
+          Copyright © {year} Islam Kamel. All rights reserved.
         </p>
 
         <div className="flex items-center gap-5">
