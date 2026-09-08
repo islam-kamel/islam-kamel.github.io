@@ -22,10 +22,10 @@ import {
 export default function Home() {
   const capabilities = [
     {
-      title: "Frontend & Next.js Architecture",
+      title: "Frontend Development",
       icon: LayersIcon,
       description:
-        "Architecting high-performance web platforms using Next.js App Router, React Server Components, and modular UI systems. Engineered for sub-second TTFB, streamable hydration, and strict type safety across complex client-side workflows.",
+        "Building responsive, type-safe web applications using Next.js and React. Focused on state management, fast rendering, and clean UI architecture.",
       highlights: [
         "Next.js App Router",
         "React Server Components",
@@ -34,10 +34,10 @@ export default function Home() {
       ],
     },
     {
-      title: "LLM & Multi-Agent Pipelines",
+      title: "AI & LLM Integration",
       icon: BotIcon,
       description:
-        "Designing deterministic AI orchestration pipelines, tool-calling agent networks, and automated data extraction workflows. Implementing robust schema validation, resilient fallback recovery, and context window optimization.",
+        "Integrating LLMs into production environments. Building tool-calling agents, structured data extraction, and reliable AI workflows.",
       highlights: [
         "Multi-Agent Coordination",
         "Tool Execution Systems",
@@ -46,10 +46,10 @@ export default function Home() {
       ],
     },
     {
-      title: "Real-Time Telemetry & WebSockets",
+      title: "Real-Time Systems",
       icon: ActivityIcon,
       description:
-        "Building low-latency event-driven communication channels and live dashboard feeds using WebSockets, socket.io, and background Web Workers for asynchronous state processing without UI thread blocking.",
+        "Implementing WebSockets and background workers for live data feeds, telemetry dashboards, and event-driven architecture.",
       highlights: [
         "Bi-directional Sockets",
         "Event-Driven Architecture",
@@ -58,10 +58,10 @@ export default function Home() {
       ],
     },
     {
-      title: "Dynamic Reports & Data Visualization",
+      title: "Data & Reporting",
       icon: BarChart3Icon,
       description:
-        "Developing rich, interactive telemetry charts and programmatic document generation engines utilizing Apache ECharts, SheetJS spreadsheet manipulation, and client/server-side react-pdf pipelines.",
+        "Creating interactive dashboards with ECharts and generating programmatic documents (PDF/Excel) directly from application state.",
       highlights: [
         "Apache ECharts Analytics",
         "Dynamic PDF Engines",
@@ -73,11 +73,11 @@ export default function Home() {
 
   const techStack = [
     {
-      title: "Frontend Systems",
-      subtitle: "Type-safe interfaces & modern UI primitives",
+      title: "Frontend",
+      subtitle: "Interfaces & Client Logic",
       icon: Code2Icon,
       description:
-        "Crafting responsive, accessible, and high-performance user interfaces with modern component architectures and strict TypeScript integration.",
+        "TypeScript, React, Next.js, Tailwind CSS, and component libraries.",
       chips: [
         "TypeScript",
         "Next.js",
@@ -88,11 +88,11 @@ export default function Home() {
       ],
     },
     {
-      title: "Backend & Integration",
-      subtitle: "Concurrent APIs, messaging & containers",
+      title: "Backend",
+      subtitle: "APIs & Infrastructure",
       icon: ServerIcon,
       description:
-        "Engineering reliable backend services, asynchronous API contracts, real-time message brokers, and containerized deployments.",
+        "Python, Django, Flask, PostgreSQL, Docker, and RESTful APIs.",
       chips: [
         "Python",
         "Django",
@@ -104,11 +104,11 @@ export default function Home() {
       ],
     },
     {
-      title: "Data & Automation",
-      subtitle: "Agent workflows, computation & document engines",
+      title: "Tooling & Integration",
+      subtitle: "Automation & Visualization",
       icon: CpuIcon,
       description:
-        "Orchestrating autonomous LLM pipelines, client-side data parsing, high-density visualization dashboards, and multi-format reporting.",
+        "LLMs, WebSockets, Apache ECharts, SheetJS, and Web Workers.",
       chips: [
         "LLM Orchestration",
         "Multi-Agent Systems",
@@ -153,21 +153,17 @@ export default function Home() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary shadow-[0_0_8px_rgba(217,71,36,0.6)]" />
           </span>
-          <span>Available for high-impact roles</span>
+          <span>Status: Open to opportunities</span>
         </div>
 
         {/* Display Headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.14]">
-          Software Engineer building scalable web architectures, LLM automation,
-          and data-dense interfaces.
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.15] text-balance">
+          Software Engineer focusing on web architecture and AI integration.
         </h1>
 
         {/* Descriptive Paragraph */}
         <p className="text-lg sm:text-xl text-[#8899A6] max-w-3xl leading-relaxed">
-          Specializing in high-performance web applications, event-driven
-          architectures, and AI-assisted workflows. Bridging modern Next.js and
-          React frontend platforms with robust Python backend integrations,
-          multi-agent LLM pipelines, and low-latency real-time WebSockets.
+          I build scalable full-stack applications, real-time systems, and production-ready LLM pipelines. My core stack includes Next.js, React, Python, and PostgreSQL.
         </p>
 
         {/* Direct Links */}
@@ -203,7 +199,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* B. Capabilities Section */}
+      {/* B. What I Do Section */}
       <section
         className="scroll-mt-24 pt-12 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
         id="capabilities"
@@ -217,8 +213,7 @@ export default function Home() {
             Engineering Focus
           </h2>
           <p className="mt-2 text-base text-[#8899A6] max-w-2xl">
-            Delivering robust technical solutions across the entire stack, from
-            high-fidelity user interfaces to distributed systems.
+            My main areas of expertise across the stack.
           </p>
         </div>
 
@@ -278,8 +273,7 @@ export default function Home() {
             Technical Ecosystem
           </h2>
           <p className="mt-2 text-base text-[#8899A6] max-w-2xl">
-            Selected languages, frameworks, and infrastructure used to build
-            resilient production applications.
+            The core languages and tools I use to build applications.
           </p>
         </div>
 
@@ -344,8 +338,7 @@ export default function Home() {
             Education & Certifications
           </h2>
           <p className="mt-2 text-base text-[#8899A6] max-w-2xl">
-            Formal foundations in information systems and rigorous continuous
-            technical certifications.
+            Academic background and ongoing technical training.
           </p>
         </div>
 
@@ -468,12 +461,11 @@ export default function Home() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(217,71,36,0.15)_0%,transparent_70%)] pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_100%)] pointer-events-none" />
 
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-5 relative z-10 text-balance">
-            Let&apos;s build something exceptional.
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4 relative z-10 text-balance">
+            Let&apos;s work together.
           </h2>
           <p className="text-base sm:text-lg text-[#8899A6] max-w-xl mx-auto mb-10 leading-relaxed relative z-10">
-            Open to high-impact software engineering roles, distributed systems
-            challenges, and select engineering collaborations.
+            If you&apos;re looking for an engineer to help build or scale your product, feel free to reach out.
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
