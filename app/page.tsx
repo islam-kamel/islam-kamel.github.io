@@ -147,13 +147,11 @@ export default function Home() {
     <div className="w-full">
       {/* A. Hero Section */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start gap-8">
-        {/* Pulsing Status Badge */}
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-[11px] font-semibold uppercase tracking-widest text-[#8899A6] backdrop-blur-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary shadow-[0_0_8px_rgba(217,71,36,0.6)]" />
-          </span>
-          <span>Status: Open to opportunities</span>
+        {/* Quote Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-xs text-[#8899A6] backdrop-blur-sm">
+          <span className="text-primary font-serif italic leading-none">&quot;</span>
+          <span className="font-medium">Creativity is intelligence having fun.</span>
+          <span className="text-white/40 text-[10px] uppercase tracking-widest ml-1">&mdash; Albert Einstein</span>
         </div>
 
         {/* Display Headline */}
