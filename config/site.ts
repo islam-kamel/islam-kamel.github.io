@@ -14,13 +14,20 @@ export interface SiteConfig {
 
 type Links = "github" | "linkedin";
 
+const navItems: NavItem[] = [
+  { label: "Capabilities", href: "#capabilities" },
+  { label: "Tech Stack", href: "#stack" },
+  { label: "Education", href: "#education" },
+  { label: "Contact", href: "#contact" },
+];
+
 export const siteConfig: SiteConfig = {
-  name: "Islam Kamel | Software Engineer CV",
-  url: "https://islam-kamel.github.io",
+  name: "Islam Kamel | Software Engineer",
+  url: "https://islamkamel.com",
   description:
-    "Software Engineer building React, Next.js, TypeScript, LLM-powered pipelines, technical SEO, Python automation, and backend-integrated web apps.",
-  navItems: [],
-  navMenuItems: [],
+    "Software Engineer building scalable web architectures, LLM automation pipelines, and real-time systems.",
+  navItems,
+  navMenuItems: navItems,
   links: {
     github: "https://github.com/islam-kamel",
     linkedin: "https://www.linkedin.com/in/islam-al-saghir",
