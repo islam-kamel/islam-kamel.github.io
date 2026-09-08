@@ -164,7 +164,7 @@ export default function RootLayout({
           />
         </noscript>
         {/*End Google Tag Manager (noscript)*/}
-        <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
+        <GoogleTagManager gtmId={"GTM-NPFLTNVW"} />
 
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="min-h-screen w-full relative bg-[#000000] text-white flex flex-col justify-between">

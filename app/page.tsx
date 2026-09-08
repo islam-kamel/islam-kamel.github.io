@@ -148,10 +148,16 @@ export default function Home() {
       {/* A. Hero Section */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start gap-8">
         {/* Quote Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-xs text-[#8899A6] backdrop-blur-sm">
-          <span className="text-primary font-serif italic leading-none">&quot;</span>
-          <span className="font-medium">Creativity is intelligence having fun.</span>
-          <span className="text-white/40 text-[10px] uppercase tracking-widest ml-1">&mdash; Albert Einstein</span>
+        <div className="inline-flex items-center gap-0.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-xs text-[#8899A6] backdrop-blur-sm">
+          <span className="text-primary font-serif italic leading-none">
+            &quot;
+          </span>
+          <span className="font-medium">
+            Creativity is intelligence having fun.
+          </span>
+          <span className="text-primary font-serif italic leading-none">
+            &quot;
+          </span>
         </div>
 
         {/* Display Headline */}
@@ -161,7 +167,9 @@ export default function Home() {
 
         {/* Descriptive Paragraph */}
         <p className="text-lg sm:text-xl text-[#8899A6] max-w-3xl leading-relaxed">
-          I build scalable full-stack applications, real-time systems, and production-ready LLM pipelines. My core stack includes Next.js, React, Python, and PostgreSQL.
+          I build scalable full-stack applications, real-time systems, and
+          production-ready LLM pipelines. My core stack includes Next.js, React,
+          Python, and PostgreSQL.
         </p>
 
         {/* Direct Links */}
@@ -463,7 +471,8 @@ export default function Home() {
             Let&apos;s work together.
           </h2>
           <p className="text-base sm:text-lg text-[#8899A6] max-w-xl mx-auto mb-10 leading-relaxed relative z-10">
-            If you&apos;re looking for an engineer to help build or scale your product, feel free to reach out.
+            If you&apos;re looking for an engineer to help build or scale your
+            product, feel free to reach out.
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
