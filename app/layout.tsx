@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   keywords:
-    "Islam Kamel, Software Engineer, Full-Stack Developer, React Developer, Next.js Developer, TypeScript Developer, Python Developer, LLM Integration, AI Automation Pipelines, Technical SEO, Django Developer, Web Developer CV, Web Developer Resume, ReactJS, Next.js, TypeScript, Django, Flask, ECharts, Chart.js, react-pdf, SheetJS, Vite, Web Workers, socket.io, Responsive Web Design, UI Developer, Portfolio",
+    "Islam Kamel, Software Engineer, Senior Software Engineer, Full-Stack Developer, Next.js, React, TypeScript, Python, LLM Orchestration, Multi-Agent Systems, WebSockets, Real-time Systems, ECharts, react-pdf, Docker, Django, PostgreSQL, Software Architecture, High-Performance Web",
   description: siteConfig.description,
   appleWebApp: {
     title: "Islam Kamel",
@@ -39,10 +39,11 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: "Islam Kamel",
+    locale: "en_US",
     type: "website",
     images: [
       {
-        url: `${siteConfig.url}/opengraph.png`, // حضّر صورة 1200x630
+        url: `${siteConfig.url}/opengraph.png`,
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -120,8 +121,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-    { color: "#0d0d0f" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { color: "#000000" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -146,7 +147,7 @@ export default function RootLayout({
 
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-[#000000] text-[#FFFFFF] font-sans antialiased selection:bg-primary/30 selection:text-white",
           fontSans.variable,
           fontTitle.variable,
           fontLogo.variable
@@ -166,14 +167,10 @@ export default function RootLayout({
         <GoogleTagManager gtmId={"GTM-T3GSTK22"} />
 
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="min-h-screen w-full relative">
-            <div className="absolute inset-0 z-0 bg-[radial-gradient(125%_125%_at_50%_10%,theme(colors.black)_40%,theme(colors.zinc.900)_100%)]" />
-
-            <div className="relative grid auto-rows-max gap-4  ">
-              <Navbar />
-              {children}
-              <Footer />
-            </div>
+          <div className="min-h-screen w-full relative bg-[#000000] text-white flex flex-col justify-between">
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
           </div>
         </Providers>
       </body>

@@ -1,6 +1,47 @@
 import * as React from "react";
+import {
+  Activity,
+  ArrowUpRight,
+  Award,
+  BarChart3,
+  Bot,
+  CheckCircle2,
+  Code2,
+  Cpu,
+  Github,
+  GraduationCap,
+  Layers,
+  Linkedin,
+  Mail,
+  Menu,
+  Send,
+  Server,
+  X,
+  type LucideIcon,
+  type LucideProps,
+} from "lucide-react";
 
 import { IconSvgProps } from "@/types";
+
+export type { LucideIcon, LucideProps };
+
+export const LayersIcon = Layers;
+export const BotIcon = Bot;
+export const ActivityIcon = Activity;
+export const BarChart3Icon = BarChart3;
+export const Code2Icon = Code2;
+export const ServerIcon = Server;
+export const CpuIcon = Cpu;
+export const GraduationCapIcon = GraduationCap;
+export const AwardIcon = Award;
+export const CheckCircle2Icon = CheckCircle2;
+export const SendIcon = Send;
+export const MailIcon = Mail;
+export const GithubIcon = Github;
+export const LinkedinIcon = Linkedin;
+export const ArrowUpRightIcon = ArrowUpRight;
+export const MenuIcon = Menu;
+export const CloseIcon = X;
 
 export const Logo: React.FC<IconSvgProps> = (props) => {
   const { size = "40", width } = props;
