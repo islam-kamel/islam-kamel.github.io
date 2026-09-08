@@ -1,10 +1,13 @@
 import * as React from "react";
 import {
   Activity,
+  ArrowLeft,
   ArrowUpRight,
   Award,
   BarChart3,
+  BookOpen,
   Bot,
+  Calendar,
   CheckCircle2,
   Code2,
   Cpu,
@@ -38,6 +41,9 @@ export const CheckCircle2Icon = CheckCircle2;
 export const SendIcon = Send;
 export const MailIcon = Mail;
 export const GithubIcon = Github;
+export const CalendarIcon = Calendar;
+export const BookOpenIcon = BookOpen;
+export const ArrowLeftIcon = ArrowLeft;
 export const LinkedinIcon = Linkedin;
 export const ArrowUpRightIcon = ArrowUpRight;
 export const MenuIcon = Menu;

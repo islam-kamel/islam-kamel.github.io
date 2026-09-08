@@ -37,3 +37,57 @@ html {
         stroke-dashoffset: 0;
     }
 }
+
+/* Blog prose styles */
+.prose-blog h2 {
+    @apply text-2xl font-bold text-white tracking-tight mt-10 mb-3;
+}
+
+.prose-blog h3 {
+    @apply text-xl font-bold text-white tracking-tight mt-8 mb-3;
+}
+
+.prose-blog p {
+    @apply text-base text-[#8899A6] leading-relaxed mb-5;
+}
+
+.prose-blog a {
+    @apply text-primary hover:text-primary-hover underline underline-offset-4 transition-colors;
+}
+
+.prose-blog ul {
+    @apply list-disc list-inside space-y-2 text-[#8899A6] mb-5 ml-2;
+}
+
+.prose-blog ol {
+    @apply list-decimal list-inside space-y-2 text-[#8899A6] mb-5 ml-2;
+}
+
+.prose-blog li {
+    @apply text-base leading-relaxed;
+}
+
+.prose-blog blockquote {
+    @apply border-l-2 border-primary/50 pl-5 my-6 text-[#8899A6] italic;
+}
+
+.prose-blog hr {
+    @apply border-white/[0.06] my-10;
+}
+
+.prose-blog strong {
+    @apply text-white font-semibold;
+}
+
+.prose-blog code {
+    @apply text-primary bg-primary/10 px-1.5 py-0.5 rounded text-[0.9em] font-mono;
+}
+
+/* Code blocks rendered by Shiki */
+.prose-blog pre {
+    @apply my-6 rounded-2xl overflow-x-auto p-5 text-sm border border-white/[0.06];
+}
+
+.prose-blog pre code {
+    @apply bg-transparent p-0 text-inherit;
+}

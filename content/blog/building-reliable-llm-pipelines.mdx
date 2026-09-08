@@ -1,0 +1,166 @@
+---
+title: "Building Reliable LLM Pipelines in Production"
+date: "2025-01-20"
+description: "LLM APIs fail, hallucinate, and return unpredictable output. Here are the patterns I use to make tool-calling agents work reliably in production."
+tags: ["LLM", "AI", "Backend"]
+---
+
+## The reliability problem
+
+LLM APIs are not like regular REST APIs. A database query either works or throws an error. An LLM call can return a 200 with output that is subtly wrong, formatted differently than expected, or completely unrelated to the prompt.
+
+When I started building agent pipelines, I treated the LLM like any other service: call it, parse the response, move on. That worked in demos. In production, with thousands of daily requests, I needed a different approach.
+
+## Structured output with schema validation
+
+The single most impactful change was enforcing output structure. Instead of hoping the model returns valid JSON, I define a schema upfront and validate against it.
+
+```typescript
+import { z } from "zod";
+
+const ExtractionSchema = z.object({
+  entities: z.array(
+    z.object({
+      name: z.string(),
+      type: z.enum(["person", "organization", "location"]),
+      confidence: z.number().min(0).max(1),
+    })
+  ),
+  summary: z.string().max(500),
+});
+
+type Extraction = z.infer<typeof ExtractionSchema>;
+```
+
+The model gets the schema description in the prompt. After the response comes back, I parse it:
+
+```typescript
+function parseResponse(raw: string): Extraction | null {
+  try {
+    const json = JSON.parse(raw);
+    return ExtractionSchema.parse(json);
+  } catch {
+    return null;
+  }
+}
+```
+
+When parsing fails, I retry with a corrective prompt that includes the validation error. This catches ~95% of formatting issues on the second attempt.
+
+## Retry logic that actually helps
+
+Naive retries (just call again with the same prompt) waste tokens and usually produce the same broken output. My retry strategy depends on the failure mode:
+
+```typescript
+async function callWithRetry<T>(
+  fn: () => Promise<T>,
+  validate: (result: T) => boolean,
+  maxRetries = 3
+): Promise<T> {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const result = await fn();
+      if (validate(result)) return result;
+
+      lastError = new Error("Validation failed");
+    } catch (err) {
+      lastError = err as Error;
+
+      // Rate limit: back off exponentially
+      if ((err as { status?: number }).status === 429) {
+        await sleep(Math.pow(2, attempt) * 1000);
+        continue;
+      }
+
+      // Server error: retry immediately
+      if ((err as { status?: number }).status === 500) {
+        continue;
+      }
+
+      // Client error: don't retry
+      throw err;
+    }
+  }
+
+  throw lastError ?? new Error("Max retries exceeded");
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+```
+
+Key decisions:
+- **Rate limits (429):** Exponential backoff. The API is telling you to slow down.
+- **Server errors (500):** Retry immediately. These are usually transient.
+- **Client errors (400):** Do not retry. The request is malformed.
+- **Validation failures:** Retry with a modified prompt that includes the error message.
+
+## Fallback chains
+
+Not every task needs the most capable model. I use a fallback chain: try the fast model first, fall back to the slower one only when needed.
+
+```typescript
+const MODELS = [
+  { name: "gemini-2.0-flash", costPer1k: 0.01 },
+  { name: "gemini-2.5-pro", costPer1k: 0.05 },
+];
+
+async function extractWithFallback(
+  input: string
+): Promise<Extraction> {
+  for (const model of MODELS) {
+    try {
+      const result = await callLLM(model.name, input);
+      const parsed = parseResponse(result);
+
+      if (parsed) return parsed;
+    } catch {
+      console.warn(`${model.name} failed, trying next`);
+    }
+  }
+
+  throw new Error("All models failed");
+}
+```
+
+In practice, the fast model handles ~80% of requests successfully. The remaining 20% go to the more capable model. This cuts costs significantly without losing reliability.
+
+## Logging everything
+
+LLM pipelines are hard to debug without full request/response logs. I log:
+
+- The full prompt sent to the model
+- The raw response
+- The parsed/validated output
+- Latency and token counts
+- Which retry attempt succeeded
+
+This is not optional. When a user reports wrong output, I need to trace exactly what the model received and returned. A structured log entry looks like this:
+
+```typescript
+interface LLMLog {
+  requestId: string;
+  model: string;
+  prompt: string;
+  response: string;
+  parsed: unknown | null;
+  valid: boolean;
+  attempt: number;
+  latencyMs: number;
+  tokens: { input: number; output: number };
+  timestamp: string;
+}
+```
+
+## What I would do differently
+
+If I were starting over, I would use a dedicated orchestration layer (like LangGraph or a simple state machine) instead of chaining function calls. The pipeline logic gets complex fast, and having an explicit graph of states and transitions makes it easier to reason about error recovery.
+
+I would also invest in evaluation earlier. Running a set of test inputs through the pipeline nightly catches regressions before users notice them.
+
+## Summary
+
+Reliable LLM pipelines come down to three things: validate output strictly, retry intelligently, and log everything. The model itself is the easy part. The engineering around it is what makes it production-ready.
