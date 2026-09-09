@@ -354,11 +354,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            <div className="relative z-10 pt-6 mt-6 border-t border-white/[0.06] flex items-center gap-2.5 text-xs font-medium text-[#8899A6]">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary/80 shadow-[0_0_8px_rgba(217,71,36,0.8)]" />
-              <span>Full 4-year undergraduate degree completed</span>
-            </div>
           </div>
 
           {/* Certifications Card */}
@@ -409,11 +404,6 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="relative z-10 pt-6 mt-6 border-t border-white/[0.06] flex items-center gap-2.5 text-xs font-medium text-[#8899A6]">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary/80 shadow-[0_0_8px_rgba(217,71,36,0.8)]" />
-              <span>Verified credentials & specialized tracks</span>
             </div>
           </div>
         </div>
