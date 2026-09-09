@@ -4,6 +4,26 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { codeToHtml } from "shiki";
 
+const HTML_ENTITIES: Record<string, string> = {
+  "&lt;": "<",
+  "&gt;": ">",
+  "&amp;": "&",
+  "&quot;": '"',
+  "&apos;": "'",
+};
+
+function decodeHtmlEntities(text: string): string {
+  return text.replace(
+    /&(?:#x([0-9a-fA-F]+)|#([0-9]+)|([a-zA-Z0-9]+));/g,
+    (match, hex, dec) => {
+      if (hex) return String.fromCodePoint(parseInt(hex, 16));
+      if (dec) return String.fromCodePoint(parseInt(dec, 10));
+
+      return HTML_ENTITIES[match] || match;
+    }
+  );
+}
+
 /**
  * Renders markdown string to styled HTML with Shiki syntax highlighting.
  * Returns a static HTML string (zero client JS).
@@ -21,21 +41,15 @@ export async function renderMarkdown(source: string): Promise<string> {
   // Step 2: Highlight code blocks with Shiki
   // Match <pre><code class="language-xxx">...</code></pre> blocks
   const codeBlockRegex =
-    /<pre><code class="language-(\w+)">([\s\S]*?)<\/code><\/pre>/g;
+    /<pre><code(?: class="language-([a-zA-Z0-9_-]+)")?>([\s\S]*?)<\/code><\/pre>/g;
 
   let match: RegExpExecArray | null;
   const replacements: Array<[string, string]> = [];
 
   while ((match = codeBlockRegex.exec(html)) !== null) {
-    const [fullMatch, lang, rawCode] = match;
-    // Decode HTML entities back to plain text for Shiki
-    const code = rawCode
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&")
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .trim();
+    const [fullMatch, lang = "text", rawCode] = match;
+    // Decode all HTML entities (named, hex, and decimal) back to raw text for Shiki
+    const code = decodeHtmlEntities(rawCode).trim();
 
     const highlighted = await codeToHtml(code, {
       lang,
@@ -46,7 +60,7 @@ export async function renderMarkdown(source: string): Promise<string> {
   }
 
   for (const [original, replacement] of replacements) {
-    html = html.replace(original, replacement);
+    html = html.replace(original, () => replacement);
   }
 
   return html;
