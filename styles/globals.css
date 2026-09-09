@@ -91,3 +91,28 @@ html {
 .prose-blog pre code {
     @apply bg-transparent p-0 text-inherit;
 }
+
+.prose-blog .mermaid-block pre {
+    @apply my-0 p-0 border-0 bg-transparent overflow-visible;
+}
+
+.prose-blog .mermaid-block svg {
+    @apply max-w-full h-auto;
+}
+
+.prose-blog .mermaid-block svg .node rect,
+.prose-blog .mermaid-block svg .node polygon,
+.prose-blog .mermaid-block svg .node path {
+    rx: 8px;
+    ry: 8px;
+}
+
+.prose-blog .mermaid-block svg .cluster rect {
+    rx: 12px;
+    ry: 12px;
+}
+
+.prose-blog .mermaid-block svg .edgeLabel rect {
+    rx: 6px;
+    ry: 6px;
+}

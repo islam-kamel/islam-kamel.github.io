@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/mdx";
 import { ArrowLeftIcon, CalendarIcon } from "@/components/icons";
+import { MermaidRenderer } from "@/components/mermaid-renderer";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -166,6 +167,8 @@ export default async function BlogPostPage({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: html }}
           className="prose-blog"
         />
+
+        {html.includes("mermaid") && <MermaidRenderer />}
 
         {/* Footer navigation */}
         <div className="mt-16 pt-8 border-t border-white/[0.06]">

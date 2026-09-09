@@ -51,6 +51,13 @@ export async function renderMarkdown(source: string): Promise<string> {
     // Decode all HTML entities (named, hex, and decimal) back to raw text for Shiki
     const code = decodeHtmlEntities(rawCode).trim();
 
+    if (lang === "mermaid") {
+      const mermaidHtml = `<div class="mermaid-block my-8 flex justify-center overflow-x-auto "><pre class="mermaid text-sm text-[#8899A6]">${code}</pre></div>`;
+
+      replacements.push([fullMatch, mermaidHtml]);
+      continue;
+    }
+
     const highlighted = await codeToHtml(code, {
       lang,
       theme: "github-dark-default",

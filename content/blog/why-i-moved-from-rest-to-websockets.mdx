@@ -32,11 +32,14 @@ io.on("connection", (socket) => {
   socket.emit("status", getCurrentStatus());
 
   // Push updates only when state changes
-  statusEmitter.on("change", (data) => {
+  const onStatusChange = (data: unknown) => {
     socket.emit("status", data);
-  });
+  };
+
+  statusEmitter.on("change", onStatusChange);
 
   socket.on("disconnect", () => {
+    statusEmitter.off("change", onStatusChange);
     console.log(`Client disconnected: ${socket.id}`);
   });
 });
@@ -68,9 +71,9 @@ export function useStatus() {
 
 ## Tradeoffs I ran into
 
-**Connection management is your problem now.** With REST, every request is independent. With WebSockets, you need to handle reconnection, backoff, and stale connections. `socket.io` handles most of this out of the box, but you still need to think about what happens when a client reconnects after being offline for 5 minutes. Does it get a full state snapshot or just a diff?
+**Connection management is your problem now.** With REST, every request is independent. With WebSockets, you need to handle reconnection, backoff, and stale connections. `socket.io` handles most of this out of the box, but you still need to decide what happens when a client reconnects after being offline: does it get a full state snapshot or just a diff? I went with a full state snapshot on every reconnect. Diffing requires maintaining an in-memory event buffer with sequence numbers and eviction rules. Since our dashboard status payload was only a few kilobytes, sending `getCurrentStatus()` immediately on connect was simpler, stateless on the server, and guaranteed the client never drifted out of sync.
 
-**Load balancers need sticky sessions.** If you are behind a round-robin load balancer, WebSocket upgrade requests can land on a different server than the one holding the connection. I used Redis as a pub/sub adapter to share events across instances:
+**Load balancers need sticky sessions.** If you are behind a round-robin load balancer, WebSocket upgrade requests can land on a different server than the one holding the connection. Sticky sessions (routing a client to the same server instance) and the Redis adapter (letting different server instances broadcast to each other's connected sockets) solve different problems, and in a multi-instance setup you typically need both together. I used Redis as a pub/sub adapter to share events across instances:
 
 ```typescript
 import { createAdapter } from "@socket.io/redis-adapter";
@@ -81,6 +84,34 @@ const subClient = pubClient.duplicate();
 
 await Promise.all([pubClient.connect(), subClient.connect()]);
 io.adapter(createAdapter(pubClient, subClient));
+```
+
+```mermaid
+flowchart TD
+    ClientA["Client A"]
+    ClientB["Client B"]
+
+    subgraph LB["Load Balancer Layer"]
+        Sticky["Sticky Sessions Routing"]
+    end
+
+    subgraph Cluster["Application Cluster"]
+        Server1["Server Instance 1"]
+        Server2["Server Instance 2"]
+    end
+
+    subgraph Bus["Message Broker"]
+        Redis[("Redis Pub/Sub Adapter")]
+    end
+
+    ClientA -->|HTTP Handshake| Sticky
+    ClientB -->|HTTP Handshake| Sticky
+
+    Sticky -->|Pins Connection| Server1
+    Sticky -->|Pins Connection| Server2
+
+    Server1 <-->|Cross-Node Sync| Redis
+    Server2 <-->|Cross-Node Sync| Redis
 ```
 
 **Not everything should be a WebSocket.** I kept one-off actions (triggering a deployment, updating a config) as regular REST calls. WebSockets are for continuous data flow, not for request-response patterns.
