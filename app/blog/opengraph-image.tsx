@@ -67,7 +67,7 @@ export default function Image() {
                   fontFamily: "monospace",
                 }}
               >
-                &lt;IK /&gt;
+                IK
               </span>
               <span
                 style={{
@@ -119,17 +119,6 @@ export default function Image() {
               gap: "16px",
             }}
           >
-            <div
-              style={{
-                color: "#D94724",
-                fontSize: "15px",
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: "0.1em",
-              }}
-            >
-              {"// WRITING & ENGINEERING NOTES"}
-            </div>
             <h1
               style={{
                 fontSize: "56px",
@@ -193,7 +182,7 @@ export default function Image() {
                 letterSpacing: "0.03em",
               }}
             >
-              Islam Kamel · islamkamel.com/blog
+              Islam Kamel - islamkamel.com/blog
             </span>
           </div>
         </div>

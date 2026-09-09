@@ -80,7 +80,7 @@ export default async function Image({
                   fontFamily: "monospace",
                 }}
               >
-                &lt;IK /&gt;
+                IK
               </span>
               <span
                 style={{
@@ -101,7 +101,7 @@ export default async function Image({
                 letterSpacing: "0.08em",
               }}
             >
-              {`// ARTICLE · ${formattedDate}`}
+              {formattedDate}
             </div>
           </div>
 
@@ -175,7 +175,7 @@ export default async function Image({
                 letterSpacing: "0.03em",
               }}
             >
-              Islam Kamel · islamkamel.com
+              Islam Kamel - islamkamel.com
             </span>
           </div>
         </div>

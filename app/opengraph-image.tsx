@@ -67,7 +67,7 @@ export default function Image() {
                   fontFamily: "monospace",
                 }}
               >
-                &lt;IK /&gt;
+                IK
               </span>
               <span
                 style={{
