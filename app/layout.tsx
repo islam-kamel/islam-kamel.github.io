@@ -50,59 +50,37 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/favicon-16x16.png",
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-      },
-      {
-        url: "/favicon-32x32.png",
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-      },
-      {
         url: "/favicon-96x96.png",
         rel: "icon",
         type: "image/png",
         sizes: "96x96",
       },
       {
-        url: "/favicon.svg",
-        rel: "alternate icon",
-        type: "image/svg+xml",
-      },
-      {
-        url: "/favicon.svg",
+        url: "/favicon-48x48.png",
         rel: "icon",
-        type: "image/svg+xml",
+        type: "image/png",
+        sizes: "48x48",
       },
       {
         url: "/favicon.ico",
         rel: "icon",
-        type: "image/x-icon",
+        sizes: "any",
+      },
+      {
+        url: "/favicon.svg",
+        rel: "icon",
+        type: "image/svg+xml",
       },
     ],
     apple: [
-      {
-        url: "/apple-icon.png",
-        rel: "apple-touch-icon",
-        sizes: "192x192",
-      },
       {
         url: "/apple-icon-180x180.png",
         rel: "apple-touch-icon",
         sizes: "180x180",
       },
       {
-        url: "/apple-icon-precomposed.png",
-        rel: "apple-touch-icon-precomposed",
-        sizes: "192x192",
-      },
-      {
-        url: "/android-icon-192x192.png",
-        rel: "icon",
-        type: "image/png",
+        url: "/apple-icon.png",
+        rel: "apple-touch-icon",
         sizes: "192x192",
       },
     ],
