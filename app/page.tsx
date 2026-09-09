@@ -1,6 +1,8 @@
 import React from "react";
+import { Metadata } from "next";
 
 import { siteConfig } from "@/config/site";
+import { LD_JSON } from "@/config/ld_json";
 import {
   ActivityIcon,
   ArrowUpRightIcon,
@@ -18,6 +20,39 @@ import {
   SendIcon,
   ServerIcon,
 } from "@/components/icons";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: siteConfig.name,
+  },
+  description: siteConfig.description,
+  alternates: {
+    canonical: siteConfig.url,
+  },
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: "Islam Kamel",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: `${siteConfig.url}/opengraph.png`,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [`${siteConfig.url}/opengraph.png`],
+    creator: "@IslamKamelLl",
+  },
+};
 
 export default function Home() {
   const capabilities = [
@@ -145,6 +180,13 @@ export default function Home() {
 
   return (
     <div className="w-full">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(LD_JSON).replace(/</g, "\\u003c"),
+        }}
+        id="ld-json-homepage"
+        type="application/ld+json"
+      />
       {/* A. Hero Section */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start gap-8">
         {/* Quote Badge */}

@@ -10,7 +10,6 @@ import { siteConfig } from "@/config/site";
 import { fontLogo, fontSans, fontTitle } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import Footer from "@/components/footer";
-import { LD_JSON } from "@/config/ld_json";
 
 export const metadata: Metadata = {
   title: {
@@ -135,16 +134,6 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(LD_JSON).replace(/</g, "\\u003c"),
-          }}
-          id="ld-json-person"
-          type="application/ld+json"
-        />
-      </head>
-
       <body
         className={clsx(
           "min-h-screen bg-[#000000] text-[#FFFFFF] font-sans antialiased selection:bg-primary/30 selection:text-white",
