@@ -6,8 +6,20 @@
 2. `openGraph.url`, `openGraph.title`, `openGraph.description` must mirror that same page's own title/description — never the default/root metadata.
 3. `twitter.title` / `twitter.description` must mirror the same values.
 4. After adding or editing any page, fetch its rendered `<head>` and confirm canonical/og/twitter values point to *that* page, not the homepage. Treat "matches homepage on a non-home route" as a bug, every time.
-   **Structured data**
-5. Every blog post should include `BlogPosting`/`Article` JSON-LD: `headline`, `description`, `datePublished`, `dateModified`, `author` (Person: Islam Kamel), `mainEntityOfPage` = canonical URL.
+
+**Dynamic Open Graph Images**
+- All routes must generate dynamic Open Graph cards via colocated `opengraph-image.tsx` using `ImageResponse` from `next/og`.
+- For static export (`output: "export"`), always configure:
+  - `export const dynamic = "force-static";`
+  - `export const size = { width: 1200, height: 630 };`
+  - `export const contentType = "image/png";`
+  - `export const alt = "...";`
+- Dynamic routes (`[slug]`) must export `generateStaticParams()` in `opengraph-image.tsx` so Next.js pre-renders all image assets during static build.
+- Never define manual `openGraph.images` or `twitter.images` arrays in page/layout `metadata` objects when `opengraph-image.tsx` is present, to prevent duplicate or conflicting tags.
+- Verification: After adding or modifying any route, inspect the built `<head>` in `out/` to confirm `<meta property="og:image">`, `<meta property="og:image:width">`, `<meta property="og:image:height">`, and `<meta name="twitter:image">` point to that route's own `opengraph-image.png`.
+
+**Structured data**
+5. Every blog post should include `BlogPosting`/`Article` JSON-LD: `headline`, `description`, `datePublished`, `dateModified`, `author` (Person: Islam Kamel), `mainEntityOfPage` = canonical URL, and `image` = `${canonicalUrl}/opengraph-image.png`.
 6. Homepage should include `Person` + `WebSite` JSON-LD.
 
 **Title tags**
