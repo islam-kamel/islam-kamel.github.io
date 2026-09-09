@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { siteConfig } from "@/config/site";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/mdx";
 import { ArrowLeftIcon, CalendarIcon } from "@/components/icons";
@@ -22,10 +23,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   try {
     const post = getPostBySlug(slug);
+    const postUrl = `${siteConfig.url}/blog/${post.slug}`;
 
     return {
-      title: post.title,
+      title: {
+        absolute: post.title,
+      },
       description: post.description,
+      alternates: {
+        canonical: postUrl,
+      },
+      openGraph: {
+        title: post.title,
+        description: post.description,
+        url: postUrl,
+        siteName: "Islam Kamel",
+        locale: "en_US",
+        type: "article",
+        publishedTime: new Date(post.date).toISOString(),
+        authors: ["Islam Kamel"],
+        images: [
+          {
+            url: `${siteConfig.url}/opengraph.png`,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.description,
+        images: [`${siteConfig.url}/opengraph.png`],
+        creator: "@IslamKamelLl",
+      },
     };
   } catch {
     return { title: "Post Not Found" };
@@ -44,9 +76,42 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const html = await renderMarkdown(post.content);
+  const canonicalUrl = `${siteConfig.url}/blog/${post.slug}`;
+
+  const blogPostingLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: new Date(post.date).toISOString(),
+    dateModified: new Date(post.date).toISOString(),
+    author: {
+      "@type": "Person",
+      name: "Islam Kamel",
+      url: siteConfig.url,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Islam Kamel",
+      url: siteConfig.url,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+    url: canonicalUrl,
+    image: `${siteConfig.url}/opengraph.png`,
+  };
 
   return (
     <div className="w-full">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(blogPostingLd).replace(/</g, "\\u003c"),
+        }}
+        id="ld-json-blog-posting"
+        type="application/ld+json"
+      />
       <article className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back link */}
         <Link
