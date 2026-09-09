@@ -1,12 +1,12 @@
 {
   "name": "Islam Kamel",
   "short_name": "Islam Kamel",
-  "start_url": "https://islam-kamel.github.io",
+  "start_url": "https://islamkamel.com",
   "id": "islam-kamel",
   "description": "Islam Kamel — Software Engineer CV",
   "theme_color": "#000000",
   "display": "fullscreen",
-  "scope": "https://islam-kamel.github.io",
+  "scope": "https://islamkamel.com",
   "icons": [
     {
       "src": "\/android-icon-36x36.png",
