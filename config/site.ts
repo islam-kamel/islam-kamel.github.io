@@ -15,11 +15,10 @@ export interface SiteConfig {
 type Links = "github" | "linkedin";
 
 const navItems: NavItem[] = [
-  { label: "Capabilities", href: "#capabilities" },
-  { label: "Tech Stack", href: "#stack" },
-  { label: "Education", href: "#education" },
+  { label: "Capabilities", href: "/#capabilities" },
+  { label: "Education", href: "/#education" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const siteConfig: SiteConfig = {

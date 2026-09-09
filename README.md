@@ -16,11 +16,10 @@
 
 ## 📜 Certifications
 
-- CS50’s Introduction to Computer Science
-- Python: The Big Picture
-- Python Fundamentals
-- Full Stack Development
-- Frontend & Cross-Platform Mobile Development Track
+- CS50’s Introduction to Computer Science (Harvard University)
+- Python Development & Fundamentals (Pluralsight)
+- Full Stack Web Development (Udacity)
+- Frontend & Cross-Platform Mobile Development Track (Information Technology Institute - ITI)
 
 ---
 
