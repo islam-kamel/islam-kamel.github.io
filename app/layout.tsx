@@ -50,6 +50,39 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
+        url: "/favicon.svg",
+        rel: "icon",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/favicon-dark-96x96.png",
+        rel: "icon",
+        type: "image/png",
+        sizes: "96x96",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-dark-48x48.png",
+        rel: "icon",
+        type: "image/png",
+        sizes: "48x48",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-96x96.png",
+        rel: "icon",
+        type: "image/png",
+        sizes: "96x96",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/favicon-48x48.png",
+        rel: "icon",
+        type: "image/png",
+        sizes: "48x48",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
         url: "/favicon-96x96.png",
         rel: "icon",
         type: "image/png",
@@ -65,11 +98,6 @@ export const metadata: Metadata = {
         url: "/favicon.ico",
         rel: "icon",
         sizes: "any",
-      },
-      {
-        url: "/favicon.svg",
-        rel: "icon",
-        type: "image/svg+xml",
       },
     ],
     apple: [
