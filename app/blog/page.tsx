@@ -2,6 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 
+import { siteConfig } from "@/config/site";
 import { getAllPosts } from "@/lib/blog";
 import {
   ArrowUpRightIcon,
@@ -9,10 +10,40 @@ import {
   BookOpenIcon,
 } from "@/components/icons";
 
+const title = `Blog - ${siteConfig.name}`;
+const description =
+  "Technical articles on web architecture, real-time systems, and AI integration.";
+const url = `${siteConfig.url}/blog`;
+
 export const metadata: Metadata = {
   title: "Blog",
-  description:
-    "Technical articles on web architecture, real-time systems, and AI integration.",
+  description,
+  alternates: {
+    canonical: url,
+  },
+  openGraph: {
+    title,
+    description,
+    url,
+    siteName: "Islam Kamel",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: `${siteConfig.url}/opengraph.png`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [`${siteConfig.url}/opengraph.png`],
+    creator: "@IslamKamelLl",
+  },
 };
 
 export default function BlogPage() {
