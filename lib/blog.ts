@@ -7,6 +7,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   date: string;
+  dateModified?: string;
   description: string;
   tags: string[];
   content: string;
@@ -16,6 +17,7 @@ export interface BlogPostMeta {
   slug: string;
   title: string;
   date: string;
+  dateModified?: string;
   description: string;
   tags: string[];
 }
@@ -34,6 +36,7 @@ export function getAllPosts(): BlogPostMeta[] {
       slug,
       title: data.title ?? slug,
       date: data.date ?? "",
+      dateModified: data.dateModified ?? data.date ?? "",
       description: data.description ?? "",
       tags: data.tags ?? [],
     };
@@ -52,6 +55,7 @@ export function getPostBySlug(slug: string): BlogPost {
     slug,
     title: data.title ?? slug,
     date: data.date ?? "",
+    dateModified: data.dateModified ?? data.date ?? "",
     description: data.description ?? "",
     tags: data.tags ?? [],
     content,
