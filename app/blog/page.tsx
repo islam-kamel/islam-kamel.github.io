@@ -12,7 +12,7 @@ import {
 
 const title = `Blog - ${siteConfig.name}`;
 const description =
-  "Technical articles on web architecture, real-time systems, and AI integration.";
+  "Technical articles, reference notes, and architecture patterns.";
 const url = `${siteConfig.url}/blog`;
 
 export const metadata: Metadata = {
@@ -53,8 +53,7 @@ export default function BlogPage() {
             Writing
           </h1>
           <p className="text-base text-[#8899A6] max-w-xl">
-            Notes on problems I have solved, patterns that worked, and lessons
-            from shipping production software.
+            Technical articles, reference notes, and architecture patterns.
           </p>
         </div>
 
@@ -66,9 +65,6 @@ export default function BlogPage() {
               className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden p-6 sm:p-8 block"
               href={`/blog/${post.slug}`}
             >
-              {/* Ambient glow */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(217,71,36,0.1)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
               <div className="relative z-10">
                 {/* Date */}
                 <div className="flex items-center gap-2 text-xs text-[#8899A6] mb-3">

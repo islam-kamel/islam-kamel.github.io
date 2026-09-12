@@ -1,21 +1,21 @@
 ---
-title: "Why I Moved from REST Polling to WebSockets"
+title: "REST Polling vs WebSockets for Real-Time Interfaces"
 date: "2026-09-08"
-description: "Polling a REST endpoint every 2 seconds worked until it didn't. Here is how I migrated a live dashboard to WebSockets and what I learned along the way."
+description: "A technical comparison of REST polling and WebSockets for real-time dashboards, covering connection management, horizontal scaling, and reconnect strategies."
 tags: ["WebSockets", "Real-Time", "Architecture"]
 ---
 
-## The problem with polling
+## The overhead of short polling
 
-I had a telemetry dashboard that polled a `/status` endpoint every 2 seconds. For a single user it was fine. Once 30 operators had it open during a deployment, the backend was handling **900 requests per minute** just for status checks. Most responses were identical to the previous one.
+Short polling queries an HTTP endpoint on a fixed timer regardless of whether state has changed. For example, 30 active clients querying a `/status` endpoint every 2 seconds generate 900 requests per minute solely for status checks. When state changes infrequently, the majority of these responses return redundant payloads.
 
-The symptoms were predictable: increased latency on the actual API routes, pointless database reads, and a frontend that always felt slightly behind.
+This pattern introduces predictable bottlenecks: unnecessary database reads, increased queue depth on API servers, and UI state that lags behind reality by up to the duration of the polling interval.
 
-## What WebSockets actually changed
+## Event-driven updates over persistent connections
 
-Switching to WebSockets meant the server pushes state changes only when they happen. No more redundant reads. The connection stays open, and the server decides when to send data.
+Persistent WebSocket connections invert the communication model: clients maintain an open connection, and the server pushes events when mutations occur. This removes interval-based reads and avoids waiting for the next polling tick.
 
-Here is a minimal `socket.io` setup that replaced the polling loop:
+The following example illustrates a minimal event-driven setup using Socket.IO:
 
 ```typescript
 // server.ts
@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
 });
 ```
 
-On the client side, the React hook is straightforward:
+On the client side, the corresponding React hook manages connection lifecycle and cleanup:
 
 ```typescript
 // useStatus.ts
@@ -69,11 +69,15 @@ export function useStatus() {
 }
 ```
 
-## Tradeoffs I ran into
+## Architectural trade-offs
 
-**Connection management is your problem now.** With REST, every request is independent. With WebSockets, you need to handle reconnection, backoff, and stale connections. `socket.io` handles most of this out of the box, but you still need to decide what happens when a client reconnects after being offline: does it get a full state snapshot or just a diff? I went with a full state snapshot on every reconnect. Diffing requires maintaining an in-memory event buffer with sequence numbers and eviction rules. Since our dashboard status payload was only a few kilobytes, sending `getCurrentStatus()` immediately on connect was simpler, stateless on the server, and guaranteed the client never drifted out of sync.
+**Reconnect strategies: snapshot vs diff.** When a client reconnects after network interruption, it must re-synchronize state. Choosing between sending a full snapshot versus incremental event diffs depends on payload size and complexity:
+- Event diffing requires an in-memory event buffer with monotonic sequence numbers and eviction policies.
+- For compact state payloads, sending a full snapshot immediately on connection avoids a server-side event buffer and gives the client a defined synchronization baseline.
 
-**Load balancers need sticky sessions.** If you are behind a round-robin load balancer, WebSocket upgrade requests can land on a different server than the one holding the connection. Sticky sessions (routing a client to the same server instance) and the Redis adapter (letting different server instances broadcast to each other's connected sockets) solve different problems, and in a multi-instance setup you typically need both together. I used Redis as a pub/sub adapter to share events across instances:
+**Horizontal scaling and sticky sessions.** In multi-instance deployments behind a load balancer, WebSocket handshakes and persistent sockets require two coordination layers:
+1. **Sticky sessions:** Route repeated HTTP transport upgrades from a given client to the specific node maintaining its connection.
+2. **Pub/Sub message bus:** Broadcast state changes across all application nodes so any worker can notify its connected clients.
 
 ```typescript
 import { createAdapter } from "@socket.io/redis-adapter";
@@ -114,18 +118,14 @@ flowchart TD
     Server2 <-->|Cross-Node Sync| Redis
 ```
 
-**Not everything should be a WebSocket.** I kept one-off actions (triggering a deployment, updating a config) as regular REST calls. WebSockets are for continuous data flow, not for request-response patterns.
+**Separating commands from streams.** WebSockets are suited for continuous data streams and push notifications. Standard request-response operations—such as submitting forms, triggering mutations, or fetching static configurations—remain better suited to standard REST endpoints with conventional HTTP status codes and caching semantics.
 
-## Results
+## When polling remains the right choice
 
-After the migration:
+WebSockets introduce operational complexity: connection state tracking, heartbeat monitoring, connection drain during deployments, and horizontal synchronization. Short or long polling remains appropriate when:
 
-- Backend requests for status dropped by **~97%**
-- Dashboard updates went from "up to 2 seconds stale" to sub-100ms
-- CPU usage on the API server dropped noticeably during peak usage
+- Data changes infrequently (e.g., once a minute or longer).
+- The active client count is low, so request overhead does not strain database or server capacity.
+- The interface does not require sub-second UI synchronization.
 
-The migration took about a week. Most of that time was spent on the reconnection logic and making sure the load balancer configuration was correct, not on the socket.io code itself.
-
-## When polling is still fine
-
-If your data changes once a minute and you have a handful of clients, polling is simpler and works. I would not recommend WebSockets for a settings page that refreshes occasionally. The overhead of maintaining persistent connections is only worth it when you have frequent updates and many concurrent consumers.
+Persistent bidirectional connections are worth the operational overhead primarily when high client concurrency, rapid state mutations, or low-latency push notifications make polling inefficient.

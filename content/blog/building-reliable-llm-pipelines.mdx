@@ -1,19 +1,19 @@
 ---
-title: "Building Reliable LLM Pipelines in Production"
+title: "Building Reliable LLM Pipelines"
 date: "2026-09-09"
-description: "LLM APIs fail, hallucinate, and return unpredictable output. Here are the patterns I use to make tool-calling agents work reliably in production."
+description: "Patterns for schema validation, failure-aware retries, model fallback chains, and structured logging in production LLM applications."
 tags: ["LLM", "AI", "Backend"]
 ---
 
 ## The reliability problem
 
-LLM APIs are not like regular REST APIs. A database query either works or throws an error. An LLM call can return a 200 with output that is subtly wrong, formatted differently than expected, or completely unrelated to the prompt.
+LLM APIs behave differently from standard web services. A database query either returns records or throws an error, but a language model call can return an HTTP 200 with output that is malformed, factually inconsistent, or unrelated to the prompt.
 
-When I started building agent pipelines, I treated the LLM like any other service: call it, parse the response, move on. That worked in demos. In production, with thousands of daily requests, I needed a different approach.
+Model invocations are non-deterministic service calls. Their application boundary needs output schemas, failure-specific retry rules, fallback tiers, and sanitized telemetry.
 
 ## Structured output with schema validation
 
-The single most impactful change was enforcing output structure. Instead of hoping the model returns valid JSON, I define a schema upfront and validate against it.
+Enforcing output structure at the application boundary prevents invalid payloads from propagating downstream. Rather than accepting unconstrained natural language, define a schema upfront and validate the parsed JSON against it:
 
 ```typescript
 import { z } from "zod";
@@ -32,7 +32,7 @@ const ExtractionSchema = z.object({
 type Extraction = z.infer<typeof ExtractionSchema>;
 ```
 
-The model gets the schema description in the prompt. After the response comes back, I parse it:
+The model receives the expected schema definition in its system or task prompt. After receiving the response, validate the payload:
 
 ```typescript
 function parseResponse(raw: string): Extraction | null {
@@ -45,11 +45,11 @@ function parseResponse(raw: string): Extraction | null {
 }
 ```
 
-When parsing fails, I retry with a corrective prompt that includes the validation error. This catches ~95% of formatting issues on the second attempt.
+When parsing fails, retry with a corrective prompt that includes the specific validation error. Providing the parse error output allows the model to address missing fields or invalid types directly.
 
-## Retry logic that actually helps
+## Failure-aware retry strategies
 
-Naive retries (just call again with the same prompt) waste tokens and usually produce the same broken output. My retry strategy depends on the failure mode:
+Repeating an identical prompt after a failure wastes tokens and frequently reproduces the same malformed response. Effective retry logic differentiates by error type:
 
 ```typescript
 async function callWithRetry<T>(
@@ -93,19 +93,19 @@ function sleep(ms: number) {
 ```
 
 Key decisions:
-- **Rate limits (429):** Exponential backoff. The API is telling you to slow down.
-- **Server errors (500):** Retry immediately. These are usually transient.
-- **Client errors (400):** Do not retry. The request is malformed.
-- **Validation failures:** Retry with a modified prompt that includes the error message.
+- **Rate limits (429):** Exponential backoff allows upstream rate limits to reset.
+- **Server errors (500):** Retry immediately or with short jitter for transient infrastructure interruptions.
+- **Client errors (400):** Do not retry; the payload or request configuration requires correction.
+- **Validation failures:** Retry with a modified prompt containing the validation error message.
 
 ## Fallback chains
 
-Not every task needs the most capable model. I use a fallback chain: try the fast model first, fall back to the slower one only when needed.
+Not every task requires the same model tier. A fallback chain can try a fast model first, then move to a higher-capability model when validation fails or execution errors occur:
 
 ```typescript
 const MODELS = [
-  { name: "gemini-2.0-flash", costPer1k: 0.01 },
-  { name: "gemini-2.5-pro", costPer1k: 0.05 },
+  { name: "fast-model" },
+  { name: "high-capability-model" },
 ];
 
 async function extractWithFallback(
@@ -126,27 +126,27 @@ async function extractWithFallback(
 }
 ```
 
-In practice, the fast model handles ~80% of requests successfully. The remaining 20% go to the more capable model. This cuts costs significantly without losing reliability.
+Measure each tier's validation pass rate, latency, and token usage before choosing the order. A fallback chain is useful only when the first tier's lower cost outweighs the extra retry path.
 
-## Logging everything
+## Structured logging and data handling
 
-LLM pipelines are hard to debug without full request/response logs. I log:
+Debugging non-deterministic systems requires tracing request and response state, but prompts and completions frequently contain sensitive data, personal identifiers, or credentials. Production logging must combine comprehensive telemetry with redaction and access controls.
 
-- The full prompt sent to the model
-- The raw response
-- The parsed/validated output
-- Latency and token counts
-- Which retry attempt succeeded
+A structured telemetry record should capture:
 
-This is not optional. When a user reports wrong output, I need to trace exactly what the model received and returned. A structured log entry looks like this:
+- Unique request identifiers and model configurations
+- Sanitized prompts and responses (with sensitive values masked or omitted)
+- Validation status and parsed payloads
+- Request latency and token usage
+- Retry attempt counts and failure classifications
 
 ```typescript
 interface LLMLog {
   requestId: string;
   model: string;
-  prompt: string;
-  response: string;
-  parsed: unknown | null;
+  sanitizedPrompt: string;
+  sanitizedResponse: string;
+  sanitizedParsed: unknown | null;
   valid: boolean;
   attempt: number;
   latencyMs: number;
@@ -155,12 +155,8 @@ interface LLMLog {
 }
 ```
 
-## What I would do differently
+## Orchestration layers and evaluation datasets
 
-If I were starting over, I would use a dedicated orchestration layer (like LangGraph or a simple state machine) instead of chaining function calls. The pipeline logic gets complex fast, and having an explicit graph of states and transitions makes it easier to reason about error recovery.
+As pipelines add parallel branches, tool executions, and multi-step recovery logic, chaining asynchronous functions quickly becomes unwieldy. Explicit state machines or graph-based orchestration frameworks make state transitions, timeouts, and checkpointing predictable and inspectable.
 
-I would also invest in evaluation earlier. Running a set of test inputs through the pipeline nightly catches regressions before users notice them.
-
-## Summary
-
-Reliable LLM pipelines come down to three things: validate output strictly, retry intelligently, and log everything. The model itself is the easy part. The engineering around it is what makes it production-ready.
+A fixed evaluation set can compare prompt or model changes before release. Assertions work for structural requirements; task-specific scoring or reviewed examples are needed for semantic quality.

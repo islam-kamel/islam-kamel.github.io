@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig = {
   name: "Islam Kamel | Software Engineer",
   url: "https://islamkamel.com",
   description:
-    "Software Engineer building scalable web architectures, LLM automation pipelines, and real-time systems.",
+    "Building web applications, real-time communication systems, and LLM workflows with structured data and modular architecture.",
   navItems,
   navMenuItems: navItems,
   links: {

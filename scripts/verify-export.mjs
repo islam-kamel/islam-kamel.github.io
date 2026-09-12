@@ -78,7 +78,7 @@ const robots = readCandidate("out/robots.txt");
 const articleUrl = "https://islamkamel.com/blog/migrating-github-pages-to-vercel";
 const expectedTitle = "Migrating GitHub Pages to Vercel Without SEO Drift";
 const expectedDescription =
-  "A practical DevOps case study on moving a static site to Vercel behind Cloudflare while preserving HTTPS canonicals, redirects, analytics, and indexing signals.";
+  "A technical reference for moving a static site to Vercel behind Cloudflare while preserving HTTPS canonicals, redirects, analytics, and indexing signals.";
 
 // 2. Canonical tag on article
 assert(

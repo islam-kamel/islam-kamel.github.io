@@ -8,9 +8,9 @@ export const contentType = "image/png";
 export default function Image() {
   const capabilities = [
     "Frontend Architecture",
-    "LLM Orchestration",
+    "LLM Integration",
     "Real-Time Systems",
-    "Distributed Services",
+    "Backend Systems",
   ];
 
   return new ImageResponse(
@@ -106,7 +106,7 @@ export default function Image() {
                   letterSpacing: "0.05em",
                 }}
               >
-                SYSTEMS ARCHITECT
+                SOFTWARE ENGINEER
               </span>
             </div>
           </div>
@@ -158,8 +158,8 @@ export default function Image() {
                 maxWidth: "920px",
               }}
             >
-              Building scalable web architectures, LLM automation pipelines, and
-              real-time systems.
+              Building web applications, real-time communication systems, and
+              LLM workflows with structured data and modular architecture.
             </p>
           </div>
 

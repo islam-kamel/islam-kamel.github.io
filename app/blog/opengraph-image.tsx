@@ -140,8 +140,7 @@ export default function Image() {
                 maxWidth: "880px",
               }}
             >
-              Technical articles on web architecture, real-time systems, and AI
-              integration.
+              Technical articles, reference notes, and architecture patterns.
             </p>
           </div>
 

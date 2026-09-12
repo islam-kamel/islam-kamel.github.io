@@ -48,7 +48,7 @@ export default function Home() {
       title: "Frontend Architecture",
       icon: LayersIcon,
       description:
-        "Building responsive, type-safe web applications using Next.js and React. Focused on state management, fast rendering, and clean UI architecture.",
+        "Building responsive, type-safe web applications using Next.js and React. Focused on state management, server components, and modular UI structure.",
       highlights: [
         "Next.js App Router",
         "React Server Components",
@@ -68,12 +68,12 @@ export default function Home() {
       title: "Backend & Systems",
       icon: ServerIcon,
       description:
-        "Designing resilient backend services, relational database schemas, containerized environments, and clean RESTful APIs.",
+        "Designing backend services, relational database schemas, containerized environments, and RESTful APIs.",
       highlights: [
         "Modular API Architecture",
         "Relational Data Modeling",
-        "Containerized Deployments",
-        "Production Environments",
+        "Container Deployments",
+        "Environment Configuration",
       ],
       chips: ["Python", "Django", "Flask", "Docker", "PostgreSQL", "REST APIs"],
     },
@@ -81,7 +81,7 @@ export default function Home() {
       title: "AI & LLM Integration",
       icon: BotIcon,
       description:
-        "Integrating LLMs into production environments. Building tool-calling agents, structured data extraction, and reliable AI workflows.",
+        "Integrating LLMs with application services. Building tool-calling agents, structured data extraction, and evaluation workflows.",
       highlights: [
         "Multi-Agent Coordination",
         "Tool Execution Systems",
@@ -99,7 +99,7 @@ export default function Home() {
       title: "Real-Time & Data Engineering",
       icon: ActivityIcon,
       description:
-        "Implementing low-latency data streaming, off-thread concurrency, interactive analytics dashboards, and programmatic document pipelines.",
+        "Implementing bi-directional data streaming, off-thread concurrency, interactive analytics dashboards, and programmatic document generation.",
       highlights: [
         "Bi-directional Sockets",
         "Event-Driven Architecture",
@@ -151,19 +151,6 @@ export default function Home() {
       />
       {/* A. Hero Section */}
       <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start gap-8">
-        {/* Quote Badge */}
-        <div className="inline-flex items-center gap-0.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-xs text-[#8899A6] backdrop-blur-sm">
-          <span className="text-primary font-serif italic leading-none">
-            &quot;
-          </span>
-          <span className="font-medium">
-            Creativity is intelligence having fun.
-          </span>
-          <span className="text-primary font-serif italic leading-none">
-            &quot;
-          </span>
-        </div>
-
         {/* Display Headline */}
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.15] text-balance">
           Software Engineer focusing on web architecture and AI integration.
@@ -171,9 +158,8 @@ export default function Home() {
 
         {/* Descriptive Paragraph */}
         <p className="text-lg sm:text-xl text-[#8899A6] max-w-3xl leading-relaxed">
-          I build scalable full-stack applications, real-time systems, and
-          production-ready LLM pipelines. My core stack includes Next.js, React,
-          Python, and PostgreSQL.
+          Building web applications, real-time communication systems, and LLM
+          workflows with structured data and modular architecture.
         </p>
 
         {/* Direct Links */}
@@ -223,8 +209,7 @@ export default function Home() {
             Engineering Focus & Technical Stack
           </h2>
           <p className="mt-2 text-base text-[#8899A6] max-w-2xl">
-            My core engineering disciplines and the production-tested
-            technologies I use to build systems.
+            Engineering disciplines and technologies used across projects.
           </p>
         </div>
 
@@ -237,10 +222,6 @@ export default function Home() {
                 key={idx}
                 className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between p-6 sm:p-8"
               >
-                {/* Ambient Radial Gradients */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(217,71,36,0.1)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.02)_0%,transparent_50%)] pointer-events-none" />
-
                 <div className="relative z-10 mb-6">
                   <div className="w-14 h-14 rounded-[16px] bg-gradient-to-b from-[#111622] to-[#0A0D14] border border-[#1A2234] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-500 mb-6">
                     <Icon size={26} strokeWidth={1.5} />
@@ -304,8 +285,6 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Education Card */}
           <div className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between p-6 sm:p-8">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(217,71,36,0.08)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-14 h-14 rounded-[16px] bg-gradient-to-b from-[#111622] to-[#0A0D14] border border-[#1A2234] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-500">
@@ -323,7 +302,6 @@ export default function Home() {
 
               <div className="space-y-4">
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] group-hover:border-primary/20 transition-colors duration-500 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
                   <div className="relative z-10">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
                       <h4 className="text-base font-bold text-white">
@@ -349,8 +327,6 @@ export default function Home() {
 
           {/* Certifications Card */}
           <div className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between p-6 sm:p-8">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(217,71,36,0.08)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-14 h-14 rounded-[16px] bg-gradient-to-b from-[#111622] to-[#0A0D14] border border-[#1A2234] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-500">
@@ -411,11 +387,11 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_100%)] pointer-events-none" />
 
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4 relative z-10 text-balance">
-            Let&apos;s work together.
+            Project and role inquiries.
           </h2>
           <p className="text-base sm:text-lg text-[#8899A6] max-w-xl mx-auto mb-10 leading-relaxed relative z-10">
-            If you&apos;re looking for an engineer to help build or scale your
-            product, feel free to reach out.
+            For contract projects or full-time engineering roles, send a brief
+            note about the work and its technical constraints.
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
