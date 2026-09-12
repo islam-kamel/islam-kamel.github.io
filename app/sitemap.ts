@@ -8,6 +8,12 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPosts();
 
+  const blogLastModified = posts.reduce(
+    (latest, post) =>
+      Math.max(latest, new Date(post.dateModified || post.date).getTime()),
+    0
+  );
+
   const blogEntries = posts.map((post) => ({
     url: `${siteConfig.url}/blog/${post.slug}`,
     lastModified: new Date(post.dateModified || post.date),
@@ -18,13 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: siteConfig.url,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },
     {
       url: `${siteConfig.url}/blog`,
-      lastModified: new Date(),
+      ...(blogLastModified ? { lastModified: new Date(blogLastModified) } : {}),
       changeFrequency: "weekly",
       priority: 0.8,
     },

@@ -145,7 +145,7 @@ export default function RootLayout({
           {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
           <iframe
             height="0"
-            src="https://www.googletagmanager.com/ns.html?id=GTM-T3GSTK22"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-NPFLTNVW"
             style={{ display: "none", visibility: "hidden" }}
             width="0"
           />

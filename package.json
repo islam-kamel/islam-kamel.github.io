@@ -4,10 +4,11 @@
  "private": true,
  "scripts": {
   "dev": "next dev --turbopack",
-  "build": "next build",
+  "build": "next build && node scripts/verify-export.mjs",
   "start": "next start",
   "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
-  "generate:favicons": "node scripts/generate-favicons.mjs"
+  "generate:favicons": "node scripts/generate-favicons.mjs",
+  "test:export": "node scripts/verify-export.mjs"
  },
  "dependencies": {
   "@heroui/avatar": "2.2.20",

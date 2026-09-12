@@ -1,0 +1,28 @@
+{
+  "rewrites": [
+    {
+      "source": "/:path*/opengraph-image.png",
+      "destination": "/:path*/opengraph-image"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/:path*/opengraph-image",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        }
+      ]
+    },
+    {
+      "source": "/:path*/opengraph-image.png",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        }
+      ]
+    }
+  ]
+}
