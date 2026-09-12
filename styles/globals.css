@@ -97,7 +97,8 @@ html {
 }
 
 .prose-blog .mermaid-block svg {
-    @apply max-w-full h-auto;
+    @apply block w-full min-w-[42rem] h-auto;
+    max-width: none !important;
 }
 
 .prose-blog .mermaid-block svg .node rect,
