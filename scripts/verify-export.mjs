@@ -189,7 +189,7 @@ assert.equal(height, 630, `Expected OG image height 630, got ${height}`);
 // 8. Sitemap entries and truthful dates
 const sitemapEntries = parseSitemapEntries(sitemap);
 
-const homeEntry = sitemapEntries.find((e) => e.loc === "https://islamkamel.com");
+const homeEntry = sitemapEntries.find((e) => e.loc === "https://islamkamel.com/");
 assert(homeEntry, "Homepage entry must exist in sitemap");
 assert.equal(
   homeEntry.lastmod,

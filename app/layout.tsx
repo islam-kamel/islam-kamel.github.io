@@ -31,7 +31,6 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(siteConfig.url),
   creator: "Islam Kamel",
-  alternates: { canonical: siteConfig.url },
   manifest: "/manifest.json",
   openGraph: {
     title: siteConfig.name,
