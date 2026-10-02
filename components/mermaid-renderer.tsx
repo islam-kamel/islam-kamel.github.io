@@ -24,45 +24,45 @@ export function MermaidRenderer() {
 
         mermaid.initialize({
           startOnLoad: false,
-          theme: "dark",
+          theme: "base",
           themeVariables: {
-            darkMode: true,
+            darkMode: false,
             fontFamily:
-              "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+              "var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
 
             // Canvas & Container
-            background: "transparent",
-            mainBkg: "#111622",
+            background: "#FAF8F5",
+            mainBkg: "#FAF8F5",
 
-            // Primary Nodes (Elevated Surface)
-            primaryColor: "#111622",
-            primaryTextColor: "#FFFFFF",
-            primaryBorderColor: "#283550",
-            nodeBorder: "#283550",
-            nodeTextColor: "#FFFFFF",
+            // Primary Nodes
+            primaryColor: "#FFFFFF",
+            primaryTextColor: "#111111",
+            primaryBorderColor: "#111111",
+            nodeBorder: "#111111",
+            nodeTextColor: "#111111",
 
-            // Clusters & Subgraphs (Layered Depth)
-            clusterBkg: "#070A0F",
-            clusterBorder: "#1A2234",
-            titleColor: "#D94724",
+            // Clusters & Subgraphs
+            clusterBkg: "#FAF8F5",
+            clusterBorder: "#111111",
+            titleColor: "#111111",
 
-            // Arrows & Connections (Brand Accent)
-            lineColor: "#D94724",
-            defaultLinkColor: "#D94724",
+            // Arrows & Connections
+            lineColor: "#111111",
+            defaultLinkColor: "#111111",
 
             // Edge Labels
-            edgeLabelBackground: "#111622",
-            labelBackground: "#111622",
-            labelTextColor: "#E2E8F0",
-            textColor: "#FFFFFF",
+            edgeLabelBackground: "#FAF8F5",
+            labelBackground: "#FAF8F5",
+            labelTextColor: "#111111",
+            textColor: "#111111",
 
             // Secondary Elements
-            secondaryColor: "#161E30",
-            secondaryBorderColor: "#283550",
-            secondaryTextColor: "#FFFFFF",
-            tertiaryColor: "#070A0F",
-            tertiaryBorderColor: "#1A2234",
-            tertiaryTextColor: "#D94724",
+            secondaryColor: "#EE7C98",
+            secondaryBorderColor: "#111111",
+            secondaryTextColor: "#111111",
+            tertiaryColor: "#DCE5DB",
+            tertiaryBorderColor: "#111111",
+            tertiaryTextColor: "#111111",
           },
           flowchart: {
             htmlLabels: true,

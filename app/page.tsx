@@ -1,21 +1,17 @@
 import React from "react";
 import { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
 
 import { siteConfig } from "@/config/site";
 import { LD_JSON } from "@/config/ld_json";
+import { getAllPosts } from "@/lib/blog";
 import {
-  ActivityIcon,
   ArrowUpRightIcon,
-  AwardIcon,
-  BotIcon,
-  CheckCircle2Icon,
+  CalendarIcon,
   GithubIcon,
-  GraduationCapIcon,
-  LayersIcon,
   LinkedinIcon,
-  MailIcon,
   SendIcon,
-  ServerIcon,
 } from "@/components/icons";
 
 export const metadata: Metadata = {
@@ -43,10 +39,12 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const capabilities = [
+  const posts = getAllPosts().slice(0, 3);
+
+  const disciplines = [
     {
+      num: "01",
       title: "Frontend Architecture",
-      icon: LayersIcon,
       description:
         "Building responsive, type-safe web applications using Next.js and React. Focused on state management, server components, and modular UI structure.",
       highlights: [
@@ -65,8 +63,8 @@ export default function Home() {
       ],
     },
     {
+      num: "02",
       title: "Backend & Systems",
-      icon: ServerIcon,
       description:
         "Designing backend services, relational database schemas, containerized environments, and RESTful APIs.",
       highlights: [
@@ -78,8 +76,8 @@ export default function Home() {
       chips: ["Python", "Django", "Flask", "Docker", "PostgreSQL", "REST APIs"],
     },
     {
+      num: "03",
       title: "AI & LLM Integration",
-      icon: BotIcon,
       description:
         "Integrating LLMs with application services. Building tool-calling agents, structured data extraction, and evaluation workflows.",
       highlights: [
@@ -96,8 +94,8 @@ export default function Home() {
       ],
     },
     {
+      num: "04",
       title: "Real-Time & Data Engineering",
-      icon: ActivityIcon,
       description:
         "Implementing bi-directional data streaming, off-thread concurrency, interactive analytics dashboards, and programmatic document generation.",
       highlights: [
@@ -141,7 +139,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-[#FAF8F5] text-[#111111]">
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(LD_JSON).replace(/</g, "\\u003c"),
@@ -149,225 +147,249 @@ export default function Home() {
         id="ld-json-homepage"
         type="application/ld+json"
       />
+
       {/* A. Hero Section */}
-      <section className="relative pt-16 pb-20 sm:pt-24 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start gap-8">
-        {/* Display Headline */}
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.15] text-balance">
-          Software Engineer focusing on web architecture and AI integration.
-        </h1>
+      <section className="relative pt-10 pb-16 sm:pt-16 sm:pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Subtle pale haze at top */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-48 bg-[radial-gradient(ellipse_at_top,rgba(238,124,152,0.15)_0%,transparent_70%)] pointer-events-none" />
 
-        {/* Descriptive Paragraph */}
-        <p className="text-lg sm:text-xl text-[#8899A6] max-w-3xl leading-relaxed">
-          Building web applications, real-time communication systems, and LLM
-          workflows with structured data and modular architecture.
-        </p>
-
-        {/* Direct Links */}
-        <div className="flex flex-wrap items-center gap-3.5 pt-2">
-          <a
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary hover:bg-primary-hover text-white font-medium text-sm transition-all duration-300 shadow-[0_0_20px_rgba(217,71,36,0.3)] hover:shadow-[0_0_30px_rgba(217,71,36,0.5)] overflow-hidden"
-            href="mailto:contact@islamkamel.com"
-          >
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.2),transparent)] -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-out" />
-            <MailIcon size={16} />
-            <span>contact@islamkamel.com</span>
-          </a>
-          <a
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#0A0D14] hover:bg-[#111622] text-white/90 hover:text-white border border-[#1A2234] hover:border-[#283550] shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] font-medium text-sm transition-all duration-300"
-            href={siteConfig.links.github}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <GithubIcon size={16} />
-            <span>GitHub</span>
-            <ArrowUpRightIcon className="text-[#8899A6]" size={14} />
-          </a>
-          <a
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#0A0D14] hover:bg-[#111622] text-white/90 hover:text-white border border-[#1A2234] hover:border-[#283550] shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] font-medium text-sm transition-all duration-300"
-            href={siteConfig.links.linkedin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <LinkedinIcon size={16} />
-            <span>LinkedIn</span>
-            <ArrowUpRightIcon className="text-[#8899A6]" size={14} />
-          </a>
-        </div>
-      </section>
-
-      {/* B. Capabilities & Technical Stack Section */}
-      <section
-        className="scroll-mt-24 pt-12 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
-        id="capabilities"
-      >
-        <div className="mb-10">
-          <div className="text-[11px] font-mono uppercase tracking-widest text-primary font-semibold mb-3 flex items-center gap-2">
-            <span className="w-4 h-[1px] bg-primary/50" />
-            Capabilities
+        {/* Editorial Header Bar */}
+        <div className="flex justify-end border-b-2 border-[#111111] pb-3 mb-8 sm:mb-12 text-xs text-[#5A606B]">
+          <div className="font-medium">
+            <span>Cairo, Egypt</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            Engineering Focus & Technical Stack
-          </h2>
-          <p className="mt-2 text-base text-[#8899A6] max-w-2xl">
-            Engineering disciplines and technologies used across projects.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {capabilities.map((cap, idx) => {
-            const Icon = cap.icon;
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Main Display Lead (Left 7 cols) */}
+          <div className="lg:col-span-7 flex flex-col items-start gap-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#EE7C98] text-[#111111] text-xs font-bold border border-[#111111]">
+              <span>Software engineer</span>
+            </div>
 
-            return (
-              <div
-                key={idx}
-                className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between p-6 sm:p-8"
+            <div className="space-y-2">
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-[#111111] leading-[0.95] text-balance">
+                Islam Kamel
+              </h1>
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#111111]">
+                Software engineer
+              </p>
+            </div>
+
+            <p className="text-base sm:text-lg text-[#333333] leading-relaxed max-w-xl font-normal">
+              Building web applications, real-time data streaming systems, and
+              LLM integration workflows.
+            </p>
+
+            {/* Direct Actions */}
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <a
+                className="inline-flex items-center gap-2.5 px-6 py-3 bg-[#EE7C98] hover:bg-[#E56382] text-[#111111] font-bold text-sm border-2 border-[#111111] shadow-[3px_3px_0px_0px_#111111] hover:shadow-[1px_1px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+                href="mailto:contact@islamkamel.com"
               >
-                <div className="relative z-10 mb-6">
-                  <div className="w-14 h-14 rounded-[16px] bg-gradient-to-b from-[#111622] to-[#0A0D14] border border-[#1A2234] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-500 mb-6">
-                    <Icon size={26} strokeWidth={1.5} />
-                  </div>
-                  <h3 className="text-xl font-bold text-white tracking-tight mb-3">
-                    {cap.title}
-                  </h3>
-                  <p className="text-sm text-[#8899A6] leading-relaxed">
-                    {cap.description}
-                  </p>
-                </div>
+                <SendIcon size={16} />
+                <span>Say hello</span>
+              </a>
 
-                <div className="relative z-10 pt-6 border-t border-white/[0.06] flex flex-col gap-4">
-                  <div className="flex flex-col gap-2">
-                    {cap.highlights.map((highlight) => (
-                      <div
-                        key={highlight}
-                        className="flex items-center gap-2.5 text-xs font-medium text-[#8899A6] group-hover:text-white/90 transition-colors duration-300"
-                      >
-                        <span className="w-1 h-1 rounded-full bg-primary/60 group-hover:bg-primary transition-colors" />
-                        {highlight}
-                      </div>
-                    ))}
-                  </div>
+              <a
+                className="inline-flex items-center gap-2 px-4 py-3 bg-[#FAF8F5] hover:bg-white text-[#111111] font-bold text-sm border-2 border-[#111111] shadow-[3px_3px_0px_0px_#111111] hover:shadow-[1px_1px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                href={siteConfig.links.github}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <GithubIcon size={16} />
+                <span>GitHub</span>
+                <ArrowUpRightIcon size={14} />
+              </a>
 
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/[0.04]">
-                    {cap.chips.map((chip) => (
-                      <span
-                        key={chip}
-                        className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/[0.02] text-[#8899A6] border border-white/[0.06] shadow-sm hover:bg-primary/10 hover:text-white hover:border-primary/40 transition-all duration-300"
-                      >
-                        {chip}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* C. Education & Certifications Section */}
-      <section
-        className="scroll-mt-24 pt-12 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[#1A2234]/60"
-        id="education"
-      >
-        <div className="mb-10">
-          <div className="text-[11px] font-mono uppercase tracking-widest text-primary font-semibold mb-3 flex items-center gap-2">
-            <span className="w-4 h-[1px] bg-primary/50" />
-            Credentials
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            Education & Certifications
-          </h2>
-          <p className="mt-2 text-base text-[#8899A6] max-w-2xl">
-            Academic background and ongoing technical training.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Education Card */}
-          <div className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between p-6 sm:p-8">
-            <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 rounded-[16px] bg-gradient-to-b from-[#111622] to-[#0A0D14] border border-[#1A2234] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-500">
-                  <GraduationCapIcon size={26} strokeWidth={1.5} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">
-                    Education
-                  </h3>
-                  <span className="text-[11px] uppercase tracking-widest font-semibold text-[#8899A6] mt-0.5 block">
-                    Academic Degree
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] group-hover:border-primary/20 transition-colors duration-500 relative overflow-hidden">
-                  <div className="relative z-10">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
-                      <h4 className="text-base font-bold text-white">
-                        ASA Academy
-                      </h4>
-                      <span className="inline-flex text-[10px] uppercase tracking-widest font-bold text-primary px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 shadow-[0_0_12px_-3px_rgba(217,71,36,0.3)]">
-                        2016 – 2020
-                      </span>
-                    </div>
-                    <p className="text-sm font-semibold text-white/90 mb-2">
-                      Bachelor&apos;s in Management Information Systems
-                    </p>
-                    <p className="text-xs text-[#8899A6] leading-relaxed">
-                      Core curriculum centered on systems analysis, database
-                      architecture, business logic modeling, and enterprise
-                      software engineering foundations.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <a
+                className="inline-flex items-center gap-2 px-4 py-3 bg-[#FAF8F5] hover:bg-white text-[#111111] font-bold text-sm border-2 border-[#111111] shadow-[3px_3px_0px_0px_#111111] hover:shadow-[1px_1px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                href={siteConfig.links.linkedin}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <LinkedinIcon size={16} />
+                <span>LinkedIn</span>
+                <ArrowUpRightIcon size={14} />
+              </a>
             </div>
           </div>
 
-          {/* Certifications Card */}
-          <div className="group relative rounded-[24px] bg-[#0A0D14] border border-[#1A2234] hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between p-6 sm:p-8">
-            <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 rounded-[16px] bg-gradient-to-b from-[#111622] to-[#0A0D14] border border-[#1A2234] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-500">
-                  <AwardIcon size={26} strokeWidth={1.5} />
-                </div>
+          {/* Abstract Print Collage Artwork (Right 5 cols) */}
+          <div className="lg:col-span-5 w-full flex items-center justify-center">
+            <div className="border-2 border-[#111111] bg-[#FAF8F5] shadow-[6px_6px_0px_0px_#111111] overflow-hidden w-full max-w-[460px]">
+              <Image
+                unoptimized
+                alt="Abstract retro print collage with pink clouds, halftone textures, and geometric forms"
+                className="w-full h-auto object-cover"
+                height={1254}
+                loading="eager"
+                src="/retro-cloud-collage.webp"
+                width={1254}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* B. What I build Section (The Warm Salmon-Pink Panel) */}
+      <section
+        className="scroll-mt-20 py-16 sm:py-24 bg-[#EE7C98] border-y-2 border-[#111111] relative overflow-hidden"
+        id="capabilities"
+      >
+        {/* Anchor aliases for what-i-build and tech-stack links */}
+        <span className="sr-only scroll-mt-20" id="what-i-build" />
+        <span className="sr-only scroll-mt-20" id="tech-stack" />
+
+        {/* Restrained Halftone Texture Overlay */}
+        <div className="absolute inset-0 bg-halftone pointer-events-none opacity-20" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 sm:mb-16 border-b-2 border-[#111111] pb-6">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#111111] block mb-2">
+                What I build
+              </span>
+              <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#111111] leading-tight text-balance">
+                Engineering Focus
+              </h2>
+            </div>
+            <p className="text-base sm:text-lg text-[#111111] max-w-md font-medium">
+              Web applications, real-time data streaming architectures, and
+              backend services.
+            </p>
+          </div>
+
+          {/* Editorial Open Layout (Numbered Rows) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
+            {disciplines.map((item) => (
+              <div
+                key={item.num}
+                className="border-t-2 border-[#111111] pt-6 flex flex-col justify-between"
+              >
                 <div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">
-                    Certifications
+                  <div className="flex items-baseline justify-between mb-4">
+                    <span className="text-4xl sm:text-5xl font-bold text-[#111111] tracking-tight">
+                      {item.num}
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-bold text-[#111111] tracking-tight mb-3">
+                    {item.title}
                   </h3>
-                  <span className="text-[11px] uppercase tracking-widest font-semibold text-[#8899A6] mt-0.5 block">
-                    Verified Programs
-                  </span>
+
+                  <p className="text-sm sm:text-base text-[#111111] leading-relaxed mb-6 font-normal">
+                    {item.description}
+                  </p>
+
+                  <div className="space-y-2 mb-6">
+                    {item.highlights.map((highlight) => (
+                      <div
+                        key={highlight}
+                        className="flex items-center gap-2 text-xs font-bold text-[#111111]"
+                      >
+                        <span>{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-[#111111]/30">
+                  {item.chips.map((chip) => (
+                    <span
+                      key={chip}
+                      className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-bold bg-[#FAF8F5] text-[#111111] border border-[#111111] shadow-[1px_1px_0px_0px_#111111]"
+                    >
+                      {chip}
+                    </span>
+                  ))}
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-3">
+      {/* C. Education & Certifications Section (The Muted Sage Interlude) */}
+      <section
+        className="scroll-mt-20 py-16 sm:py-24 bg-[#DCE5DB] border-b-2 border-[#111111] relative"
+        id="education"
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 pb-6 border-b-2 border-[#111111]">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#2A342B] block mb-2">
+                Education
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111111] leading-tight">
+                Education &amp; Certifications
+              </h2>
+            </div>
+            <p className="text-base text-[#2A342B] font-medium max-w-md">
+              Academic degree and professional training programs.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Education Degree (Left, 5 cols) */}
+            <div className="lg:col-span-5 border-2 border-[#111111] bg-[#FAF8F5] shadow-[5px_5px_0px_0px_#111111] flex flex-col justify-between">
+              <div className="bg-[#111111] text-[#FAF8F5] px-4 py-2.5 flex items-center justify-between border-b-2 border-[#111111]">
+                <span className="text-xs font-bold">Academic Degree</span>
+                <span className="text-xs text-[#8E939E]">2016–2020</span>
+              </div>
+
+              <div className="p-6 sm:p-8 flex-grow flex flex-col justify-between">
+                <div>
+                  <div className="inline-block px-2.5 py-1 bg-[#DCE5DB] border border-[#111111] text-xs font-bold text-[#111111] mb-4">
+                    Bachelor&apos;s Degree
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-[#111111] tracking-tight mb-1">
+                    ASA Academy
+                  </h3>
+
+                  <p className="text-base font-bold text-[#111111] mb-4">
+                    Bachelor&apos;s in Management Information Systems
+                  </p>
+
+                  <p className="text-sm text-[#333333] leading-relaxed">
+                    Curriculum centered on systems analysis, database
+                    architecture, business logic modeling, and enterprise
+                    software engineering foundations.
+                  </p>
+                </div>
+
+                <div className="mt-8 pt-4 border-t border-[#111111]/15 text-xs text-[#5A606B]">
+                  Management Information Systems, 4-year program
+                </div>
+              </div>
+            </div>
+
+            {/* Certifications (Right, 7 cols) */}
+            <div className="lg:col-span-7 border-2 border-[#111111] bg-[#FAF8F5] shadow-[5px_5px_0px_0px_#111111] flex flex-col justify-between">
+              <div className="bg-[#111111] text-[#FAF8F5] px-4 py-2.5 flex items-center justify-between border-b-2 border-[#111111]">
+                <span className="text-xs font-bold">Certifications</span>
+              </div>
+
+              <div className="p-6 sm:p-8 space-y-4 flex-grow">
                 {certifications.map((cert) => (
                   <div
                     key={cert.title}
-                    className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.1] hover:bg-white/[0.04] transition-colors duration-300 flex items-start gap-3.5"
+                    className="p-4 border border-[#111111]/20 bg-white hover:border-[#111111] hover:shadow-[2px_2px_0px_0px_#111111] transition-all"
                   >
-                    <div className="mt-0.5 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <CheckCircle2Icon
-                        className="text-primary"
-                        size={12}
-                        strokeWidth={3}
-                      />
+                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-1.5">
+                      <h4 className="text-sm font-bold text-[#111111] leading-snug">
+                        {cert.title}
+                      </h4>
+                      <span className="inline-block px-2 py-0.5 bg-[#FAF8F5] border border-[#111111] text-[10px] font-bold text-[#111111] shrink-0 w-fit">
+                        {cert.issuer}
+                      </span>
                     </div>
-                    <div>
-                      <div className="flex flex-col gap-1 mb-1">
-                        <h4 className="text-sm font-bold text-white leading-snug">
-                          {cert.title}
-                        </h4>
-                        <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-[#8899A6] px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.02] w-fit">
-                          {cert.issuer}
-                        </span>
-                      </div>
-                      <p className="text-[11px] font-medium text-[#8899A6]">
-                        {cert.focus}
-                      </p>
-                    </div>
+                    <p className="text-xs text-[#5A606B] leading-relaxed">
+                      {cert.focus}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -376,32 +398,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* D. Contact CTA Section */}
+      {/* D. Recent Writing Section */}
+      <section className="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b-2 border-[#111111]">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#5A606B] block mb-2">
+              Writing
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#111111]">
+              Recent Articles
+            </h2>
+          </div>
+
+          <Link
+            className="inline-flex items-center gap-2 font-bold text-sm text-[#111111] hover:underline underline-offset-4 transition-all"
+            href="/blog"
+          >
+            <span>View all articles</span>
+            <ArrowUpRightIcon size={16} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <Link
+              key={post.slug}
+              className="border-2 border-[#111111] bg-[#FAF8F5] shadow-[4px_4px_0px_0px_#111111] hover:shadow-[6px_6px_0px_0px_#111111] hover:-translate-y-1 transition-all p-6 flex flex-col justify-between group"
+              href={`/blog/${post.slug}`}
+            >
+              <div>
+                <div className="flex items-center gap-2 text-xs text-[#5A606B] mb-3">
+                  <CalendarIcon size={13} />
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+
+                <h3 className="text-lg font-bold text-[#111111] tracking-tight group-hover:underline underline-offset-4 transition-all mb-2">
+                  {post.title}
+                </h3>
+
+                <p className="text-xs text-[#5A606B] leading-relaxed line-clamp-3 mb-4">
+                  {post.description}
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-[#111111]/15 flex items-center justify-between text-xs font-bold text-[#111111]">
+                <span>Read article</span>
+                <ArrowUpRightIcon
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                  size={14}
+                />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* E. Personal Contact Section */}
       <section
-        className="scroll-mt-24 pt-16 pb-32 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
+        className="scroll-mt-20 pb-24 sm:pb-32 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
         id="contact"
       >
-        <div className="group relative rounded-[32px] bg-gradient-to-b from-[#0A0D14] to-[#05070A] border border-[#1A2234] p-10 sm:p-16 text-center overflow-hidden transition-colors duration-500 hover:border-primary/30">
-          {/* Subtle Ambient Radial Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(217,71,36,0.15)_0%,transparent_70%)] pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-1000" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0%,transparent_100%)] pointer-events-none" />
-
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4 relative z-10 text-balance">
-            Project and role inquiries.
-          </h2>
-          <p className="text-base sm:text-lg text-[#8899A6] max-w-xl mx-auto mb-10 leading-relaxed relative z-10">
-            For contract projects or full-time engineering roles, send a brief
-            note about the work and its technical constraints.
-          </p>
-          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-primary hover:bg-primary-hover text-white font-bold text-sm transition-all duration-300 shadow-[0_0_30px_rgba(217,71,36,0.3)] hover:shadow-[0_0_40px_rgba(217,71,36,0.6)] hover:-translate-y-0.5"
-              href="mailto:contact@islamkamel.com"
-            >
-              <SendIcon size={18} />
-              <span>contact@islamkamel.com</span>
-            </a>
+        <div className="border-2 border-[#111111] bg-[#FAF8F5] shadow-[6px_6px_0px_0px_#111111] p-8 sm:p-14 text-center">
+          <div className="inline-block px-3 py-1 bg-[#EE7C98] border border-[#111111] text-xs font-bold text-[#111111] mb-6">
+            Say hello
           </div>
+
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111111] mb-4">
+            Say hello
+          </h2>
+
+          <p className="text-base sm:text-lg text-[#5A606B] max-w-xl mx-auto mb-8 leading-relaxed">
+            Have a question about an article, want to discuss software
+            architecture, or just want to connect? Send a note to say hello.
+          </p>
+
+          <a
+            className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#EE7C98] hover:bg-[#E56382] text-[#111111] font-bold text-base border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] hover:shadow-[2px_2px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+            href="mailto:contact@islamkamel.com"
+          >
+            <SendIcon size={18} />
+            <span>contact@islamkamel.com</span>
+          </a>
         </div>
       </section>
     </div>

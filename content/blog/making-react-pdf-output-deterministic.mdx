@@ -1,0 +1,310 @@
+---
+title: "Making React PDF Output Deterministic"
+date: "2026-09-15"
+description: "A failure-driven guide to repeatable React PDF reports through normalized inputs, pinned fonts, controlled pagination, stable metadata, and explicit generation errors."
+tags: ["React", "PDF", "Document Generation"]
+---
+
+## Defining document determinism
+
+A PDF document generation process is deterministic when identical source inputs and pinned font assets produce the same visible content, record ordering, pagination boundaries, and document metadata across multiple runs.
+
+This definition focuses on layout and visual reproducibility. It explicitly does not guarantee byte-for-byte binary identity of the emitted file without a separate hash check. PDF engines can embed varying creation timestamps, object dictionary key ordering, and internal stream compression variations into the raw binary container. The target of these controls is eliminating visual, structural, and semantic drift between separate compilation runs.
+
+## The report failure catalogue
+
+Automated PDF generation pipelines fail determinism in five common ways:
+
+- **Unsorted collection inputs:**
+  - *Visible symptom:* Rows swap positions across generation runs, causing variable page breaks when database queries or upstream APIs return records without an explicit `ORDER BY`.
+  - *Control:* Enforce pure input normalization that deep-copies the collection and sorts records using a multi-key comparison ending in an unambiguous lexical tie-breaker.
+- **Render-time timestamps and dynamic identifiers:**
+  - *Visible symptom:* Generating the exact same statement twice prints differing generation times, print timestamps, or UUIDs in document headers and footers.
+  - *Control:* Pass an immutable ISO 8601 timestamp string into the document props; forbid `new Date()`, `Date.now()`, or pseudo-random identifiers inside React components.
+- **Environment font substitution:**
+  - *Visible symptom:* Developer laptops and serverless build containers measure text with differing fallback font metrics, triggering unexpected word wrapping and shifting total page counts.
+  - *Control:* Register versioned, self-contained font files using explicit font family identifiers via `Font.register()`.
+- **Accidental row splitting:**
+  - *Visible symptom:* A multi-line table row or signature block breaks across the bottom margin of page 1 and the top of page 2, stranding cell borders or orphan lines.
+  - *Control:* Wrap indivisible row layouts in container views configured with `wrap={false}`, set a standard `size="A4"`, and use explicit `break` triggers for intentional section breaks.
+- **Swallowed compilation failures:**
+  - *Visible symptom:* Malformed styles or unreachable font assets cause PDF generation promises to hang or fail silently, leaving the user interface in a permanent loading state.
+  - *Control:* Wrap the compiler call in a `try/catch` block, retain the root error using `Error.cause`, expose a retryable error message, and revoke generated object URLs.
+
+## Normalizing inputs before rendering
+
+The document template should accept pre-processed, sorted, and validated data. Performing data sanitization inside the rendering tree mixes data transformation with layout calculation.
+
+A dedicated `normalizeReport` function acts as the deterministic boundary:
+
+```typescript
+export interface RawReportItem {
+  id: string;
+  label: string;
+  amount: number;
+  category: string;
+}
+
+export interface RawReportInput {
+  reportId: string;
+  title: string;
+  items: RawReportItem[];
+}
+
+export interface NormalizedReportItem {
+  id: string;
+  label: string;
+  amount: number;
+  category: string;
+  formattedAmount: string;
+}
+
+export interface NormalizedReport {
+  reportId: string;
+  title: string;
+  generatedAt: string;
+  items: NormalizedReportItem[];
+  totalAmount: number;
+}
+
+export function normalizeReport(
+  input: RawReportInput,
+  generatedAt: string
+): NormalizedReport {
+  if (!input.title || input.title.trim() === "") {
+    throw new Error("Report title is required");
+  }
+
+  // Copy records before sorting to avoid mutating input references
+  const sortedItems = [...input.items].sort((a, b) => {
+    // 1. Primary order: category ascending
+    const catCompare = a.category.localeCompare(b.category);
+    if (catCompare !== 0) return catCompare;
+
+    // 2. Secondary order: amount descending
+    if (b.amount !== a.amount) return b.amount - a.amount;
+
+    // 3. Unambiguous lexical tie-breaker: unique id ascending
+    return a.id.localeCompare(b.id);
+  });
+
+  let totalAmount = 0;
+  const items: NormalizedReportItem[] = sortedItems.map((item) => {
+    totalAmount += item.amount;
+    return {
+      ...item,
+      formattedAmount: item.amount.toFixed(2),
+    };
+  });
+
+  return {
+    reportId: input.reportId,
+    title: input.title.trim(),
+    generatedAt,
+    items,
+    totalAmount,
+  };
+}
+```
+
+This transformation guarantees that regardless of the initial record order, the array passed into the renderer follows an identical sequence. Passing `generatedAt` as an argument removes clock lookups from component evaluation.
+
+## Pinning fonts and pagination layout
+
+Using current `@react-pdf/renderer` v4 APIs, configure page dimensions, font registration, indivisible rows, and intentional breaks using [`Document`, `Page`, `View`, and `Text`](https://react-pdf.org/docs/v4/components):
+
+```tsx
+import {
+  Document,
+  Font,
+  Page,
+  StyleSheet,
+  Text,
+  View,
+} from "@react-pdf/renderer";
+
+// Register explicit font sources to prevent host font fallback drift
+Font.register({
+  family: "Inter",
+  fonts: [
+    { src: "/fonts/Inter-Regular.ttf", fontWeight: "normal" },
+    { src: "/fonts/Inter-Bold.ttf", fontWeight: "bold" },
+  ],
+});
+
+const styles = StyleSheet.create({
+  page: {
+    paddingTop: 36,
+    paddingBottom: 48,
+    paddingHorizontal: 36,
+    fontFamily: "Inter",
+    fontSize: 10,
+    color: "#111827",
+  },
+  header: {
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+    paddingBottom: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  meta: {
+    fontSize: 9,
+    color: "#6B7280",
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
+    paddingVertical: 6,
+  },
+  sectionBreak: {
+    marginTop: 24,
+    paddingTop: 12,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 36,
+    right: 36,
+    textAlign: "center",
+    fontSize: 8,
+    color: "#9CA3AF",
+  },
+});
+
+export function ReportDocument({ report }: { report: NormalizedReport }) {
+  return (
+    <Document title={report.title} author="Reporting System">
+      <Page size="A4" style={styles.page}>
+        <View style={styles.header}>
+          <Text style={styles.title}>{report.title}</Text>
+          <Text style={styles.meta}>
+            ID: {report.reportId} | Generated: {report.generatedAt}
+          </Text>
+        </View>
+
+        <View>
+          {report.items.map((item) => (
+            // wrap={false} prevents this container from breaking across pages
+            <View key={item.id} style={styles.tableRow} wrap={false}>
+              <Text style={{ flex: 2 }}>{item.label}</Text>
+              <Text style={{ flex: 1 }}>{item.category}</Text>
+              <Text style={{ flex: 1, textAlign: "right" }}>
+                {item.formattedAmount}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        {/* break forces this audit block onto a clean page boundary */}
+        <View style={styles.sectionBreak} break>
+          <Text style={styles.title}>Audit Summary</Text>
+          <View style={styles.tableRow} wrap={false}>
+            <Text style={{ flex: 3, fontWeight: "bold" }}>Total Processed</Text>
+            <Text style={{ flex: 1, textAlign: "right", fontWeight: "bold" }}>
+              {report.totalAmount.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+
+        {/* Side-effect-free page numbers computed by the layout engine */}
+        <Text
+          style={styles.footer}
+          render={({ pageNumber, totalPages }) =>
+            `Page ${pageNumber} of ${totalPages}`
+          }
+          fixed
+        />
+      </Page>
+    </Document>
+  );
+}
+```
+
+Key pagination and styling properties from [React PDF styling](https://react-pdf.org/docs/v4/styling) and [page wrapping](https://react-pdf.org/docs/v4/advanced/page-wrapping):
+
+- `size="A4"` defines explicit viewport dimensions (595.28 x 841.89 points), preventing variations between print presets.
+- `wrap={false}` informs the layout engine that the target `View` cannot be divided across a page break. If the row exceeds remaining vertical space on the current page, the engine moves the entire row to the next page.
+- `break` marks an intentional section separator, guaranteeing that the audit summary starts at the top of a fresh page rather than awkwardly attaching to the end of a previous list.
+- `fixed` pins the footer to the bottom of every emitted page, and the `render` callback receives `{ pageNumber, totalPages }` directly from the layout pass without modifying React component state.
+
+## Explicit generation errors and resource cleanup
+
+Compiling a PDF in the browser involves font fetching, glyph layout calculation, and binary compression. Calling `pdf().toBlob()` from the [@react-pdf/renderer source](https://github.com/diegomura/react-pdf/blob/master/packages/renderer/src/index.js) can reject if network assets fail or stylesheet properties contain errors.
+
+A robust trigger isolates failures, retains debugging context, and cleans up blob references:
+
+```tsx
+import React, { useState } from "react";
+import { pdf } from "@react-pdf/renderer";
+
+interface DownloadButtonProps {
+  report: NormalizedReport;
+}
+
+export function DownloadReportButton({ report }: DownloadButtonProps) {
+  const [isCompiling, setIsCompiling] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleDownload = async () => {
+    setIsCompiling(true);
+    setErrorMessage(null);
+
+    let blobUrl: string | null = null;
+    try {
+      // Compile the document tree to a binary blob
+      const blob = await pdf(<ReportDocument report={report} />).toBlob();
+      blobUrl = URL.createObjectURL(blob);
+
+      const downloadLink = document.createElement("a");
+      downloadLink.href = blobUrl;
+      downloadLink.download = `${report.reportId}.pdf`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } catch (err) {
+      // Retain the underlying failure context for error reporting
+      const failure = new Error("Failed to compile PDF document", { cause: err });
+      console.error(failure);
+
+      setErrorMessage(
+        err instanceof Error ? err.message : "Document compilation failed"
+      );
+    } finally {
+      // Revoke the blob URL to prevent browser memory retention
+      if (blobUrl) {
+        URL.revokeObjectURL(blobUrl);
+      }
+      setIsCompiling(false);
+    }
+  };
+
+  return (
+    <div>
+      <button
+        onClick={handleDownload}
+        disabled={isCompiling}
+        type="button"
+      >
+        {isCompiling ? "Compiling Document..." : "Download PDF"}
+      </button>
+
+      {errorMessage && (
+        <div role="alert">
+          <span>{errorMessage}</span>
+          <button onClick={handleDownload} type="button">
+            Retry
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+Calling `URL.revokeObjectURL(blobUrl)` in the `finally` block releases the binary reference once the browser initiates the download, preventing detached blobs from lingering in heap memory across repeated downloads. Wrapping the invocation with `{ cause: err }` preserves network or layout stack traces for diagnostics while displaying an actionable retry option in the interface.

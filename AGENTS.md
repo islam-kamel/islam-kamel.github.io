@@ -1,13 +1,14 @@
-
 ## Rules for the AI agent (going forward)
 
 **Metadata**
+
 1. Every route must set its own `alternates.canonical` equal to that page's exact live URL. Never let it inherit the site root.
 2. `openGraph.url`, `openGraph.title`, `openGraph.description` must mirror that same page's own title/description — never the default/root metadata.
 3. `twitter.title` / `twitter.description` must mirror the same values.
-4. After adding or editing any page, fetch its rendered `<head>` and confirm canonical/og/twitter values point to *that* page, not the homepage. Treat "matches homepage on a non-home route" as a bug, every time.
+4. After adding or editing any page, fetch its rendered `<head>` and confirm canonical/og/twitter values point to _that_ page, not the homepage. Treat "matches homepage on a non-home route" as a bug, every time.
 
 **Dynamic Open Graph Images**
+
 - All routes must generate dynamic Open Graph cards via colocated `opengraph-image.tsx` using `ImageResponse` from `next/og`.
 - For static export (`output: "export"`), always configure:
   - `export const dynamic = "force-static";`
@@ -19,17 +20,21 @@
 - Verification: After adding or modifying any route, inspect the built `<head>` in `out/` to confirm `<meta property="og:image">`, `<meta property="og:image:width">`, `<meta property="og:image:height">`, and `<meta name="twitter:image">` point to that route's own `opengraph-image.png`.
 
 **Structured data**
+
 5. Every blog post should include `BlogPosting`/`Article` JSON-LD: `headline`, `description`, `datePublished`, `dateModified`, `author` (Person: Islam Kamel), `mainEntityOfPage` = canonical URL, and `image` = `${canonicalUrl}/opengraph-image.png`.
 6. Homepage should include `Person` + `WebSite` JSON-LD.
 
 **Title tags**
+
 7. Keep `<title>` under ~60 characters where practical. For long post titles, drop the trailing `| Software Engineer` suffix rather than let the post title get truncated in search results.
 
 **Sitemap / robots**
+
 8. Confirm `/robots.txt` references the sitemap.
 9. Confirm `sitemap.xml` is generated automatically (not hardcoded) and includes every published post with an accurate `lastmod` — new posts should never require a manual sitemap edit.
 
 **Anti-AI-Slop Quality Standard**
+
 - **Scope**: Applies across all public routes (homepage, blog index, articles, navigation, error states) for all new content and material edits, covering page copy, blog content, cards, gradients, icons, animations, charts, and Mermaid diagrams. Build success alone is never sufficient verification.
 - **Specificity over generic prose**: Every section must contain a project-specific fact, decision, constraint, result, or example. Remove statements that could be pasted unchanged into another portfolio. Claims must be supported by observable evidence. Round statistics, performance claims, and business outcomes need their measurement method or source.
   - Rejected: Building resilient systems requires a thoughtful and comprehensive approach.
@@ -59,20 +64,49 @@
   - Record concrete evidence in the final report: routes inspected, viewport sizes, and any content or visuals removed or rewritten.
 
 **Content/writing style**
+
 10. In example code, clean up anything registered on connect (event listeners, subscriptions) in the matching teardown/disconnect handler — an example that leaks a listener undercuts a post that's specifically about doing this reliably in production.
 11. If a post raises a specific design question rhetorically (e.g. "full snapshot or a diff on reconnect?"), answer it or state which way you went and why — don't leave it hanging right as it gets interesting.
 
 **Homepage / positioning (active)**
+
 12. Don't repeat the same tool/skill names across two sections under different headings (e.g. "Capabilities" and "Core Stack" currently both list ECharts, LLM Orchestration, WebSockets almost verbatim). Each section should carry information the other doesn't.
 13. Name the issuing platform/institution for every certification listed, not just CS50 — unlabeled cert sources are harder to verify or weigh.
-14. Confirm whether the CTA is meant for freelance/contract inquiries, full-time roles, or both, and word "Let's work together" accordingly instead of leaving it ambiguous.
+14. This is a personal website. Use "Say hello" for the contact CTA; do not imply hiring, recruiting, freelance, or contract intent.
 
 **Homepage / positioning (deferred — content not ready, do not act on these yet)**
+
 15. Backing capability claims with real projects/case studies.
 16. Adding a current role/status + years-of-experience line.
 
 **Navigation**
+
 17. Every nav link that targets a homepage section (Capabilities, Tech Stack, Education, Contact) must resolve correctly from any route, not just from the homepage. Test each of the four links from `/blog` and from a blog post, not only from `/`.
 
 **Low priority / no action needed**
+
 18. `meta-keywords` hasn't been a ranking signal for Google/Bing since ~2009. Not worth agent time either way.
+
+### 2 UI copy and iconography
+
+These rules apply to all user-facing application copy and controls.
+
+- Do not use the em dash character, Unicode U+2014, in user-facing strings.
+- Do not use the middle dot character, Unicode U+00B7, as a separator.
+- Do not use emoji or decorative Unicode glyphs as interface icons.
+- Do not use textual arrows, checkmarks, crosses, stars, warning glyphs, filled circles, or similar symbols in place of an icon.
+- Use named icons from `components/icons.tsx` for product interface iconography.
+- Do not mix Lucide with another icon library unless the product owner explicitly approves an exception.
+- An icon must support meaning, not replace a critical action label when the label is needed for clarity.
+- Every icon-only interactive control must have an accessible name such as `aria-label`.
+- Icons should inherit `currentColor` and follow the surrounding semantic state.
+- Prefer normal punctuation, whitespace, layout, borders, or separate text rows instead of decorative character separators.
+- IF USED IN PROJECT: CI must reject forbidden UI glyphs in source and translation catalogs.
+
+### 3 User interface language and visual direction
+
+- Prefer short, natural, descriptive headings and labels. Do not use pseudo-code section names, bracketed labels, slash-separated all-caps jargon, or invented system/file-path language in interface copy. For example, reject `[SECTION_02] // ACADEMIC & VERIFIED CREDENTIALS`.
+- Remove identity or metadata labels that repeat information already visible. Do not add "Personal portfolio" beside a displayed name; remove filler rather than replacing it with another marketing label.
+- Convey a visual style through typography, palette, layout, and relevant artwork. Do not imitate terminals, dashboards, telemetry, or schematic devices with fake labels, signals, metrics, or readouts.
+- Follow the owner's supplied visual references and explicit art direction across the homepage, blog, navigation, articles, error states, and social cards. Prefer artwork that fits the real content; do not invent diagrams or imagery to fill space. When the owner specifies an art direction, apply it directly without adding an approval step.
+- These rules apply to interface copy and visuals, not technical prose or code examples. Preserve meaningful technical terms, operators, and syntax.

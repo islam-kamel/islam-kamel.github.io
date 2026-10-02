@@ -8,9 +8,9 @@ export const contentType = "image/png";
 export default function Image() {
   const capabilities = [
     "Frontend Architecture",
-    "LLM Integration",
+    "Backend & Systems",
+    "AI & LLM Integration",
     "Real-Time Systems",
-    "Backend Systems",
   ];
 
   return new ImageResponse(
@@ -21,10 +21,8 @@ export default function Image() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#0A0D14",
-          backgroundImage:
-            "radial-gradient(circle at 85% 15%, rgba(217, 71, 36, 0.18) 0%, rgba(10, 13, 20, 0) 60%)",
-          padding: "48px",
+          backgroundColor: "#FAF8F5",
+          padding: "40px",
         }}
       >
         <div
@@ -34,18 +32,44 @@ export default function Image() {
             justifyContent: "space-between",
             width: "100%",
             height: "100%",
-            border: "1px solid #1A2234",
-            borderRadius: "24px",
-            backgroundColor: "rgba(10, 13, 20, 0.75)",
-            padding: "48px 56px",
+            border: "3px solid #111111",
+            backgroundColor: "#FAF8F5",
+            boxShadow: "8px 8px 0px 0px #111111",
           }}
         >
-          {/* Top Bar */}
+          {/* Top Window Bar */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              backgroundColor: "#111111",
+              color: "#FAF8F5",
+              padding: "12px 24px",
+              fontFamily: "monospace",
+              fontSize: "16px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  backgroundColor: "#EE7C98",
+                }}
+              />
+              <span>Islam Kamel</span>
+            </div>
+          </div>
+
+          {/* Middle Body */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+              padding: "36px 48px",
             }}
           >
             <div
@@ -53,142 +77,77 @@ export default function Image() {
                 display: "flex",
                 alignItems: "center",
                 gap: "12px",
-                padding: "8px 18px",
-                borderRadius: "9999px",
-                border: "1px solid #1A2234",
-                backgroundColor: "#111622",
-              }}
-            >
-              <span
-                style={{
-                  color: "#D94724",
-                  fontWeight: 700,
-                  fontSize: "18px",
-                  fontFamily: "monospace",
-                }}
-              >
-                IK
-              </span>
-              <span
-                style={{
-                  color: "#8899A6",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                }}
-              >
-                islamkamel.com
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "6px 14px",
-                borderRadius: "9999px",
-                border: "1px solid rgba(217, 71, 36, 0.3)",
-                backgroundColor: "rgba(217, 71, 36, 0.08)",
               }}
             >
               <div
                 style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "#D94724",
-                }}
-              />
-              <span
-                style={{
-                  color: "#D94724",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  letterSpacing: "0.05em",
+                  backgroundColor: "#EE7C98",
+                  color: "#111111",
+                  border: "2px solid #111111",
+                  padding: "6px 14px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
                 }}
               >
-                SOFTWARE ENGINEER
-              </span>
+                Software engineer
+              </div>
             </div>
-          </div>
 
-          {/* Middle Section */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "14px",
-            }}
-          >
-            <div
+            <h1
               style={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "20px",
+                fontSize: "68px",
+                fontWeight: 700,
+                color: "#111111",
+                letterSpacing: "-0.04em",
+                margin: 0,
+                lineHeight: 1.05,
               }}
             >
-              <h1
-                style={{
-                  fontSize: "60px",
-                  fontWeight: 800,
-                  color: "#FFFFFF",
-                  letterSpacing: "-0.03em",
-                  margin: 0,
-                  lineHeight: 1.1,
-                }}
-              >
-                Islam Kamel
-              </h1>
-              <span
-                style={{
-                  fontSize: "28px",
-                  fontWeight: 600,
-                  color: "#D94724",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Software Engineer
-              </span>
-            </div>
+              Islam Kamel
+            </h1>
+
             <p
               style={{
                 fontSize: "22px",
                 lineHeight: 1.45,
-                color: "#8899A6",
+                color: "#333333",
                 margin: 0,
-                maxWidth: "920px",
+                maxWidth: "960px",
               }}
             >
-              Building web applications, real-time communication systems, and
-              LLM workflows with structured data and modular architecture.
+              Building web applications, real-time data streaming systems, and
+              LLM integration workflows.
             </p>
           </div>
 
-          {/* Bottom Section */}
+          {/* Bottom Bar */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              paddingTop: "24px",
-              borderTop: "1px solid #1A2234",
+              padding: "20px 48px",
+              borderTop: "2px solid #111111",
+              backgroundColor: "#FAF8F5",
             }}
           >
             <div style={{ display: "flex", gap: "10px" }}>
-              {capabilities.map((pill) => (
+              {capabilities.map((cap) => (
                 <div
-                  key={pill}
+                  key={cap}
                   style={{
                     display: "flex",
-                    padding: "8px 16px",
-                    borderRadius: "9999px",
-                    backgroundColor: "#111622",
-                    border: "1px solid #1A2234",
-                    color: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: 500,
+                    padding: "6px 14px",
+                    backgroundColor: "#FFFFFF",
+                    border: "2px solid #111111",
+                    color: "#111111",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    fontFamily: "monospace",
                   }}
                 >
-                  {pill}
+                  {cap}
                 </div>
               ))}
             </div>
@@ -196,8 +155,8 @@ export default function Image() {
               style={{
                 fontFamily: "monospace",
                 fontSize: "16px",
-                color: "#8899A6",
-                letterSpacing: "0.05em",
+                color: "#111111",
+                fontWeight: 700,
               }}
             >
               islamkamel.com

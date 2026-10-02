@@ -1,0 +1,267 @@
+---
+title: "Moving Data Processing Off React's Main Thread"
+date: "2026-09-15"
+description: "A practical Web Worker boundary for keeping filtering and aggregation from blocking a React interface, with typed messages, stale-result handling, cleanup, and measurement."
+tags: ["React", "Web Workers", "Performance"]
+---
+
+## The synchronous data-table execution trace
+
+A text input fires an `onChange` event in a data table holding 100,000 in-memory records. On every keystroke, React invokes an event handler that filters the array across multiple search predicates and calculates grouping totals for each active category.
+
+Because the filtering and aggregation logic runs synchronously on the browser main thread, the JavaScript engine monopolizes execution for the duration of the loop. During this window, the browser cannot run layout passes, recalculate styles, paint frames, or process incoming user interactions. If the user types three characters in rapid succession, the second and third keystrokes stall until the previous filter loop finishes.
+
+Moving the processing off the main thread establishes a clear separation: React manages user input events and DOM rendering, while a single dedicated [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) handles CPU-bound filtering and aggregation.
+
+Offloading this computation does not decrease the total CPU cycles required. The worker executes the exact same iterative operations, and passing data across the thread boundary adds message serialization overhead. The architectural goal is thread isolation: preventing long-running calculations from delaying the browser event loop so user input and animations remain responsive.
+
+## A typed request and response protocol
+
+Communication with a worker relies on [`postMessage()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage). The browser serializes payloads using the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), meaning functions, DOM nodes, and object methods cannot cross the boundary.
+
+Transmitting a 100,000-row collection on every keystroke creates unnecessary serialization delays. Instead, the protocol initializes the row collection once upon worker instantiation, then transmits lightweight query descriptors paired with an incrementing job identifier:
+
+```typescript
+export interface Row {
+  id: string;
+  category: string;
+  value: number;
+  status: "active" | "archived" | "pending";
+}
+
+export interface Summary {
+  count: number;
+  totalValue: number;
+  categoryCounts: Record<string, number>;
+}
+
+export type WorkerRequest =
+  | { type: "init"; rows: Row[] }
+  | { type: "run"; jobId: number; query: string };
+
+export type WorkerResponse =
+  | { type: "ready" }
+  | { type: "result"; jobId: number; summary: Summary }
+  | { type: "error"; jobId: number; message: string };
+```
+
+If memory profiling indicates that the initial row cloning blocks execution during page startup, transferable objects such as `ArrayBuffer` offer zero-copy memory transfer by transferring ownership of the underlying buffer to the worker thread. For most structured data sets, however, a single initialization clone is fast enough that transferable buffers serve as an optimization path rather than an initial requirement.
+
+## Dedicated worker implementation
+
+The worker maintains the dataset within its module scope, validates incoming messages, and returns serializable payloads:
+
+```typescript
+// worker.ts
+let dataset: Row[] = [];
+
+self.onmessage = (event: MessageEvent<WorkerRequest>) => {
+  const message = event.data;
+
+  if (!message || typeof message !== "object") {
+    self.postMessage({
+      type: "error",
+      jobId: -1,
+      message: "Malformed request payload",
+    } satisfies WorkerResponse);
+    return;
+  }
+
+  switch (message.type) {
+    case "init": {
+      dataset = message.rows;
+      self.postMessage({ type: "ready" } satisfies WorkerResponse);
+      break;
+    }
+
+    case "run": {
+      try {
+        const query = message.query.trim().toLowerCase();
+        let totalValue = 0;
+        let count = 0;
+        const categoryCounts: Record<string, number> = {};
+
+        for (let i = 0; i < dataset.length; i++) {
+          const row = dataset[i];
+          const matches =
+            query === "" ||
+            row.category.toLowerCase().includes(query) ||
+            row.status.includes(query);
+
+          if (matches) {
+            count++;
+            totalValue += row.value;
+            categoryCounts[row.category] = (categoryCounts[row.category] || 0) + 1;
+          }
+        }
+
+        self.postMessage({
+          type: "result",
+          jobId: message.jobId,
+          summary: { count, totalValue, categoryCounts },
+        } satisfies WorkerResponse);
+      } catch (err) {
+        self.postMessage({
+          type: "error",
+          jobId: message.jobId,
+          message: err instanceof Error ? err.message : "Computation failed",
+        } satisfies WorkerResponse);
+      }
+      break;
+    }
+
+    default: {
+      const exhaustiveCheck: never = message;
+      self.postMessage({
+        type: "error",
+        jobId: -1,
+        message: `Unhandled message type: ${JSON.stringify(exhaustiveCheck)}`,
+      } satisfies WorkerResponse);
+    }
+  }
+};
+```
+
+Wrapping the query loop in a `try/catch` block ensures that unexpected calculation errors produce a typed response instead of silently terminating the worker context.
+
+## React lifecycle, stale-result handling, and cleanup
+
+The React hook manages worker instantiation, event listeners, query dispatching, and teardown inside [React `useEffect`](https://react.dev/reference/react/useEffect):
+
+```typescript
+// useTableWorker.ts
+import { useEffect, useRef, useState } from "react";
+
+interface WorkerState {
+  isReady: boolean;
+  isProcessing: boolean;
+  summary: Summary | null;
+  error: string | null;
+}
+
+export function useTableWorker(initialRows: Row[]) {
+  const workerRef = useRef<Worker | null>(null);
+  const latestJobIdRef = useRef<number>(0);
+  const [state, setState] = useState<WorkerState>({
+    isReady: false,
+    isProcessing: false,
+    summary: null,
+    error: null,
+  });
+
+  useEffect(() => {
+    const worker = new Worker(
+      new URL("./worker.ts", import.meta.url),
+      { type: "module" }
+    );
+    workerRef.current = worker;
+
+    const handleMessage = (event: MessageEvent<WorkerResponse>) => {
+      const response = event.data;
+
+      if (response.type === "ready") {
+        setState((prev) => ({ ...prev, isReady: true, error: null }));
+        return;
+      }
+
+      if (response.type === "result") {
+        // Discard results from superseded queries
+        if (response.jobId === latestJobIdRef.current) {
+          setState((prev) => ({
+            ...prev,
+            isProcessing: false,
+            summary: response.summary,
+            error: null,
+          }));
+        }
+        return;
+      }
+
+      if (response.type === "error") {
+        if (response.jobId === latestJobIdRef.current || response.jobId === -1) {
+          setState((prev) => ({
+            ...prev,
+            isProcessing: false,
+            error: response.message,
+          }));
+        }
+      }
+    };
+
+    const handleMessageError = () => {
+      setState((prev) => ({
+        ...prev,
+        isProcessing: false,
+        error: "Failed to deserialize worker message",
+      }));
+    };
+
+    const handleError = (event: ErrorEvent) => {
+      setState((prev) => ({
+        ...prev,
+        isProcessing: false,
+        error: event.message || "Uncaught worker error",
+      }));
+    };
+
+    worker.addEventListener("message", handleMessage);
+    worker.addEventListener("messageerror", handleMessageError);
+    worker.addEventListener("error", handleError);
+
+    worker.postMessage({
+      type: "init",
+      rows: initialRows,
+    } satisfies WorkerRequest);
+
+    return () => {
+      worker.removeEventListener("message", handleMessage);
+      worker.removeEventListener("messageerror", handleMessageError);
+      worker.removeEventListener("error", handleError);
+      worker.terminate();
+      workerRef.current = null;
+    };
+  }, [initialRows]);
+
+  const filterData = (query: string) => {
+    if (!workerRef.current || !state.isReady) return;
+
+    const nextJobId = latestJobIdRef.current + 1;
+    latestJobIdRef.current = nextJobId;
+
+    setState((prev) => ({ ...prev, isProcessing: true }));
+
+    workerRef.current.postMessage({
+      type: "run",
+      jobId: nextJobId,
+      query,
+    } satisfies WorkerRequest);
+  };
+
+  return { ...state, filterData };
+}
+```
+
+This lifecycle implementation addresses three specific operational constraints:
+
+1. **Listener removal and worker termination:** The cleanup callback unregisters all three listeners (`message`, `messageerror`, and `error`) and calls [`worker.terminate()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/terminate). Calling `terminate()` immediately shuts down the background thread, preventing memory leaks when the host component unmounts.
+2. **Discarding obsolete job results:** An incrementing `latestJobIdRef` tracks the active query. When typing quickly, query 1 and query 2 might both run in the background. If query 1 resolves after query 2 has already been dispatched, matching `response.jobId === latestJobIdRef.current` ensures that the older result is ignored rather than overwriting fresh UI state.
+3. **Execution non-interruption:** Job IDs discard obsolete results after completion, but they do not cancel or interrupt a synchronous loop already executing inside the worker. If a query takes several hundred milliseconds and the user types again, the worker must finish the active loop before picking up the next message. If immediate cancellation is required for heavier workloads, terminating the existing worker and spawning a fresh replacement, or introducing cooperative chunking (yielding execution in the worker loop using timers), provides cancellation at the cost of recreation overhead.
+
+## Reproducible DevTools performance measurement
+
+To verify responsiveness improvements without relying on ungrounded claims, record two execution traces in Chrome DevTools using a synthetic fixture:
+
+1. **Fixture setup:** Create a deterministic generator function that outputs 50,000 rows with fixed string and numeric fields. Avoid randomized lengths or non-deterministic values across runs.
+2. **Synchronous trace:**
+   - In DevTools, open the **Performance** panel.
+   - Start recording.
+   - In the input field, type a predetermined five-character sequence (for example, `"appl"`) with a 100ms pause between keystrokes.
+   - Stop recording.
+   - Inspect the **Main** thread track. The trace displays wide task blocks exceeding 50ms (flagged with red corners as Long Tasks). The **Frames** track reveals dropped frames during each keystroke, and the Summary tab records elevated Total Blocking Time (TBT).
+3. **Worker trace:**
+   - Switch the interface to the Web Worker implementation.
+   - Run the identical five-character typing sequence under the Performance recorder.
+   - Stop recording.
+   - In the **Main** thread track, the Long Tasks disappear. The main thread shows brief message dispatch and state update blocks.
+   - Scroll down to the dedicated **Worker** thread section. The compute blocks appear entirely within the worker track.
+   - Check the time spent in `postMessage` calls in the bottom-up view to verify that structured cloning serialization overhead remains lower than the frame budget.

@@ -72,6 +72,45 @@ export const Logo: React.FC<IconSvgProps> = (props) => {
   );
 };
 
+export const IkIcon = () => (
+  <svg
+    className="group overflow-visible"
+    fill="none"
+    height={36}
+    viewBox="0 0 36 36"
+    width={36}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Shadow */}
+    <rect
+      className="fill-[#EE7C98] group-hover:fill-[#111111] transition-colors"
+      height={36}
+      rx={8}
+      width={36}
+      x={2}
+      y={2}
+    />
+
+    {/* Background */}
+    <rect
+      className="fill-[#111111] group-hover:fill-[#EE7C98] transition-colors"
+      height={36}
+      rx={8}
+      width={36}
+    />
+
+    <g
+      className="text-[#FAF8F5] group-hover:text-[#111111]"
+      transform="translate(7 7)"
+    >
+      <Logo
+        className="group-hover:scale-105 transition-transform origin-center"
+        size={22}
+      />
+    </g>
+  </svg>
+);
+
 export const MoonFilledIcon = ({
   size = 24,
   width,

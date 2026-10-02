@@ -75,7 +75,8 @@ const article = readCandidate(
 const sitemap = readCandidate("out/sitemap.xml");
 const robots = readCandidate("out/robots.txt");
 
-const articleUrl = "https://islamkamel.com/blog/migrating-github-pages-to-vercel";
+const articleUrl =
+  "https://islamkamel.com/blog/migrating-github-pages-to-vercel";
 const expectedTitle = "Migrating GitHub Pages to Vercel Without SEO Drift";
 const expectedDescription =
   "A technical reference for moving a static site to Vercel behind Cloudflare while preserving HTTPS canonicals, redirects, analytics, and indexing signals.";
@@ -96,7 +97,9 @@ assert(
   "Article must specify its exact og:title"
 );
 assert(
-  article.includes(`<meta property="og:description" content="${expectedDescription}"/>`),
+  article.includes(
+    `<meta property="og:description" content="${expectedDescription}"/>`
+  ),
   "Article must specify its exact og:description"
 );
 assert(
@@ -108,7 +111,9 @@ assert(
   "Article must specify og:image:height 630"
 );
 assert(
-  article.includes(`<meta property="og:image" content="${articleUrl}/opengraph-image`),
+  article.includes(
+    `<meta property="og:image" content="${articleUrl}/opengraph-image`
+  ),
   "Article must specify its own dynamic og:image URL"
 );
 
@@ -118,11 +123,15 @@ assert(
   "Article must specify its exact twitter:title"
 );
 assert(
-  article.includes(`<meta name="twitter:description" content="${expectedDescription}"/>`),
+  article.includes(
+    `<meta name="twitter:description" content="${expectedDescription}"/>`
+  ),
   "Article must specify its exact twitter:description"
 );
 assert(
-  article.includes(`<meta name="twitter:image" content="${articleUrl}/opengraph-image`),
+  article.includes(
+    `<meta name="twitter:image" content="${articleUrl}/opengraph-image`
+  ),
   "Article must specify its own dynamic twitter:image URL"
 );
 
@@ -175,7 +184,9 @@ const ogImagePath = findFile(
   "out/blog/migrating-github-pages-to-vercel/opengraph-image.png"
 );
 const ogBytes = fs.readFileSync(ogImagePath);
-const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const pngSignature = Buffer.from([
+  0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
+]);
 assert.equal(
   ogBytes.subarray(0, 8).equals(pngSignature),
   true,
@@ -189,7 +200,9 @@ assert.equal(height, 630, `Expected OG image height 630, got ${height}`);
 // 8. Sitemap entries and truthful dates
 const sitemapEntries = parseSitemapEntries(sitemap);
 
-const homeEntry = sitemapEntries.find((e) => e.loc === "https://islamkamel.com/");
+const homeEntry = sitemapEntries.find(
+  (e) => e.loc === "https://islamkamel.com/"
+);
 assert(homeEntry, "Homepage entry must exist in sitemap");
 assert.equal(
   homeEntry.lastmod,
@@ -204,14 +217,19 @@ assert(
   "Article sitemap entry must have truthful lastmod matching its publication date"
 );
 
-const blogEntry = sitemapEntries.find((e) => e.loc === "https://islamkamel.com/blog");
+const blogEntry = sitemapEntries.find(
+  (e) => e.loc === "https://islamkamel.com/blog"
+);
 assert(blogEntry, "Blog index entry must exist in sitemap");
 assert(blogEntry.lastmod, "Blog index entry must have lastmod in sitemap");
 
 const postEntries = sitemapEntries.filter((e) =>
   e.loc.startsWith("https://islamkamel.com/blog/")
 );
-assert(postEntries.length > 0, "Expected at least one blog post entry in sitemap");
+assert(
+  postEntries.length > 0,
+  "Expected at least one blog post entry in sitemap"
+);
 
 const maxPostTime = Math.max(
   ...postEntries.map((post) => {
@@ -262,6 +280,36 @@ assert(
 assert(
   !home.includes("gtm.js?id=GTM-T3GSTK22"),
   "Homepage must not contain executable/preload GTM URL with retired GTM-T3GSTK22"
+);
+
+// 11. Navigation anchor targets and section ID contract
+assert(
+  home.includes('id="capabilities"'),
+  'Homepage must contain an element with id="capabilities"'
+);
+assert(
+  home.includes('id="tech-stack"'),
+  'Homepage must contain an element with id="tech-stack"'
+);
+assert(
+  home.includes('id="education"'),
+  'Homepage must contain an element with id="education"'
+);
+assert(
+  home.includes('id="contact"'),
+  'Homepage must contain an element with id="contact"'
+);
+assert(
+  home.includes('href="/#capabilities"'),
+  "Homepage navigation must link to /#capabilities"
+);
+assert(
+  blog.includes('href="/#capabilities"'),
+  "Blog navigation must link to /#capabilities"
+);
+assert(
+  article.includes('href="/#capabilities"'),
+  "Article navigation must link to /#capabilities"
 );
 
 console.log("Static export verification passed: all invariants verified.");

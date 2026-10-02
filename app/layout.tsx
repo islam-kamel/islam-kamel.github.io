@@ -7,7 +7,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { fontLogo, fontSans, fontTitle } from "@/config/fonts";
+import { fontLogo, fontMono, fontSans, fontTitle } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import Footer from "@/components/footer";
 
@@ -116,8 +116,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-    { color: "#000000" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E1013" },
+    { color: "#FAF8F5" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -133,8 +133,9 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "min-h-screen bg-[#000000] text-[#FFFFFF] font-sans antialiased selection:bg-primary/30 selection:text-white",
+          "min-h-screen bg-[#FAF8F5] text-[#111111] font-sans antialiased selection:bg-[#EE7C98] selection:text-[#111111]",
           fontSans.variable,
+          fontMono.variable,
           fontTitle.variable,
           fontLogo.variable
         )}
@@ -152,8 +153,14 @@ export default function RootLayout({
         {/*End Google Tag Manager (noscript)*/}
         <GoogleTagManager gtmId={"GTM-NPFLTNVW"} />
 
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="min-h-screen w-full relative bg-[#000000] text-white flex flex-col justify-between">
+        <Providers
+          themeProps={{
+            attribute: "class",
+            defaultTheme: "light",
+            forcedTheme: "light",
+          }}
+        >
+          <div className="min-h-screen w-full relative bg-[#FAF8F5] text-[#111111] flex flex-col justify-between">
             <Navbar />
             <main className="flex-grow">{children}</main>
             <Footer />

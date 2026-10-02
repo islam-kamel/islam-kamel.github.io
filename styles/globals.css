@@ -3,117 +3,276 @@
 @tailwind utilities;
 
 html {
-    scroll-padding-top: 70px; /* Replace 64px with your navbar height */
+  scroll-padding-top: 80px;
+  background-color: #faf8f5;
+  color: #111111;
 }
 
+/* Halftone and print textures */
+.bg-halftone {
+  background-image: radial-gradient(
+    rgba(17, 17, 17, 0.15) 1.25px,
+    transparent 1.25px
+  );
+  background-size: 14px 14px;
+}
+
+.bg-halftone-subtle {
+  background-image: radial-gradient(
+    rgba(17, 17, 17, 0.08) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
+}
+
+/* Retro hard offset shadows */
+.retro-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #111111;
+}
+
+.retro-shadow {
+  box-shadow: 3px 3px 0px 0px #111111;
+}
+
+.retro-shadow-md {
+  box-shadow: 4px 4px 0px 0px #111111;
+}
+
+.retro-shadow-lg {
+  box-shadow: 6px 6px 0px 0px #111111;
+}
 
 .draw {
-    stroke-dasharray: 445.7563781738281;
-    stroke-dashoffset: 445.7563781738281;
-    animation: drawText 4s ease forwards;
-    animation-delay: 0s;
-    animation-iteration-count: infinite;
-    animation-duration: 30s;
+  stroke-dasharray: 445.7563781738281;
+  stroke-dashoffset: 445.7563781738281;
+  animation: drawText 4s ease forwards;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-duration: 30s;
 }
 
-.logo:hover {
-    .draw {
-        stroke: theme("colors.primary.500");
-        transition: all 0.2s ease;
-    }
+.logo:hover .draw {
+  transition: all 0.2s ease;
+  stroke: color-mix(in srgb, #ee7c98 190%, black);
 }
-
-
 
 @keyframes drawText {
-    0% {
-        stroke-dashoffset: 445.7563781738281;
-    }
-
-    10% {
-        stroke-dashoffset: 0;
-    }
-    100% {
-        stroke-dashoffset: 0;
-    }
+  0% {
+    stroke-dashoffset: 445.7563781738281;
+  }
+  10% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
-/* Blog prose styles */
+/* Blog prose styles - Editorial Retro */
+.prose-blog {
+  color: #222222;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
 .prose-blog h2 {
-    @apply text-2xl font-bold text-white tracking-tight mt-10 mb-3;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111111;
+  letter-spacing: -0.025em;
+  margin-top: 2.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.25;
 }
 
 .prose-blog h3 {
-    @apply text-xl font-bold text-white tracking-tight mt-8 mb-3;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: -0.02em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  line-height: 1.3;
 }
 
 .prose-blog p {
-    @apply text-base text-[#8899A6] leading-relaxed mb-5;
+  color: #282828;
+  line-height: 1.8;
+  margin-bottom: 1.4rem;
 }
 
 .prose-blog a {
-    @apply text-primary hover:text-primary-hover underline underline-offset-4 transition-colors;
+  color: #111111;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.prose-blog a:hover {
+  color: #ff5c8a;
 }
 
 .prose-blog ul {
-    @apply list-disc list-inside space-y-2 text-[#8899A6] mb-5 ml-2;
+  list-style-type: disc;
+  margin-bottom: 1.4rem;
+  margin-left: 1.5rem;
+  color: #282828;
 }
 
 .prose-blog ol {
-    @apply list-decimal list-inside space-y-2 text-[#8899A6] mb-5 ml-2;
+  list-style-type: decimal;
+  margin-bottom: 1.4rem;
+  margin-left: 1.5rem;
+  color: #282828;
 }
 
 .prose-blog li {
-    @apply text-base leading-relaxed;
+  line-height: 1.75;
+  margin-bottom: 0.4rem;
 }
 
 .prose-blog blockquote {
-    @apply border-l-2 border-primary/50 pl-5 my-6 text-[#8899A6] italic;
+  border-left: 3px solid #111111;
+  background-color: #efece6;
+  padding: 1.1rem 1.4rem;
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+  color: #2c2c2c;
+  font-style: italic;
+  border-radius: 0 4px 4px 0;
 }
 
 .prose-blog hr {
-    @apply border-white/[0.06] my-10;
+  border: none;
+  border-top: 2px dashed rgba(17, 17, 17, 0.2);
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .prose-blog strong {
-    @apply text-white font-semibold;
+  color: #111111;
+  font-weight: 700;
 }
 
 .prose-blog code {
-    @apply text-primary bg-primary/10 px-1.5 py-0.5 rounded text-[0.9em] font-mono;
+  color: #111111;
+  background-color: rgba(17, 17, 17, 0.07);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  border: 1px solid rgba(17, 17, 17, 0.15);
 }
 
 /* Code blocks rendered by Shiki */
 .prose-blog pre {
-    @apply my-6 rounded-2xl overflow-x-auto p-5 text-sm border border-white/[0.06];
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  padding: 1.25rem 1.4rem;
+  font-size: 0.875rem;
+  border: 2px solid #111111;
+  background-color: #0e1013 !important;
+  box-shadow: 3px 3px 0px 0px #111111;
 }
 
 .prose-blog pre code {
-    @apply bg-transparent p-0 text-inherit;
+  background-color: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+  border: 0 !important;
+}
+
+/* Mermaid diagrams in light editorial context */
+.prose-blog .mermaid-block {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid #111111;
+  border-radius: 6px;
+  background-color: #faf8f5;
+  padding: 1.5rem;
+  overflow-x: auto;
+  box-shadow: 3px 3px 0px 0px #111111;
+  -webkit-overflow-scrolling: touch;
 }
 
 .prose-blog .mermaid-block pre {
-    @apply my-0 p-0 border-0 bg-transparent overflow-visible;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
 }
 
 .prose-blog .mermaid-block svg {
-    @apply block w-full min-w-[42rem] h-auto;
-    max-width: none !important;
+  display: block;
+  width: 100%;
+  min-width: 32rem;
+  height: auto;
+  max-width: none !important;
 }
 
+/* Explicit high-contrast light theme overrides for Mermaid diagram elements */
 .prose-blog .mermaid-block svg .node rect,
 .prose-blog .mermaid-block svg .node polygon,
+.prose-blog .mermaid-block svg .node circle,
 .prose-blog .mermaid-block svg .node path {
-    rx: 8px;
-    ry: 8px;
+  fill: #ffffff !important;
+  stroke: #111111 !important;
+  stroke-width: 1.5px !important;
+  rx: 4px;
+  ry: 4px;
 }
 
-.prose-blog .mermaid-block svg .cluster rect {
-    rx: 12px;
-    ry: 12px;
+.prose-blog .mermaid-block svg .node .label,
+.prose-blog .mermaid-block svg .node text,
+.prose-blog .mermaid-block svg .node span,
+.prose-blog .mermaid-block svg .label text,
+.prose-blog .mermaid-block svg .nodeLabel,
+.prose-blog .mermaid-block svg .labelText,
+.prose-blog .mermaid-block svg span.nodeLabel {
+  color: #111111 !important;
+  fill: #111111 !important;
+  font-weight: 600 !important;
+}
+
+.prose-blog .mermaid-block svg .edgePath path,
+.prose-blog .mermaid-block svg .flowchart-link {
+  stroke: #111111 !important;
+  stroke-width: 1.5px !important;
+}
+
+.prose-blog .mermaid-block svg .marker,
+.prose-blog .mermaid-block svg marker path,
+.prose-blog .mermaid-block svg #arrowhead path {
+  fill: #111111 !important;
+  stroke: #111111 !important;
+}
+
+.prose-blog .mermaid-block svg .edgeLabel {
+  background-color: #faf8f5 !important;
+  color: #111111 !important;
+  fill: #111111 !important;
+  font-size: 0.85em !important;
+  font-weight: 500 !important;
 }
 
 .prose-blog .mermaid-block svg .edgeLabel rect {
-    rx: 6px;
-    ry: 6px;
+  fill: #faf8f5 !important;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

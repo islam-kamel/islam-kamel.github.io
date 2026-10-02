@@ -34,10 +34,8 @@ export default async function Image({
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#0A0D14",
-          backgroundImage:
-            "radial-gradient(circle at 85% 15%, rgba(217, 71, 36, 0.18) 0%, rgba(10, 13, 20, 0) 60%)",
-          padding: "48px",
+          backgroundColor: "#FAF8F5",
+          padding: "40px",
         }}
       >
         <div
@@ -47,18 +45,54 @@ export default async function Image({
             justifyContent: "space-between",
             width: "100%",
             height: "100%",
-            border: "1px solid #1A2234",
-            borderRadius: "24px",
-            backgroundColor: "rgba(10, 13, 20, 0.75)",
-            padding: "48px 56px",
+            border: "3px solid #111111",
+            backgroundColor: "#FAF8F5",
+            boxShadow: "8px 8px 0px 0px #111111",
           }}
         >
-          {/* Top Bar */}
+          {/* Top Window Bar */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              backgroundColor: "#111111",
+              color: "#FAF8F5",
+              padding: "12px 24px",
+              fontFamily: "monospace",
+              fontSize: "16px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  backgroundColor: "#EE7C98",
+                }}
+              />
+              <span>Islam Kamel</span>
+            </div>
+            <div
+              style={{
+                color: "#FAF8F5",
+                fontSize: "14px",
+                fontFamily: "monospace",
+                fontWeight: 700,
+              }}
+            >
+              {formattedDate}
+            </div>
+          </div>
+
+          {/* Middle Body */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "18px",
+              padding: "36px 48px",
             }}
           >
             <div
@@ -66,70 +100,41 @@ export default async function Image({
                 display: "flex",
                 alignItems: "center",
                 gap: "12px",
-                padding: "8px 18px",
-                borderRadius: "9999px",
-                border: "1px solid #1A2234",
-                backgroundColor: "#111622",
               }}
             >
-              <span
+              <div
                 style={{
-                  color: "#D94724",
-                  fontWeight: 700,
-                  fontSize: "18px",
-                  fontFamily: "monospace",
-                }}
-              >
-                IK
-              </span>
-              <span
-                style={{
-                  color: "#8899A6",
+                  backgroundColor: "#EE7C98",
+                  color: "#111111",
+                  border: "2px solid #111111",
+                  padding: "6px 14px",
                   fontSize: "14px",
-                  fontWeight: 500,
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
                 }}
               >
-                islamkamel.com/blog
-              </span>
+                Article
+              </div>
             </div>
-            <div
-              style={{
-                color: "#D94724",
-                fontSize: "15px",
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-              }}
-            >
-              {formattedDate}
-            </div>
-          </div>
 
-          {/* Middle: Title & Description */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-            }}
-          >
             <h1
               style={{
-                fontSize: "48px",
-                fontWeight: 800,
-                color: "#FFFFFF",
+                fontSize: "50px",
+                fontWeight: 700,
+                color: "#111111",
                 letterSpacing: "-0.03em",
                 margin: 0,
-                lineHeight: 1.2,
+                lineHeight: 1.12,
               }}
             >
               {post.title}
             </h1>
+
             <p
               style={{
-                fontSize: "22px",
+                fontSize: "20px",
                 lineHeight: 1.45,
-                color: "#8899A6",
+                color: "#333333",
                 margin: 0,
                 maxWidth: "960px",
               }}
@@ -138,14 +143,15 @@ export default async function Image({
             </p>
           </div>
 
-          {/* Bottom: Tags & Footer */}
+          {/* Bottom Bar */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              paddingTop: "24px",
-              borderTop: "1px solid #1A2234",
+              padding: "20px 48px",
+              borderTop: "2px solid #111111",
+              backgroundColor: "#FAF8F5",
             }}
           >
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
@@ -155,12 +161,12 @@ export default async function Image({
                   style={{
                     display: "flex",
                     padding: "6px 14px",
-                    borderRadius: "9999px",
-                    backgroundColor: "#111622",
-                    border: "1px solid #1A2234",
-                    color: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: 500,
+                    backgroundColor: "#FFFFFF",
+                    border: "2px solid #111111",
+                    color: "#111111",
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    fontFamily: "monospace",
                   }}
                 >
                   {tag}
@@ -171,11 +177,11 @@ export default async function Image({
               style={{
                 fontFamily: "monospace",
                 fontSize: "16px",
-                color: "#8899A6",
-                letterSpacing: "0.03em",
+                color: "#111111",
+                fontWeight: 700,
               }}
             >
-              Islam Kamel - islamkamel.com
+              Islam Kamel
             </span>
           </div>
         </div>
