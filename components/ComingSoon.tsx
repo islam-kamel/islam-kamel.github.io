@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { shuffle } from "lodash";
 
+import { comingSoonColors } from "@/styles/tokens";
+
 const spring = {
   type: "spring",
   damping: 20,
@@ -10,10 +12,10 @@ const spring = {
 };
 
 export const Example = () => {
-  const [colors, setColors] = useState(initialColors);
+  const [colors, setColors] = useState<string[]>([...comingSoonColors]);
 
   useEffect(() => {
-    setTimeout(() => setColors(shuffle(colors)), 1000);
+    setTimeout(() => setColors(shuffle([...colors])), 1000);
   }, [colors]);
 
   return (
@@ -30,8 +32,6 @@ export const Example = () => {
     </div>
   );
 };
-
-const initialColors = ["#F34F29", "#F3B700", "#77878B"];
 
 export default function ComingSoon() {
   return (

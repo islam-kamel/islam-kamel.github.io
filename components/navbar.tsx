@@ -180,7 +180,7 @@ export const Navbar = () => {
           {/* Logo Circle (Always visible when scrolled) */}
           <NextLink
             aria-label="Home"
-            className="w-11 h-11 rounded-full bg-[#FAF8F5] border-2 border-[#111111] hover:bg-[#EE7C98] backdrop-blur-md flex items-center justify-center shadow-[2px_2px_0px_0px_#111111] hover:shadow-[1px_1px_0px_0px_#111111] hover:translate-x-[1px] hover:translate-y-[1px] transition-all group shrink-0 text-[#111111] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+            className="w-11 h-11 rounded-full bg-retro-bg border-2 border-retro-ink hover:bg-retro-pink backdrop-blur-md flex items-center justify-center shadow-retro-sm hover:shadow-retro-xs hover:translate-x-[1px] hover:translate-y-[1px] transition-all group shrink-0 text-retro-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink focus-visible:ring-offset-2"
             href="/"
             onClick={handleLogoClick}
           >
@@ -193,20 +193,20 @@ export const Navbar = () => {
           {/* Desktop Nav Pill (Hidden on mobile) */}
           <nav
             aria-label="Scrolled Navigation"
-            className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#FAF8F5]/95 border-2 border-[#111111] backdrop-blur-xl shadow-[3px_3px_0px_0px_#111111]"
+            className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-retro-bg/95 border-2 border-retro-ink backdrop-blur-xl shadow-retro"
           >
             {siteConfig.navItems.map((item) => (
               <NextLink
                 key={item.href}
-                className="text-sm font-bold text-[#111111] hover:bg-[#EE7C98]/25 px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                className="text-sm font-bold text-retro-ink hover:bg-retro-pink/25 px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                 href={item.href}
               >
                 {item.label}
               </NextLink>
             ))}
-            <div className="w-[1.5px] h-4 bg-[#111111]/20 mx-1" />
+            <div className="w-[1.5px] h-4 bg-retro-ink/20 mx-1" />
             <a
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-[#111111] bg-[#EE7C98] hover:bg-[#E56382] border border-[#111111] rounded-full transition-all duration-200 shadow-[1px_1px_0px_0px_#111111] shrink-0 whitespace-nowrap ml-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-retro-ink bg-retro-pink hover:bg-retro-pink-hover border border-retro-ink rounded-full transition-all duration-200 shadow-retro-xs shrink-0 whitespace-nowrap ml-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
               href="mailto:contact@islamkamel.com"
             >
               <MailIcon size={13} />
@@ -221,7 +221,7 @@ export const Navbar = () => {
           aria-controls="mobile-navigation-dialog"
           aria-expanded={isMobileMenuOpen}
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-          className="md:hidden w-11 h-11 rounded-full bg-[#FAF8F5] border-2 border-[#111111] flex items-center justify-center text-[#111111] hover:bg-[#EE7C98] transition-colors shadow-[2px_2px_0px_0px_#111111] backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+          className="md:hidden w-11 h-11 rounded-full bg-retro-bg border-2 border-retro-ink flex items-center justify-center text-retro-ink hover:bg-retro-pink transition-colors shadow-retro-sm backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
           type="button"
           onClick={() => handleToggleMenu(scrolledTriggerRef.current)}
         >
@@ -236,7 +236,7 @@ export const Navbar = () => {
           y: shouldReduceMotion ? 0 : isScrolled ? -10 : 0,
         }}
         aria-hidden={isScrolled}
-        className={`fixed top-0 inset-x-0 h-20 w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#111111]/15 z-40 ${
+        className={`fixed top-0 inset-x-0 h-20 w-full bg-retro-bg/90 backdrop-blur-md border-b border-retro-ink/15 z-40 ${
           isScrolled ? "pointer-events-none invisible" : "pointer-events-auto"
         }`}
         inert={isScrolled ? true : undefined}
@@ -246,16 +246,18 @@ export const Navbar = () => {
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
           {/* Left Brand */}
           <NextLink
-            className="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] rounded-lg"
+            className="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink rounded-lg"
             href="/"
             onClick={handleLogoClick}
           >
             <IkIcon />
             <div className="flex flex-col">
-              <span className="text-[#111111] font-bold text-base sm:text-lg tracking-tight transition-colors">
+              <span className="text-retro-ink font-bold text-base sm:text-lg tracking-tight transition-colors">
                 Islam Kamel
               </span>
-              <span className="text-xs text-[#5A606B]">Software engineer</span>
+              <span className="text-xs text-retro-muted">
+                Software engineer
+              </span>
             </div>
           </NextLink>
 
@@ -267,7 +269,7 @@ export const Navbar = () => {
             {siteConfig.navItems.map((item) => (
               <NextLink
                 key={item.href}
-                className="text-sm font-bold text-[#111111] hover:bg-[#EE7C98]/25 px-3.5 py-1.5 rounded-md transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                className="text-sm font-bold text-retro-ink hover:bg-retro-pink/25 px-3.5 py-1.5 rounded-md transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                 href={item.href}
               >
                 {item.label}
@@ -279,7 +281,7 @@ export const Navbar = () => {
           <div className="hidden sm:flex items-center gap-3">
             <a
               aria-label="GitHub"
-              className="text-[#111111] hover:bg-[#EE7C98]/25 transition-colors p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+              className="text-retro-ink hover:bg-retro-pink/25 transition-colors p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
               href={siteConfig.links.github}
               rel="noopener noreferrer"
               target="_blank"
@@ -288,7 +290,7 @@ export const Navbar = () => {
             </a>
             <a
               aria-label="LinkedIn"
-              className="text-[#111111] hover:text-[#0077B5] transition-colors p-2 rounded-md hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+              className="text-retro-ink hover:text-linkedin transition-colors p-2 rounded-md hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
               href={siteConfig.links.linkedin}
               rel="noopener noreferrer"
               target="_blank"
@@ -296,7 +298,7 @@ export const Navbar = () => {
               <LinkedinIcon size={19} />
             </a>
             <a
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-[#111111] bg-[#EE7C98] hover:bg-[#E56382] rounded-full border-2 border-[#111111] shadow-[2px_2px_0px_0px_#111111] hover:shadow-[1px_1px_0px_0px_#111111] hover:translate-x-[1px] hover:translate-y-[1px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-retro-ink bg-retro-pink hover:bg-retro-pink-hover rounded-full border-2 border-retro-ink shadow-retro-sm hover:shadow-retro-xs hover:translate-x-[1px] hover:translate-y-[1px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink focus-visible:ring-offset-2"
               href="mailto:contact@islamkamel.com"
             >
               <MailIcon size={15} />
@@ -310,7 +312,7 @@ export const Navbar = () => {
             aria-controls="mobile-navigation-dialog"
             aria-expanded={isMobileMenuOpen}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            className="md:hidden w-10 h-10 flex items-center justify-end text-[#111111] hover:text-[#EE7C98] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+            className="md:hidden w-10 h-10 flex items-center justify-end text-retro-ink hover:text-retro-pink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
             type="button"
             onClick={() => handleToggleMenu(unscrolledTriggerRef.current)}
           >
@@ -332,18 +334,18 @@ export const Navbar = () => {
         onClose={handleDialogClose}
       >
         <div
-          className={`w-full h-full bg-[#FAF8F5] flex flex-col justify-between pt-6 pb-8 px-6 overflow-y-auto ${
+          className={`w-full h-full bg-retro-bg flex flex-col justify-between pt-6 pb-8 px-6 overflow-y-auto ${
             shouldReduceMotion ? "" : "transition-opacity duration-200 ease-out"
           }`}
         >
           <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between pb-4 border-b-2 border-[#111111]/20">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#5A606B]">
+            <div className="flex items-center justify-between pb-4 border-b-2 border-retro-ink/20">
+              <span className="text-xs font-mono uppercase tracking-widest text-retro-muted">
                 Navigation
               </span>
               <button
                 aria-label="Close navigation menu"
-                className="p-1.5 text-[#111111] hover:bg-[#EE7C98]/20 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                className="p-1.5 text-retro-ink hover:bg-retro-pink/20 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                 type="button"
                 onClick={closeMobileMenu}
               >
@@ -353,7 +355,7 @@ export const Navbar = () => {
             {siteConfig.navItems.map((item) => (
               <NextLink
                 key={item.href}
-                className="text-2xl font-bold text-[#111111] hover:bg-[#EE7C98]/20 py-2.5 px-3 rounded-lg border-b border-[#111111]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                className="text-2xl font-bold text-retro-ink hover:bg-retro-pink/20 py-2.5 px-3 rounded-lg border-b border-retro-ink/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                 href={item.href}
                 onClick={closeMobileMenu}
               >
@@ -362,9 +364,9 @@ export const Navbar = () => {
             ))}
           </div>
 
-          <div className="space-y-4 pt-6 border-t-2 border-[#111111]">
+          <div className="space-y-4 pt-6 border-t-2 border-retro-ink">
             <a
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-[#EE7C98] hover:bg-[#E56382] text-[#111111] font-bold text-base border-2 border-[#111111] shadow-[3px_3px_0px_0px_#111111] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-retro-pink hover:bg-retro-pink-hover text-retro-ink font-bold text-base border-2 border-retro-ink shadow-retro transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
               href="mailto:contact@islamkamel.com"
               onClick={closeMobileMenu}
             >
@@ -375,7 +377,7 @@ export const Navbar = () => {
             <div className="flex items-center justify-center gap-4 pt-2">
               <a
                 aria-label="GitHub"
-                className="text-[#111111] hover:bg-[#EE7C98]/20 px-3 py-2 rounded-md transition-all flex items-center gap-2 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                className="text-retro-ink hover:bg-retro-pink/20 px-3 py-2 rounded-md transition-all flex items-center gap-2 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                 href={siteConfig.links.github}
                 rel="noopener noreferrer"
                 target="_blank"
@@ -385,7 +387,7 @@ export const Navbar = () => {
               </a>
               <a
                 aria-label="LinkedIn"
-                className="text-[#111111] hover:bg-[#EE7C98]/20 px-3 py-2 rounded-md transition-all flex items-center gap-2 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
+                className="text-retro-ink hover:bg-retro-pink/20 px-3 py-2 rounded-md transition-all flex items-center gap-2 text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                 href={siteConfig.links.linkedin}
                 rel="noopener noreferrer"
                 target="_blank"

@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { themeColors } from "@/styles/tokens";
+
 export function MermaidRenderer() {
   useEffect(() => {
     let isCancelled = false;
@@ -31,38 +33,38 @@ export function MermaidRenderer() {
               "var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
 
             // Canvas & Container
-            background: "#FAF8F5",
-            mainBkg: "#FAF8F5",
+            background: themeColors.retro.bg,
+            mainBkg: themeColors.retro.bg,
 
             // Primary Nodes
-            primaryColor: "#FFFFFF",
-            primaryTextColor: "#111111",
-            primaryBorderColor: "#111111",
-            nodeBorder: "#111111",
-            nodeTextColor: "#111111",
+            primaryColor: themeColors.retro.paper,
+            primaryTextColor: themeColors.retro.ink,
+            primaryBorderColor: themeColors.retro.ink,
+            nodeBorder: themeColors.retro.ink,
+            nodeTextColor: themeColors.retro.ink,
 
             // Clusters & Subgraphs
-            clusterBkg: "#FAF8F5",
-            clusterBorder: "#111111",
-            titleColor: "#111111",
+            clusterBkg: themeColors.retro.bg,
+            clusterBorder: themeColors.retro.ink,
+            titleColor: themeColors.retro.ink,
 
             // Arrows & Connections
-            lineColor: "#111111",
-            defaultLinkColor: "#111111",
+            lineColor: themeColors.retro.ink,
+            defaultLinkColor: themeColors.retro.ink,
 
             // Edge Labels
-            edgeLabelBackground: "#FAF8F5",
-            labelBackground: "#FAF8F5",
-            labelTextColor: "#111111",
-            textColor: "#111111",
+            edgeLabelBackground: themeColors.retro.bg,
+            labelBackground: themeColors.retro.bg,
+            labelTextColor: themeColors.retro.ink,
+            textColor: themeColors.retro.ink,
 
             // Secondary Elements
-            secondaryColor: "#EE7C98",
-            secondaryBorderColor: "#111111",
-            secondaryTextColor: "#111111",
-            tertiaryColor: "#DCE5DB",
-            tertiaryBorderColor: "#111111",
-            tertiaryTextColor: "#111111",
+            secondaryColor: themeColors.retro.pink,
+            secondaryBorderColor: themeColors.retro.ink,
+            secondaryTextColor: themeColors.retro.ink,
+            tertiaryColor: themeColors.retro.sage,
+            tertiaryBorderColor: themeColors.retro.ink,
+            tertiaryTextColor: themeColors.retro.ink,
           },
           flowchart: {
             htmlLabels: true,

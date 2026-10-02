@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { themeColors, themeShadows } from "@/styles/tokens";
+
 export const dynamic = "force-static";
 export const alt = "Blog - Islam Kamel | Software Engineer";
 export const size = { width: 1200, height: 630 };
@@ -21,7 +23,7 @@ export default function Image() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#FAF8F5",
+          backgroundColor: themeColors.retro.bg,
           padding: "40px",
         }}
       >
@@ -32,9 +34,9 @@ export default function Image() {
             justifyContent: "space-between",
             width: "100%",
             height: "100%",
-            border: "3px solid #111111",
-            backgroundColor: "#FAF8F5",
-            boxShadow: "8px 8px 0px 0px #111111",
+            border: `3px solid ${themeColors.retro.ink}`,
+            backgroundColor: themeColors.retro.bg,
+            boxShadow: themeShadows.retroXl,
           }}
         >
           {/* Top Window Bar */}
@@ -43,8 +45,8 @@ export default function Image() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: "#111111",
-              color: "#FAF8F5",
+              backgroundColor: themeColors.retro.ink,
+              color: themeColors.retro.bg,
               padding: "12px 24px",
               fontFamily: "monospace",
               fontSize: "16px",
@@ -56,7 +58,7 @@ export default function Image() {
                 style={{
                   width: "10px",
                   height: "10px",
-                  backgroundColor: "#EE7C98",
+                  backgroundColor: themeColors.retro.pink,
                 }}
               />
               <span>Islam Kamel</span>
@@ -81,9 +83,9 @@ export default function Image() {
             >
               <div
                 style={{
-                  backgroundColor: "#EE7C98",
-                  color: "#111111",
-                  border: "2px solid #111111",
+                  backgroundColor: themeColors.retro.pink,
+                  color: themeColors.retro.ink,
+                  border: `2px solid ${themeColors.retro.ink}`,
                   padding: "6px 14px",
                   fontSize: "14px",
                   fontWeight: 700,
@@ -98,7 +100,7 @@ export default function Image() {
               style={{
                 fontSize: "64px",
                 fontWeight: 700,
-                color: "#111111",
+                color: themeColors.retro.ink,
                 letterSpacing: "-0.04em",
                 margin: 0,
                 lineHeight: 1.05,
@@ -111,7 +113,7 @@ export default function Image() {
               style={{
                 fontSize: "22px",
                 lineHeight: 1.45,
-                color: "#333333",
+                color: themeColors.retro.body,
                 margin: 0,
                 maxWidth: "920px",
               }}
@@ -127,8 +129,8 @@ export default function Image() {
               alignItems: "center",
               justifyContent: "space-between",
               padding: "20px 48px",
-              borderTop: "2px solid #111111",
-              backgroundColor: "#FAF8F5",
+              borderTop: `2px solid ${themeColors.retro.ink}`,
+              backgroundColor: themeColors.retro.bg,
             }}
           >
             <div style={{ display: "flex", gap: "10px" }}>
@@ -138,9 +140,9 @@ export default function Image() {
                   style={{
                     display: "flex",
                     padding: "6px 14px",
-                    backgroundColor: "#FFFFFF",
-                    border: "2px solid #111111",
-                    color: "#111111",
+                    backgroundColor: themeColors.retro.paper,
+                    border: `2px solid ${themeColors.retro.ink}`,
+                    color: themeColors.retro.ink,
                     fontSize: "13px",
                     fontWeight: 700,
                     fontFamily: "monospace",
@@ -154,7 +156,7 @@ export default function Image() {
               style={{
                 fontFamily: "monospace",
                 fontSize: "16px",
-                color: "#111111",
+                color: themeColors.retro.ink,
                 fontWeight: 700,
               }}
             >

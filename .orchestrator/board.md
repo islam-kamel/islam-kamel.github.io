@@ -1,6 +1,16 @@
 # Retro portfolio redesign
 
+Blank Safari follow-up: completed recovery by opening a fresh Safari tab at http://localhost:3000/. Native screenshot confirms full homepage renders. Earlier tab exposed homepage content and visible computed styles but painted blank; exact cause unconfirmed. No source or server changes made. Read-only debugger status/diff audit shows only existing theme-token work.
+
 Objective: approved editorial retro redesign across homepage, blog, articles, and shared shell. Personal Say hello CTA.
+
+Current follow-up: centralize theme colors and replace hardcoded consumer colors with named Tailwind utilities/CSS variables/shared palette tokens. Preserve appearance and renderer compatibility. AGY UI owns implementation; integrator owns brief/plan and gates; parent owns browser verification. No new dependencies, commit, push, or deployment authorized for this follow-up.
+
+Theme token task blocked: AGY result exit3 RESOURCE_EXHAUSTED429. Partial unverified styles/tokens.ts, tailwind.config.js, styles/globals.css remain; consumer migration/checks incomplete. Owner approval needed before executor fallback per lane-failure instruction. No commit.
+
+Owner reports AGY quota reset and authorizes reuse. Same AGY conversation resumption delegated, task executing again. Preserve partial changes; final review/build/browser checks pending.
+
+Theme token follow-up completed: canonical styles/tokens.mjs with TypeScript declaration, named Tailwind colors/shadows/gradient and CSS theme references; all26 UI consumers migrated including legacy palettes/scrollbar/OG/Mermaid. Build guard with rejection self-check wired before Next build. Reviewer approved styling, guard and modulefix. Final independent formatter/type/lint/guard/build/export/diff checks passed; 19pages exported. Node modulewarning eliminated by explicit .mjs, directimport andbuild confirmed. Parent desktop1440/mobile390 screenshots and computedpink/sage/prose/inlinealpha confirmed preserved; Mermaid rendered2SVG with readable labels. No commit/push/deploy.
 
 | Item | Owner | Status | Dependencies | Evidence |
 | --- | --- | --- | --- | --- |

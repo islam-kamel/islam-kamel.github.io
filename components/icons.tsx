@@ -83,7 +83,7 @@ export const IkIcon = () => (
   >
     {/* Shadow */}
     <rect
-      className="fill-[#EE7C98] group-hover:fill-[#111111] transition-colors"
+      className="fill-retro-pink group-hover:fill-retro-ink transition-colors"
       height={36}
       rx={8}
       width={36}
@@ -93,14 +93,14 @@ export const IkIcon = () => (
 
     {/* Background */}
     <rect
-      className="fill-[#111111] group-hover:fill-[#EE7C98] transition-colors"
+      className="fill-retro-ink group-hover:fill-retro-pink transition-colors"
       height={36}
       rx={8}
       width={36}
     />
 
     <g
-      className="text-[#FAF8F5] group-hover:text-[#111111]"
+      className="text-retro-bg group-hover:text-retro-ink"
       transform="translate(7 7)"
     >
       <Logo

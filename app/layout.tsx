@@ -10,6 +10,7 @@ import { siteConfig } from "@/config/site";
 import { fontLogo, fontMono, fontSans, fontTitle } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import Footer from "@/components/footer";
+import { themeColors } from "@/styles/tokens";
 
 export const metadata: Metadata = {
   title: {
@@ -116,8 +117,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0E1013" },
-    { color: "#FAF8F5" },
+    { media: "(prefers-color-scheme: dark)", color: themeColors.retro.dark },
+    { color: themeColors.retro.bg },
   ],
   width: "device-width",
   initialScale: 1,
@@ -133,7 +134,7 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "min-h-screen bg-[#FAF8F5] text-[#111111] font-sans antialiased selection:bg-[#EE7C98] selection:text-[#111111]",
+          "min-h-screen bg-retro-bg text-retro-ink font-sans antialiased selection:bg-retro-pink selection:text-retro-ink",
           fontSans.variable,
           fontMono.variable,
           fontTitle.variable,
@@ -160,7 +161,7 @@ export default function RootLayout({
             forcedTheme: "light",
           }}
         >
-          <div className="min-h-screen w-full relative bg-[#FAF8F5] text-[#111111] flex flex-col justify-between">
+          <div className="min-h-screen w-full relative bg-retro-bg text-retro-ink flex flex-col justify-between">
             <Navbar />
             <main className="flex-grow">{children}</main>
             <Footer />

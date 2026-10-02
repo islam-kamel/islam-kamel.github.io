@@ -4,14 +4,14 @@
 
 html {
   scroll-padding-top: 80px;
-  background-color: #faf8f5;
-  color: #111111;
+  background-color: theme(colors.retro.bg);
+  color: theme(colors.retro.ink);
 }
 
 /* Halftone and print textures */
 .bg-halftone {
   background-image: radial-gradient(
-    rgba(17, 17, 17, 0.15) 1.25px,
+    theme(colors.retro.ink / 15%) 1.25px,
     transparent 1.25px
   );
   background-size: 14px 14px;
@@ -19,7 +19,7 @@ html {
 
 .bg-halftone-subtle {
   background-image: radial-gradient(
-    rgba(17, 17, 17, 0.08) 1px,
+    theme(colors.retro.ink / 8%) 1px,
     transparent 1px
   );
   background-size: 16px 16px;
@@ -27,19 +27,19 @@ html {
 
 /* Retro hard offset shadows */
 .retro-shadow-sm {
-  box-shadow: 2px 2px 0px 0px #111111;
+  box-shadow: theme(boxShadow.retro-sm);
 }
 
 .retro-shadow {
-  box-shadow: 3px 3px 0px 0px #111111;
+  box-shadow: theme(boxShadow.retro);
 }
 
 .retro-shadow-md {
-  box-shadow: 4px 4px 0px 0px #111111;
+  box-shadow: theme(boxShadow.retro-md);
 }
 
 .retro-shadow-lg {
-  box-shadow: 6px 6px 0px 0px #111111;
+  box-shadow: theme(boxShadow.retro-lg);
 }
 
 .draw {
@@ -53,7 +53,7 @@ html {
 
 .logo:hover .draw {
   transition: all 0.2s ease;
-  stroke: color-mix(in srgb, #ee7c98 190%, black);
+  stroke: color-mix(in srgb, theme(colors.retro.pink) 190%, black);
 }
 
 @keyframes drawText {
@@ -70,7 +70,7 @@ html {
 
 /* Blog prose styles - Editorial Retro */
 .prose-blog {
-  color: #222222;
+  color: theme(colors.retro.prose-heading);
   font-size: 1.0625rem;
   line-height: 1.75;
 }
@@ -78,7 +78,7 @@ html {
 .prose-blog h2 {
   font-size: 1.75rem;
   font-weight: 800;
-  color: #111111;
+  color: theme(colors.retro.ink);
   letter-spacing: -0.025em;
   margin-top: 2.75rem;
   margin-bottom: 1rem;
@@ -88,7 +88,7 @@ html {
 .prose-blog h3 {
   font-size: 1.35rem;
   font-weight: 700;
-  color: #111111;
+  color: theme(colors.retro.ink);
   letter-spacing: -0.02em;
   margin-top: 2.25rem;
   margin-bottom: 0.85rem;
@@ -96,13 +96,13 @@ html {
 }
 
 .prose-blog p {
-  color: #282828;
+  color: theme(colors.retro.prose-body);
   line-height: 1.8;
   margin-bottom: 1.4rem;
 }
 
 .prose-blog a {
-  color: #111111;
+  color: theme(colors.retro.ink);
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
@@ -111,21 +111,21 @@ html {
 }
 
 .prose-blog a:hover {
-  color: #ff5c8a;
+  color: theme(colors.retro.prose-link-hover);
 }
 
 .prose-blog ul {
   list-style-type: disc;
   margin-bottom: 1.4rem;
   margin-left: 1.5rem;
-  color: #282828;
+  color: theme(colors.retro.prose-body);
 }
 
 .prose-blog ol {
   list-style-type: decimal;
   margin-bottom: 1.4rem;
   margin-left: 1.5rem;
-  color: #282828;
+  color: theme(colors.retro.prose-body);
 }
 
 .prose-blog li {
@@ -134,36 +134,36 @@ html {
 }
 
 .prose-blog blockquote {
-  border-left: 3px solid #111111;
-  background-color: #efece6;
+  border-left: 3px solid theme(colors.retro.ink);
+  background-color: theme(colors.retro.prose-quote-bg);
   padding: 1.1rem 1.4rem;
   margin-top: 1.75rem;
   margin-bottom: 1.75rem;
-  color: #2c2c2c;
+  color: theme(colors.retro.prose-quote-text);
   font-style: italic;
   border-radius: 0 4px 4px 0;
 }
 
 .prose-blog hr {
   border: none;
-  border-top: 2px dashed rgba(17, 17, 17, 0.2);
+  border-top: 2px dashed theme(colors.retro.ink / 20%);
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
 }
 
 .prose-blog strong {
-  color: #111111;
+  color: theme(colors.retro.ink);
   font-weight: 700;
 }
 
 .prose-blog code {
-  color: #111111;
-  background-color: rgba(17, 17, 17, 0.07);
+  color: theme(colors.retro.ink);
+  background-color: theme(colors.retro.ink / 7%);
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
   font-size: 0.9em;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  border: 1px solid rgba(17, 17, 17, 0.15);
+  border: 1px solid theme(colors.retro.ink / 15%);
 }
 
 /* Code blocks rendered by Shiki */
@@ -174,9 +174,9 @@ html {
   overflow-x: auto;
   padding: 1.25rem 1.4rem;
   font-size: 0.875rem;
-  border: 2px solid #111111;
-  background-color: #0e1013 !important;
-  box-shadow: 3px 3px 0px 0px #111111;
+  border: 2px solid theme(colors.retro.ink);
+  background-color: theme(colors.retro.dark) !important;
+  box-shadow: theme(boxShadow.retro);
 }
 
 .prose-blog pre code {
@@ -190,12 +190,12 @@ html {
 .prose-blog .mermaid-block {
   margin-top: 2rem;
   margin-bottom: 2rem;
-  border: 2px solid #111111;
+  border: 2px solid theme(colors.retro.ink);
   border-radius: 6px;
-  background-color: #faf8f5;
+  background-color: theme(colors.retro.bg);
   padding: 1.5rem;
   overflow-x: auto;
-  box-shadow: 3px 3px 0px 0px #111111;
+  box-shadow: theme(boxShadow.retro);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -221,8 +221,8 @@ html {
 .prose-blog .mermaid-block svg .node polygon,
 .prose-blog .mermaid-block svg .node circle,
 .prose-blog .mermaid-block svg .node path {
-  fill: #ffffff !important;
-  stroke: #111111 !important;
+  fill: theme(colors.retro.paper) !important;
+  stroke: theme(colors.retro.ink) !important;
   stroke-width: 1.5px !important;
   rx: 4px;
   ry: 4px;
@@ -235,34 +235,34 @@ html {
 .prose-blog .mermaid-block svg .nodeLabel,
 .prose-blog .mermaid-block svg .labelText,
 .prose-blog .mermaid-block svg span.nodeLabel {
-  color: #111111 !important;
-  fill: #111111 !important;
+  color: theme(colors.retro.ink) !important;
+  fill: theme(colors.retro.ink) !important;
   font-weight: 600 !important;
 }
 
 .prose-blog .mermaid-block svg .edgePath path,
 .prose-blog .mermaid-block svg .flowchart-link {
-  stroke: #111111 !important;
+  stroke: theme(colors.retro.ink) !important;
   stroke-width: 1.5px !important;
 }
 
 .prose-blog .mermaid-block svg .marker,
 .prose-blog .mermaid-block svg marker path,
 .prose-blog .mermaid-block svg #arrowhead path {
-  fill: #111111 !important;
-  stroke: #111111 !important;
+  fill: theme(colors.retro.ink) !important;
+  stroke: theme(colors.retro.ink) !important;
 }
 
 .prose-blog .mermaid-block svg .edgeLabel {
-  background-color: #faf8f5 !important;
-  color: #111111 !important;
-  fill: #111111 !important;
+  background-color: theme(colors.retro.bg) !important;
+  color: theme(colors.retro.ink) !important;
+  fill: theme(colors.retro.ink) !important;
   font-size: 0.85em !important;
   font-weight: 500 !important;
 }
 
 .prose-blog .mermaid-block svg .edgeLabel rect {
-  fill: #faf8f5 !important;
+  fill: theme(colors.retro.bg) !important;
 }
 
 /* Reduced motion preference */

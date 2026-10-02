@@ -96,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
   };
 
   return (
-    <div className="w-full bg-[#FAF8F5] text-[#111111]">
+    <div className="w-full bg-retro-bg text-retro-ink">
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(blogPostingLd).replace(/</g, "\\u003c"),
@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back link */}
         <Link
-          className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#111111] hover:underline underline-offset-4 transition-all mb-8 group"
+          className="inline-flex items-center gap-2 text-xs font-mono font-bold text-retro-ink hover:underline underline-offset-4 transition-all mb-8 group"
           href="/blog"
         >
           <ArrowLeftIcon
@@ -119,7 +119,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Post header */}
         <header className="mb-10">
-          <div className="flex items-center gap-2 text-xs font-mono text-[#5A606B] mb-4">
+          <div className="flex items-center gap-2 text-xs font-mono text-retro-muted mb-4">
             <CalendarIcon size={13} />
             <time dateTime={post.date}>
               {new Date(post.date).toLocaleDateString("en-US", {
@@ -130,11 +130,11 @@ export default async function BlogPostPage({ params }: Props) {
             </time>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111111] mb-4 leading-tight text-balance">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-retro-ink mb-4 leading-tight text-balance">
             {post.title}
           </h1>
 
-          <p className="text-base sm:text-lg text-[#444444] leading-relaxed max-w-2xl font-normal">
+          <p className="text-base sm:text-lg text-retro-body-subtle leading-relaxed max-w-2xl font-normal">
             {post.description}
           </p>
 
@@ -143,14 +143,14 @@ export default async function BlogPostPage({ params }: Props) {
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-bold bg-white text-[#111111] border border-[#111111] shadow-[1px_1px_0px_0px_#111111]"
+                className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-bold bg-white text-retro-ink border border-retro-ink shadow-retro-xs"
               >
                 {tag}
               </span>
             ))}
           </div>
 
-          <hr className="border-t-2 border-[#111111] mt-8 mb-10" />
+          <hr className="border-t-2 border-retro-ink mt-8 mb-10" />
         </header>
 
         {/* Rendered markdown content */}
@@ -162,9 +162,9 @@ export default async function BlogPostPage({ params }: Props) {
         {html.includes("mermaid") && <MermaidRenderer />}
 
         {/* Footer navigation */}
-        <div className="mt-16 pt-8 border-t-2 border-[#111111] flex items-center justify-between">
+        <div className="mt-16 pt-8 border-t-2 border-retro-ink flex items-center justify-between">
           <Link
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#111111] hover:underline underline-offset-4 transition-all group"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-retro-ink hover:underline underline-offset-4 transition-all group"
             href="/blog"
           >
             <ArrowLeftIcon
@@ -175,7 +175,7 @@ export default async function BlogPostPage({ params }: Props) {
           </Link>
 
           <Link
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#111111] hover:underline underline-offset-4 transition-all group"
+            className="inline-flex items-center gap-2 text-xs font-mono font-bold text-retro-ink hover:underline underline-offset-4 transition-all group"
             href="/"
           >
             <span>Home</span>

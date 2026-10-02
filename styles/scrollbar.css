@@ -1,35 +1,34 @@
-
 /* تطبيق عام على كل العناصر اللي فيها scroll */
 * {
-    scrollbar-width: thin; /* Firefox: يجعل الـ scrollbar رفيع */
-    scrollbar-color: theme(colors.primary.500) transparent; /* Firefox: thumb + track (شفاف) */
+  scrollbar-width: thin; /* Firefox: يجعل الـ scrollbar رفيع */
+  scrollbar-color: theme(colors.primary.500) transparent; /* Firefox: thumb + track (شفاف) */
 }
 
 /* WebKit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;  /* التراك شفاف */
-    border-radius: 8px;
-    margin: 4px;
+  background: transparent; /* التراك شفاف */
+  border-radius: 8px;
+  margin: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(136, 136, 136, 0.8); /* لون مع شوية شفافية */
-    border-radius: 8px;
-    min-height: 30px;
-    border: 2px solid transparent; /* يحافظ على المساحة بدون ما يظهر خط صريح */
-    backdrop-filter: blur(4px); /* لو فيه خلفية ممكن يعطي تأثير جميل */
-    transition: background .2s ease;
+  background: theme(colors.scrollbar.thumb / 80%); /* لون مع شوية شفافية */
+  border-radius: 8px;
+  min-height: 30px;
+  border: 2px solid transparent; /* يحافظ على المساحة بدون ما يظهر خط صريح */
+  backdrop-filter: blur(4px); /* لو فيه خلفية ممكن يعطي تأثير جميل */
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(85, 85, 85, 0.9);
+  background: theme(colors.scrollbar.thumb-hover / 90%);
 }
 
 ::-webkit-scrollbar-corner {
-    background: transparent;
+  background: transparent;
 }

@@ -87,6 +87,10 @@
 
 18. `meta-keywords` hasn't been a ranking signal for Google/Bing since ~2009. Not worth agent time either way.
 
+**Theme tokens and palette**
+
+19. Use centralized theme tokens and named Tailwind utilities (`retro-*`, `shadow-retro-*`, `bg-retro-haze`) for palette colors and reusable shadows or gradients across all UI components and routes. Never embed raw theme color literals or arbitrary theme shadow classes in JSX `className` strings or inline styles; non-Tailwind renderers (such as OG images and Mermaid) must import canonical tokens from `@/styles/tokens`.
+
 ### 2 UI copy and iconography
 
 These rules apply to all user-facing application copy and controls.
