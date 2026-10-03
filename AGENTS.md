@@ -136,3 +136,58 @@ These rules apply to all user-facing application copy and controls.
   5. [Side B Music](https://side-b-music.framer.website)
   6. [Nexora template](https://nexoratemplate.framer.website)
   7. [TypeSafe](https://typesafe.ai)
+
+
+## Blog and content rules
+
+These rules apply to every article, page copy, and meta tag on this site.
+For writing a new article, also use the `writing-blog` skill.
+
+### Talking to me
+- Write to me in simple Egyptian Arabic (عامية مصرية بسيطة).
+- Keep in English: code, file names, commands, technical terms, and all site text (articles, page copy, titles, meta tags).
+- Explain an English technical term in one short Arabic sentence the first time you use it.
+- Ask questions only after reading the code and existing articles. Never ask what you can find yourself.
+- Questions come as a numbered list, max 5. Each one has: السؤال, ليه محتاج ده, مثال للإجابة, and options (أ / ب / ج) when the answer is a choice. Mark optional ones "اختياري".
+- Stop and ask before anything risky: deleting content, changing a URL, slug, canonical, or route, or publishing.
+
+### Truth rules
+- Never invent personal experience, projects, clients, numbers, benchmarks, or results.
+- First person is allowed only for a teaching voice ("I like to start with..."). Never claim a specific event happened to me unless I told you.
+- Never write a version number, status, name, default value, or "latest" from memory. Check the official docs or release notes today and note the date.
+- Never write "tested with X" unless you ran it on X. Write the exact version you ran.
+- If you cannot verify a claim, remove it or label it clearly. Do not guess.
+- If you have no web access, tell me in Arabic and stop. Do not write a technical article from memory.
+
+### Code in articles
+- Every code block and every command must run exactly as it appears in the article. Extract them from the final article text and run them. Do not run copies from scratch files.
+- Compare the real output with what the article says. Fix the article, not the output.
+- For code that handles input, test at least: the happy path, every error path, one empty input, one unusual input (Unicode, BOM, query string, or a very large body when size limits exist).
+- Use the fewest dependencies. Say which versions you used.
+
+### Text matches code
+After any edit, check again:
+- numbers in prose ("five checks") match the real list;
+- headings, function names, file names, and status codes match the code;
+- the order in the text matches the order in the code;
+- each sentence that describes behavior is true for the code as it is now.
+
+### Names and terms
+- Use one name for each thing across the whole article.
+- When a name changed between spec versions, use the number plus the current official name, and mention the old name once.
+- Check the real output on the stated version (for example the status line from `curl -i`).
+
+### Meta tags and SEO
+- Every page has a unique title and a unique meta description (about 150 characters, plain words, no keyword stuffing).
+- Every page has a canonical URL that points to itself. Never copy another page's canonical.
+- Do not add a `keywords` meta tag.
+- Describe my role only as "Software engineer". Do not add titles like "Senior" unless I say so.
+- New article: add it to the sitemap, use the same frontmatter and date mechanism as existing articles, and keep the slug stable once published.
+- Never change the slug, canonical, or publish date of an existing article unless I ask.
+
+### Publishing
+- New articles start as drafts. Never publish, push, or deploy without my clear OK.
+- Run lint, type-check, and build before you say you are done.
+
+### Final report (in Arabic)
+Every content task ends with: what changed (before/after), what you tested and on which versions, the sources you used, anything you could not verify, and questions for me.
