@@ -47,7 +47,7 @@ export default function BlogPage() {
       <section className="relative pt-10 pb-20 sm:pt-16 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Bar */}
         <div className="mb-12 pb-6 border-b-2 border-retro-ink">
-          <h1 className="inline-flex items-center gap-2 px-3.5 py-1 bg-retro-pink text-retro-ink text-xs font-bold border border-retro-ink rounded-full -rotate-1 mb-4">
+          <h1 className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-4">
             <span>Writing</span>
           </h1>
 
@@ -61,7 +61,7 @@ export default function BlogPage() {
           <div className="mb-16">
             <div className="border-2 border-retro-ink bg-retro-pink bg-print-grid shadow-retro-lg p-8 sm:p-10">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 text-xs text-retro-ink">
-                <span className="inline-block px-2.5 py-0.5 bg-retro-bg border border-retro-ink text-[11px] font-bold text-retro-ink w-fit">
+                <span className="retro-sticker-badge px-3 py-0.5 bg-retro-bg text-[11px] -rotate-1">
                   Featured article
                 </span>
                 <div className="flex items-center gap-1.5 font-medium">

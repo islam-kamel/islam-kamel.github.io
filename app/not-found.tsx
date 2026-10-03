@@ -14,7 +14,7 @@ export default function NotFound() {
 
         {/* Content */}
         <div className="p-8 text-center">
-          <div className="inline-block px-3 py-1 bg-retro-pink border border-retro-ink text-xs font-bold text-retro-ink mb-4">
+          <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-4">
             Not Found
           </div>
 

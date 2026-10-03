@@ -56,6 +56,25 @@ html {
   box-shadow: theme(boxShadow.retro-lg);
 }
 
+@layer components {
+  /* Coordinated vintage print/sticker eyebrow badge */
+  .retro-sticker-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    border-width: 1px;
+    border-style: solid;
+    border-color: theme(colors.retro.ink);
+    border-radius: 9999px;
+    box-shadow: theme(boxShadow.retro-xs);
+    color: theme(colors.retro.ink);
+    white-space: nowrap;
+    width: fit-content;
+  }
+}
+
 .draw {
   stroke-dasharray: 445.7563781738281;
   stroke-dashoffset: 445.7563781738281;

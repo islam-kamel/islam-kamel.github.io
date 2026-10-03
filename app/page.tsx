@@ -163,7 +163,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Main Display Lead (Left 7 cols) */}
           <div className="lg:col-span-7 flex flex-col items-start gap-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-retro-pink text-retro-ink text-xs font-bold border border-retro-ink rounded-full -rotate-1">
+            <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1">
               <span>Software engineer</span>
             </div>
 
@@ -240,7 +240,7 @@ export default function Home() {
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 sm:mb-16 border-b-2 border-retro-ink pb-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-retro-ink block mb-2">
+              <span className="retro-sticker-badge px-3 py-1 bg-retro-bg rotate-1 mb-3">
                 What I build
               </span>
               <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-retro-ink leading-tight text-balance">
@@ -312,7 +312,7 @@ export default function Home() {
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 pb-6 border-b-2 border-retro-ink">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-retro-sage-ink block mb-2">
+              <span className="retro-sticker-badge px-3 py-1 bg-retro-bg -rotate-1 mb-3">
                 Education
               </span>
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-retro-ink leading-tight">
@@ -336,7 +336,7 @@ export default function Home() {
 
               <div className="p-6 sm:p-8 flex-grow flex flex-col justify-between">
                 <div>
-                  <div className="inline-block px-2.5 py-1 bg-retro-sage border border-retro-ink text-xs font-bold text-retro-ink mb-4">
+                  <div className="retro-sticker-badge px-3 py-0.5 bg-retro-sage rotate-1 mb-4">
                     Bachelor&apos;s Degree
                   </div>
 
@@ -396,7 +396,7 @@ export default function Home() {
       <section className="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b-2 border-retro-ink">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-retro-muted block mb-2">
+            <span className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-3">
               Writing
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-retro-ink">
@@ -459,7 +459,7 @@ export default function Home() {
         id="contact"
       >
         <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg p-8 sm:p-14 text-center">
-          <div className="inline-block px-3.5 py-1 bg-retro-pink border border-retro-ink text-xs font-bold text-retro-ink rounded-full -rotate-1 mb-6">
+          <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-6">
             Say hello
           </div>
 
