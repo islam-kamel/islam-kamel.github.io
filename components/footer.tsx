@@ -41,22 +41,19 @@ export function Footer() {
             >
               <LinkedinIcon size={18} />
             </a>
-            <a
-              aria-label="Email"
-              className="text-retro-muted-light hover:text-retro-pink transition-colors flex items-center gap-2 font-mono text-xs"
-              href="mailto:contact@islamkamel.com"
-            >
-              <MailIcon size={16} />
-              <span>contact@islamkamel.com</span>
-            </a>
           </div>
         </div>
 
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-retro-muted-light">
           <p>© {year} Islam Kamel. All rights reserved.</p>
-          <p className="text-xs text-retro-muted-light">
-            Built with Next.js and Tailwind CSS.
-          </p>
+          <a
+            aria-label="Email"
+            className="text-retro-muted-light hover:text-retro-pink transition-colors flex items-center gap-2 font-mono text-xs"
+            href="mailto:contact@islamkamel.com"
+          >
+            <MailIcon size={16} />
+            <span>contact@islamkamel.com</span>
+          </a>
         </div>
       </div>
     </footer>

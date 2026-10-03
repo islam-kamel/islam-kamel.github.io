@@ -114,3 +114,21 @@ These rules apply to all user-facing application copy and controls.
 - Convey a visual style through typography, palette, layout, and relevant artwork. Do not imitate terminals, dashboards, telemetry, or schematic devices with fake labels, signals, metrics, or readouts.
 - Follow the owner's supplied visual references and explicit art direction across the homepage, blog, navigation, articles, error states, and social cards. Prefer artwork that fits the real content; do not invent diagrams or imagery to fill space. When the owner specifies an art direction, apply it directly without adding an approval step.
 - These rules apply to interface copy and visuals, not technical prose or code examples. Preserve meaningful technical terms, operators, and syntax.
+
+### Supplied visual references and asset sources
+
+- Current concept phase: explore how supplied assets could be used across the website. Make no website or code changes during this phase; this AGENTS.md reference update is the requested exception.
+- Prefer SVG assets where available. Inspect each source project's showcases for ideas, select suitable assets, and recolor them to match the website palette before any later implementation.
+- Figma asset collections:
+  - [1,300 Free Pixel Icons – Vector Pixel icons (svg) (Community)](https://www.figma.com/design/EaInsHfhJWV9XvUAm6rI5U/1-300-Free-Pixel-Icons-%25E2%2580%2593-Vector-Pixel-icons--svg---Community-?node-id=813-1887&p=f&t=h0VXyerS5vURlaP7-0)
+  - [Pixel Icon Library | 2300+ Pixelated Icons By HackerNoon (Community)](https://www.figma.com/design/LIj9CdXfSkELlZJPE6RDFK/Pixel-Icon-Library-%257C-2300--Pixelated-Icons-By-HackerNoon--Community-?node-id=0-1&p=f&t=vuDzKoAEBUPqeJ2B-0)
+  - [Hand Icons Collection - 336 Free Pixel-Perfect Icons (Community)](https://www.figma.com/design/ewB728vqXRsxI4tktSN8Od/Hand-Icons-Collection---336-Free-Pixel-Perfect-Icons--Community-?node-id=0-1&p=f&t=hYSOldsaScSjH3vc-0)
+- Supplied GIF intended for the Engineering Focus section: [GIPHY example](https://camo.githubusercontent.com/a0daaa25e17b30ddfc4c79e1b6c8b2c13283a48f036785dedd57c9f1a3104c8c/68747470733a2f2f6d656469612e67697068792e636f6d2f6d656469612f6247677363356d576f727966674b427831752f67697068792e676966)
+- Visual references:
+  1. [Reado podcast](https://reado-wbs.framer.website/podcast)
+  2. [Noorie](https://noorie.framer.website/)
+  3. [Gumroad](https://gumroad.com)
+  4. [Chatfolio template](https://chatfolio-template.framer.website)
+  5. [Side B Music](https://side-b-music.framer.website)
+  6. [Nexora template](https://nexoratemplate.framer.website)
+  7. [TypeSafe](https://typesafe.ai)

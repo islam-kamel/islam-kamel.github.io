@@ -101,35 +101,20 @@ html {
   }
 }
 
-/* CRT screen terminal reveal: finite, non-looping one-shot */
-@keyframes crtLineReveal {
-  0% {
-    opacity: 0;
+/* CRT terminal cursor blink: step blink using visibility, never opacity */
+@keyframes crtCursorBlink {
+  0%,
+  49% {
+    visibility: visible;
   }
+  50%,
   100% {
-    opacity: 1;
+    visibility: hidden;
   }
 }
 
-.crt-terminal-line {
-  opacity: 0;
-  animation: crtLineReveal 0.2s ease-out forwards;
-}
-
-.crt-terminal-line-1 {
-  animation-delay: 0.15s;
-}
-
-.crt-terminal-line-2 {
-  animation-delay: 0.6s;
-}
-
-.crt-terminal-line-3 {
-  animation-delay: 1.05s;
-}
-
-.crt-terminal-line-4 {
-  animation-delay: 1.5s;
+.crt-terminal-cursor {
+  animation: crtCursorBlink 1s steps(1) infinite;
 }
 
 /* Blog prose styles - Editorial Retro */
@@ -340,8 +325,8 @@ html {
     scroll-behavior: auto !important;
   }
 
-  .crt-terminal-line {
+  .crt-terminal-cursor {
     animation: none !important;
-    opacity: 1 !important;
+    visibility: hidden !important;
   }
 }

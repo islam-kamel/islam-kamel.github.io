@@ -38,80 +38,61 @@ export const metadata: Metadata = {
   },
 };
 
+const PINNED_EXCERPTS: Record<string, string> = {
+  "making-react-pdf-output-deterministic":
+    "Your PDF can change when fonts or page breaks change. I explain how to keep the output the same.",
+  "moving-data-processing-off-react-main-thread":
+    "A slow filter can freeze the page while you wait. I explain how to move that work into a Web Worker.",
+  "migrating-github-pages-to-vercel":
+    "Old redirects can send readers and search engines to the wrong page. I explain what to check when moving a site to Vercel.",
+};
+
 export default function Home() {
-  const posts = getAllPosts().slice(0, 3);
+  const posts = getAllPosts()
+    .filter((p) => p.slug !== "returning-useful-errors-for-invalid-json")
+    .slice(0, 3);
 
   const disciplines = [
     {
       num: "01",
       title: "Frontend Architecture",
       description:
-        "Building responsive, type-safe web applications using Next.js and React. Focused on state management, server components, and modular UI structure.",
-      highlights: [
-        "Next.js App Router",
-        "React Server Components",
-        "Performance Optimization",
-        "Modular Design Systems",
-      ],
-      chips: [
-        "TypeScript",
-        "Next.js",
-        "React",
-        "Tailwind CSS",
-        "HeroUI",
-        "Vite",
-      ],
+        "I build web pages with React and Next.js. I want people to find what they need without waiting on the page.",
+      outcome: "You get: pages that are clear and easy to use.",
+      tools: "TypeScript / Next.js / React / Tailwind CSS",
+      articleTitle: "Moving Data Processing Off React's Main Thread",
+      articleHref: "/blog/moving-data-processing-off-react-main-thread",
     },
     {
       num: "02",
       title: "Backend & Systems",
       description:
-        "Designing backend services, relational database schemas, containerized environments, and RESTful APIs.",
-      highlights: [
-        "Modular API Architecture",
-        "Relational Data Modeling",
-        "Container Deployments",
-        "Environment Configuration",
-      ],
-      chips: ["Python", "Django", "Flask", "Docker", "PostgreSQL", "REST APIs"],
+        "I check incoming data so people get clear errors when something is wrong.",
+      outcome: "You get: data that is checked before work continues.",
+      tools: "Python / Django / PostgreSQL / Docker",
+      articleTitle: "Returning Useful Errors for Invalid JSON in a Node.js API",
+      articleHref: "/blog/returning-useful-errors-for-invalid-json",
     },
     {
       num: "03",
       title: "AI & LLM Integration",
       description:
-        "Integrating LLMs with application services. Building tool-calling agents, structured data extraction, and evaluation workflows.",
-      highlights: [
-        "Multi-Agent Coordination",
-        "Tool Execution Systems",
-        "Structured JSON Output",
-        "Context Management",
-      ],
-      chips: [
-        "LLM Orchestration",
-        "Multi-Agent Systems",
-        "Tool Execution",
-        "Structured Output",
-      ],
+        "I connect AI tools to web apps and check what they return. I want people to get useful answers and know when something went wrong.",
+      outcome: "You get: AI features that check answers before using them.",
+      tools:
+        "LLM Orchestration / Multi-Agent Systems / Tool Execution / Structured Output",
+      articleTitle: "Building Reliable LLM Pipelines",
+      articleHref: "/blog/building-reliable-llm-pipelines",
     },
     {
       num: "04",
       title: "Real-Time & Data Engineering",
       description:
-        "Implementing bi-directional data streaming, off-thread concurrency, interactive analytics dashboards, and programmatic document generation.",
-      highlights: [
-        "Bi-directional Sockets",
-        "Event-Driven Architecture",
-        "Off-Thread Concurrency",
-        "Data-Dense Dashboards",
-      ],
-      chips: [
-        "WebSockets",
-        "Socket.io",
-        "Apache ECharts",
-        "react-pdf",
-        "SheetJS",
-        "Web Workers",
-      ],
+        "I build screens that update as new data arrives. I move heavy work away from the page so people can keep using it.",
+      outcome: "You get: dashboards that stay smooth while the data moves.",
+      tools: "WebSockets / Apache ECharts / Web Workers / react-pdf",
+      articleTitle: "REST Polling vs WebSockets for Real-Time Interfaces",
+      articleHref: "/blog/why-i-moved-from-rest-to-websockets",
     },
   ];
 
@@ -119,22 +100,22 @@ export default function Home() {
     {
       title: "CS50’s Introduction to Computer Science",
       issuer: "Harvard University",
-      focus: "C, Python, SQL, Algorithms, Memory & Data Structures",
+      focus: "C, Python, SQL, and the basics of how programs work.",
     },
     {
       title: "Python Development & Fundamentals",
       issuer: "Pluralsight",
-      focus: "Asynchronous I/O, OOP, Backend APIs, Concurrency",
+      focus: "Python, APIs, and tasks that run while other work waits.",
     },
     {
       title: "Full Stack Web Development",
       issuer: "Udacity",
-      focus: "End-to-End System Design, RESTful Architecture, Databases",
+      focus: "Building web apps, APIs, and databases.",
     },
     {
       title: "Frontend & Cross-Platform Mobile Development Track",
       issuer: "Information Technology Institute (ITI)",
-      focus: "Modern React, TypeScript, Component Systems, Responsive UI",
+      focus: "React, TypeScript, and pages that work on different screens.",
     },
   ];
 
@@ -177,8 +158,8 @@ export default function Home() {
             </div>
 
             <p className="text-base sm:text-lg text-retro-body leading-relaxed max-w-xl font-normal">
-              Building web applications, real-time data streaming systems, and
-              LLM integration workflows.
+              I build web apps, screens that show live data, and tools that use
+              AI. I care about making them fast, clear, and easy to use.
             </p>
 
             {/* Direct Actions */}
@@ -248,19 +229,18 @@ export default function Home() {
               </h2>
             </div>
             <p className="text-base sm:text-lg text-retro-ink max-w-md font-medium">
-              Web applications, real-time data streaming architectures, and
-              backend services.
+              I build web apps and the tools that keep their data moving.
             </p>
           </div>
 
           {/* Editorial Open Layout (Numbered Rows) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-fr gap-x-12 gap-y-12">
             {disciplines.map((item) => (
               <div
                 key={item.num}
-                className="border-t-2 border-retro-ink pt-6 flex flex-col justify-between"
+                className="border-t-2 border-retro-ink pt-6 flex flex-col justify-between h-full"
               >
-                <div>
+                <div className="md:min-h-[200px] lg:min-h-[175px] flex flex-col justify-start">
                   <div className="flex items-baseline justify-between mb-4">
                     <span className="text-4xl sm:text-5xl font-bold text-retro-ink tracking-tight">
                       {item.num}
@@ -271,31 +251,33 @@ export default function Home() {
                     {item.title}
                   </h3>
 
-                  <p className="text-sm sm:text-base text-retro-ink leading-relaxed mb-6 font-normal">
+                  <p className="text-sm sm:text-base text-retro-ink leading-relaxed font-normal pb-2">
                     {item.description}
                   </p>
-
-                  <div className="space-y-2 mb-6">
-                    {item.highlights.map((highlight) => (
-                      <div
-                        key={highlight}
-                        className="flex items-center gap-2 text-xs font-bold text-retro-ink"
-                      >
-                        <span>{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-retro-ink/30">
-                  {item.chips.map((chip) => (
-                    <span
-                      key={chip}
-                      className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-bold bg-retro-bg text-retro-ink border border-retro-ink shadow-retro-xs"
+                <div className="pt-4 border-t border-retro-ink space-y-2 mt-auto md:min-h-[144px] lg:min-h-[112px]">
+                  <p className="text-xs sm:text-sm font-medium text-retro-ink">
+                    {item.outcome}
+                  </p>
+
+                  <div className="font-mono text-xs text-retro-ink">
+                    Works with: {item.tools}
+                  </div>
+
+                  <div className="text-xs font-bold text-retro-ink">
+                    <span>Read: </span>
+                    <Link
+                      className="hover:underline underline-offset-4 inline-flex items-center gap-1 group"
+                      href={item.articleHref}
                     >
-                      {chip}
-                    </span>
-                  ))}
+                      <span>{item.articleTitle}</span>
+                      <ArrowUpRightIcon
+                        className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
+                        size={13}
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -303,9 +285,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* C. Education & Certifications Section (The Muted Sage Interlude) */}
+      {/* C. Recent Writing Section */}
+      <section className="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b-2 border-retro-ink">
+          <div>
+            <span className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-3">
+              Writing
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-retro-ink">
+              Recent Articles
+            </h2>
+            <p className="text-sm text-retro-muted mt-1 font-normal">
+              I write about the parts of building software that can get in the
+              way.
+            </p>
+          </div>
+
+          <Link
+            className="inline-flex items-center gap-2 font-bold text-sm text-retro-ink hover:underline underline-offset-4 transition-all"
+            href="/blog"
+          >
+            <span>View all articles</span>
+            <ArrowUpRightIcon size={16} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <Link
+              key={post.slug}
+              className="border-2 border-retro-ink bg-retro-bg shadow-retro-md hover:shadow-retro-lg hover:-translate-y-1 transition-all p-6 flex flex-col justify-between group"
+              href={`/blog/${post.slug}`}
+            >
+              <div>
+                <div className="flex items-center gap-2 text-xs text-retro-muted mb-3">
+                  <CalendarIcon size={13} />
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+
+                <h3 className="text-lg font-bold text-retro-ink tracking-tight group-hover:underline underline-offset-4 transition-all mb-2">
+                  {post.title}
+                </h3>
+
+                <p className="text-xs text-retro-muted leading-relaxed mb-4">
+                  {PINNED_EXCERPTS[post.slug] ?? post.description}
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-retro-ink/15 flex items-center justify-between text-xs font-bold text-retro-ink">
+                <span>Read article</span>
+                <ArrowUpRightIcon
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                  size={14}
+                />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* D. Education & Certifications Section (The Muted Sage Interlude) */}
       <section
-        className="scroll-mt-20 py-16 sm:py-24 bg-retro-sage border-b-2 border-retro-ink relative"
+        className="scroll-mt-20 py-16 sm:py-24 bg-retro-sage border-y-2 border-retro-ink relative"
         id="education"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -320,7 +367,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="text-base text-retro-sage-ink font-medium max-w-md">
-              Academic degree and professional training programs.
+              I studied programming, data, and web apps.
             </p>
           </div>
 
@@ -349,9 +396,9 @@ export default function Home() {
                   </p>
 
                   <p className="text-sm text-retro-body leading-relaxed">
-                    Curriculum centered on systems analysis, database
-                    architecture, business logic modeling, and enterprise
-                    software engineering foundations.
+                    I studied systems analysis, database design, and software
+                    basics. I learned how software and data fit the needs of a
+                    business.
                   </p>
                 </div>
 
@@ -392,88 +439,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* D. Recent Writing Section */}
-      <section className="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b-2 border-retro-ink">
-          <div>
-            <span className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-3">
-              Writing
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-retro-ink">
-              Recent Articles
-            </h2>
-          </div>
-
-          <Link
-            className="inline-flex items-center gap-2 font-bold text-sm text-retro-ink hover:underline underline-offset-4 transition-all"
-            href="/blog"
-          >
-            <span>View all articles</span>
-            <ArrowUpRightIcon size={16} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <Link
-              key={post.slug}
-              className="border-2 border-retro-ink bg-retro-bg shadow-retro-md hover:shadow-retro-lg hover:-translate-y-1 transition-all p-6 flex flex-col justify-between group"
-              href={`/blog/${post.slug}`}
-            >
-              <div>
-                <div className="flex items-center gap-2 text-xs text-retro-muted mb-3">
-                  <CalendarIcon size={13} />
-                  <time dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
-                </div>
-
-                <h3 className="text-lg font-bold text-retro-ink tracking-tight group-hover:underline underline-offset-4 transition-all mb-2">
-                  {post.title}
-                </h3>
-
-                <p className="text-xs text-retro-muted leading-relaxed line-clamp-3 mb-4">
-                  {post.description}
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-retro-ink/15 flex items-center justify-between text-xs font-bold text-retro-ink">
-                <span>Read article</span>
-                <ArrowUpRightIcon
-                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                  size={14}
-                />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* E. Personal Contact Section */}
       <section
-        className="scroll-mt-20 pb-24 sm:pb-32 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
+        className="scroll-mt-20 pt-12 sm:pt-16 pb-24 sm:pb-32 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
         id="contact"
       >
-        <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg p-8 sm:p-14 text-center">
-          <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-6">
+        <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg p-8 sm:p-12 text-center">
+          <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-4">
             Say hello
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-retro-ink mb-4">
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-retro-ink mb-3">
             Say hello
           </h2>
 
-          <p className="text-base sm:text-lg text-retro-muted max-w-xl mx-auto mb-8 leading-relaxed">
-            Have a question about an article, want to discuss software
-            architecture, or just want to connect? Send a note to say hello.
+          <p className="text-base sm:text-lg text-retro-muted max-w-xl mx-auto mb-6 leading-relaxed">
+            If something I wrote helped you, or you want to talk about code,
+            write to me.
           </p>
 
           <a
-            className="inline-flex items-center gap-2.5 px-8 py-4 bg-retro-pink hover:bg-retro-pink-hover text-retro-ink font-bold text-base border-2 border-retro-ink shadow-retro-md hover:shadow-retro-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2.5 px-8 py-3.5 bg-retro-pink hover:bg-retro-pink-hover text-retro-ink font-bold text-base border-2 border-retro-ink shadow-retro-md hover:shadow-retro-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink focus-visible:ring-offset-2"
             href="mailto:contact@islamkamel.com"
           >
             <SendIcon size={18} />

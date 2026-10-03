@@ -1,0 +1,281 @@
+---
+title: "Returning Useful Errors for Invalid JSON in a Node.js API"
+date: "2026-10-03"
+description: "Tell callers what to fix when JSON is broken, too large, or missing a field. A small Node.js server with no extra packages."
+tags: ["Node.js", "HTTP", "JSON", "Backend", "API Architecture"]
+---
+
+Your API gets a request with broken JSON. The caller needs a useful error, not a blank response.
+
+An API (application programming interface) lets two programs exchange data over a network. HTTP is the protocol used to deliver request and response messages. JSON is a plain text format for sending structured data as key-value pairs.
+
+When building an HTTP service in Node.js without an extra web framework, reading JSON is one of your first tasks. If you call `JSON.parse` directly on incoming data, you quickly run into edge cases. The caller might send plain text instead of JSON. They might send a body ten megabytes long. They might leave off a closing brace, or send an empty object when your code expects a person name.
+
+If you do not handle these mistakes on purpose, your server will crash, hang the connection, or return confusing responses.
+
+## Why raw Node.js needs explicit error handling
+
+Frameworks like Express hide body reading inside a built-in request helper. When you write a raw `http.createServer` handler, Node.js gives you a readable stream for the request body.
+
+Three things can surprise developers:
+
+First, `JSON.parse` throws a `SyntaxError` when it encounters broken JSON text. It does not return `null` or an error object. In a native Node.js HTTP server, an unhandled error inside an event callback crashes the server or leaves the caller waiting until a timeout. Plain `node:http` does not catch that error and convert it into an HTTP 500 for you.
+
+Second, streams deliver data in chunks. Without a limit, many large requests can use more memory than you expect. If callers send large bodies simultaneously, buffering every chunk into memory puts unnecessary pressure on your process.
+
+Third, closing the connection too early prevents the caller from reading your response. If you call `req.destroy()` while the client is still sending data, the underlying network socket sends an abrupt reset. The client sees a connection error instead of your HTTP status code and message.
+
+## The five checks every JSON endpoint needs
+
+Whenever my server receives a POST request expecting JSON, I run these five checks in order:
+
+1. **Check the media type (HTTP 415):** Make sure the `Content-Type` header is `application/json`. If someone sends XML or plain text, reject it immediately before reading the body.
+2. **Limit the body size (HTTP 413):** Count bytes as they arrive. If the request body is larger than your limit, such as 10 kilobytes, stop saving data and send back an HTTP 413 Payload Too Large response.
+3. **Parse the JSON syntax (HTTP 400):** Wrap `JSON.parse` in a `try/catch` block. If parsing fails, send back an HTTP 400 Bad Request response with a simple message. Never send the raw JavaScript stack trace back to the user.
+4. **Validate the fields (HTTP 422):** Check that the parsed data is an object and that required fields exist and have the right types. If a required field is missing or has a negative number when you need a positive integer, return HTTP 422 Unprocessable Content.
+5. **Send the success response (HTTP 200):** Once the data passes all four checks, run your app code and return a clean JSON response.
+
+## Checking the Content-Type header
+
+Callers should declare what kind of data they are sending. The `Content-Type` header tells you if you are receiving JSON.
+
+You cannot just check if the header includes the word `json`, because a client could send `text/application/json-evil`. Instead, isolate the media type part before any parameters like `charset=utf-8`. If the header is missing or does not match `application/json`, return HTTP 415 Unsupported Media Type.
+
+## Limiting memory without dropping the connection
+
+To prevent large request bodies from filling up memory, we count the bytes of each chunk. But we must be careful about how we close the connection.
+
+If we immediately destroy the request socket, the client will never see our HTTP 413 response. Instead, we write the 413 response with a `Connection: close` header. Then, we listen for the response `finish` event before cleaning up the socket. While the response is sending, we drain and discard any remaining incoming chunks so our memory stays protected.
+
+## Catching syntax errors safely
+
+When `JSON.parse` fails, it throws a `SyntaxError`. Do not pass this raw error message to the client. Different versions of Node.js format error messages differently, and stack traces reveal your internal file paths. Instead, catch the error and return a plain, fixed message explaining that the request body had malformed JSON.
+
+## Separating syntax errors from validation errors
+
+Many APIs use HTTP 400 for everything that goes wrong. But there is a useful difference between broken syntax and missing data:
+
+- Use **HTTP 400 Bad Request** when the text itself cannot be parsed as JSON.
+- Use **HTTP 422 Unprocessable Content** when the JSON parsed fine, but the data does not make sense for your application rules.
+
+For example, if a client sends `{ "name": "Apples", "quantity": -5 }`, the JSON syntax is completely valid. But a negative quantity cannot be processed. Returning 422 tells the client developer that their JSON was received, but they need to correct their field values.
+
+We also use `Number.isSafeInteger` when checking integer fields. In JavaScript, numbers larger than `Number.MAX_SAFE_INTEGER` lose precision, which can cause unexpected values in your code.
+
+## Complete runnable server
+
+Here is the complete server in a single file. You can save this as `server.mjs` and run it directly with Node.js using `node server.mjs`:
+
+```bash
+node server.mjs
+```
+
+Here is the code:
+
+```javascript
+import http from "node:http";
+import { pathToFileURL } from "node:url";
+
+export const MAX_BYTES = 10 * 1024; // 10 KB limit
+
+export function isJsonContentType(header) {
+  if (typeof header !== "string") return false;
+  return header.split(";")[0].trim().toLowerCase() === "application/json";
+}
+
+export function sendJson(res, statusCode, data) {
+  const payload = JSON.stringify(data);
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Content-Length": Buffer.byteLength(payload),
+  });
+  res.end(payload);
+}
+
+export function validateRecordSchema(data) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return "Payload must be a JSON object";
+  }
+  if (typeof data.name !== "string" || !data.name.trim()) {
+    return "Field 'name' must be a non-empty string";
+  }
+  if (
+    typeof data.quantity !== "number" ||
+    !Number.isSafeInteger(data.quantity) ||
+    data.quantity < 1
+  ) {
+    return "Field 'quantity' must be a positive integer";
+  }
+  return null;
+}
+
+export function createJsonServer() {
+  return http.createServer((req, res) => {
+    if (req.url !== "/api/records") {
+      return sendJson(res, 404, {
+        error: "Not Found",
+        message: "Endpoint not found",
+      });
+    }
+
+    if (req.method !== "POST") {
+      res.setHeader("Allow", "POST");
+      return sendJson(res, 405, {
+        error: "Method Not Allowed",
+        message: "Only POST requests are supported",
+      });
+    }
+
+    if (!isJsonContentType(req.headers["content-type"])) {
+      return sendJson(res, 415, {
+        error: "Unsupported Media Type",
+        message: "Expected Content-Type: application/json",
+      });
+    }
+
+    const declaredLen = parseInt(req.headers["content-length"] || "", 10);
+    if (Number.isFinite(declaredLen) && declaredLen > MAX_BYTES) {
+      res.writeHead(413, {
+        "Content-Type": "application/json; charset=utf-8",
+        Connection: "close",
+      });
+      res.end(
+        JSON.stringify({
+          error: "Payload Too Large",
+          message: `Payload exceeds limit of ${MAX_BYTES} bytes`,
+        })
+      );
+      res.on("finish", () => req.destroy());
+      req.resume();
+      return;
+    }
+
+    let receivedBytes = 0;
+    const chunks = [];
+    let isOversized = false;
+
+    req.on("data", (chunk) => {
+      if (isOversized) return;
+      receivedBytes += chunk.length;
+      if (receivedBytes > MAX_BYTES) {
+        isOversized = true;
+        req.resume();
+        res.writeHead(413, {
+          "Content-Type": "application/json; charset=utf-8",
+          Connection: "close",
+        });
+        res.end(
+          JSON.stringify({
+            error: "Payload Too Large",
+            message: `Payload exceeds limit of ${MAX_BYTES} bytes`,
+          })
+        );
+        res.on("finish", () => req.destroy());
+      } else {
+        chunks.push(chunk);
+      }
+    });
+
+    req.on("end", () => {
+      if (isOversized) return;
+      let parsed;
+      try {
+        parsed = JSON.parse(Buffer.concat(chunks).toString("utf-8"));
+      } catch {
+        return sendJson(res, 400, {
+          error: "Bad Request",
+          message: "Malformed JSON payload",
+        });
+      }
+
+      const schemaError = validateRecordSchema(parsed);
+      if (schemaError) {
+        return sendJson(res, 422, {
+          error: "Unprocessable Content",
+          message: schemaError,
+        });
+      }
+
+      return sendJson(res, 200, {
+        success: true,
+        data: { name: parsed.name.trim(), quantity: parsed.quantity },
+      });
+    });
+
+    req.on("error", () => {
+      if (!res.headersSent) {
+        sendJson(res, 500, {
+          error: "Internal Server Error",
+          message: "Socket error occurred",
+        });
+      }
+    });
+  });
+}
+
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  const server = createJsonServer();
+  server.listen(3001, () => {
+    console.log("Server listening on http://localhost:3001");
+  });
+}
+```
+
+## How to test each response
+
+You can test these five paths from your terminal using curl:
+
+First, send a request with no Content-Type header. Pass `-H 'Content-Type:'` so curl does not add a default header:
+
+```bash
+curl -i -X POST http://localhost:3001/api/records \
+  -H 'Content-Type:' \
+  -d '{"name":"item"}'
+```
+
+The server rejects the call and asks for `application/json`.
+
+Second, send a request body that exceeds 10 kilobytes. You can create a temporary test file with Node, run curl, and clean it up:
+
+```bash
+node -e 'fs.writeFileSync("large.json", JSON.stringify({ name: "large", quantity: 1, padding: "x".repeat(11000) }))'
+curl -i -X POST http://localhost:3001/api/records \
+  -H "Content-Type: application/json" \
+  -d @large.json
+rm -f large.json
+```
+
+The server stops reading chunks and returns HTTP 413 Payload Too Large.
+
+Third, send broken JSON syntax:
+
+```bash
+curl -i -X POST http://localhost:3001/api/records \
+  -H "Content-Type: application/json" \
+  -d '{"name": "missing quote}'
+```
+
+The server catches the syntax error and returns HTTP 400 Bad Request.
+
+Fourth, send valid JSON with invalid fields or numbers outside safe bounds:
+
+```bash
+curl -i -X POST http://localhost:3001/api/records \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Widget", "quantity": -3}'
+```
+
+The server returns HTTP 422 Unprocessable Content.
+
+Finally, send a valid record:
+
+```bash
+curl -i -X POST http://localhost:3001/api/records \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Widget", "quantity": 10}'
+```
+
+The server returns HTTP 200 with the validated data. The sample returns the checked data and does not save it. It does not write to a database or keep state.
