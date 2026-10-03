@@ -2,14 +2,15 @@
 
 ## Direction
 
-An editorial retro portfolio informed by the owner's uploaded TypeSafe AI screenshot: oversized tight black typography on warm off-white; vivid pink feature panels; muted sage interludes; and a near-black footer. Reinterpret its hierarchy and print-era texture for this personal site. Do not copy its brand, copy, illustrations, or exact layout.
+An editorial retro portfolio informed by selected references: Reado for calm editorial spacing and clear typography, NOORIE for purposeful framed surfaces and pink accents, and a restrained print-era palette of warm off-white, pink feature panels, muted sage, and ink contrast. Do not copy brand marks, copy, or exact layouts.
 
 ## Visual language
 
 - Use a strong grotesk display face already available to the project or a restrained system fallback. Keep body and article typography highly readable.
 - Build clear, varied editorial compositions with generous margins, deliberate alignment, and a small palette. Pink signals featured content; sage provides visual rest; dark is reserved for the footer and selected contrast.
-- Use the approved abstract pink-cloud, halftone, and sage geometric print collage at `public/retro-cloud-collage.webp` once in the hero. Do not use schematic computer/terminal artwork, fake interface frames, or console copy. Other visuals must be original and clearly relate to their content.
+- Hero artwork is an original chunky pixel-art CRT computer and keyboard rendered via SVG in `components/retro-pixel-pc.tsx`, using the site's palette (ink, paper, sage, pink). As a single deliberate exception to the no-terminal rule, the CRT screen displays accessible, finite recorded terminal output from verified repository commands (`node --version` and `yarn --version`). It reveals once via CSS without looping or simulating an interactive shell, and presents immediately and statically under `prefers-reduced-motion`. Fake telemetry, metrics, terminal copy, or schematic readouts remain strictly forbidden everywhere else across the site.
 - Each illustration must add meaning or context. Avoid repeated card grids, ubiquitous pills, gradients, glows, ornamental diagrams, and fabricated data visuals.
+- Keep print textures selective: the featured writing panel may use the quiet low-contrast print grid over pink.
 
 ## Motion and interaction
 

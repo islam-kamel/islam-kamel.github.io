@@ -2,40 +2,82 @@ import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 
+import {
+  generateIkIconSvg,
+  IK_LOGO_PATH,
+  IK_TIGHT_VIEWBOX,
+} from "../lib/ik-icon-data.mjs";
+import { hexToRgb, themeColors } from "../styles/tokens.mjs";
+
 const ROOT_DIR = process.cwd();
 const PUBLIC_DIR = path.join(ROOT_DIR, "public");
 
-// SVG definitions
-const IK_PATH =
-  "M71.7598 0.0810547V338.789H0V0.0810547H71.7598ZM334.663 54.7002L233.437 140.654C241.614 143.17 249.733 146.269 257.619 150.047C278.654 160.123 299.062 175.536 313.695 198.434C328.341 221.351 335.664 249.379 334.402 282.074V338.789H262.643V281.381C262.643 280.867 262.654 280.353 262.676 279.84C263.55 259.51 259.045 246.178 253.228 237.075C247.271 227.755 238.33 220.375 226.619 214.766C212.577 208.04 196.127 204.648 180.836 203.503V338.789H109.075V0.0810547H180.836V91.1787L288.215 0L334.663 54.7002Z";
+// Canonical SVG assets:
+// 1. Transparent, FULL-BLEED canvas (viewBox cropped to the artwork): ink rounded-square base,
+//    white IkIcon mark, and offset palette-color shadow. No outer padding at all.
+const CANONICAL_SVG = generateIkIconSvg();
+// 2. Opaque full canvas in themeColors.retro.ink with a large centered IkIcon mark (inside the maskable safe zone)
+const OPAQUE_SVG = generateIkIconSvg({ opaque: true });
 
-// 1. Dynamic SVG: transparent background, #F34F29 in light mode, #FFFFFF in dark mode
-const DYNAMIC_SVG = `<svg width="450" height="450" viewBox="-58 -56 450 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    path {
-      fill: #F34F29;
-    }
-    @media (prefers-color-scheme: dark) {
-      path {
-        fill: #FFFFFF;
-      }
-    }
-  </style>
-  <path d="${IK_PATH}"/>
-</svg>
-`;
-
-// Helper to make SVGs for rasterization
-function createSvg({ fillColor = "#F34F29", bgColor = null } = {}) {
-  const bgRect = bgColor ? `<rect x="-58" y="-56" width="450" height="450" fill="${bgColor}"/>` : "";
-  return `<svg width="450" height="450" viewBox="-58 -56 450 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-  ${bgRect}
-  <path d="${IK_PATH}" fill="${fillColor}"/>
-</svg>`;
+// Rasterize an SVG to an exact size x size PNG buffer.
+// High density first (crisp vector render), then downscale. The SVG is already full-bleed,
+// so "fill" is exact (the artwork is square) and nothing gets letterboxed.
+async function rasterize(svgBuffer, size) {
+  return sharp(svgBuffer, { density: 72 * 8 })
+    .resize(size, size, { fit: "fill" })
+    .png()
+    .toBuffer();
 }
 
+// All public PNG targets with intrinsic dimensions and opacity requirements
+export const PNG_TARGETS = [
+  // Favicons - Light mode (transparent, full-bleed: no outer padding)
+  { filename: "favicon-16x16.png", size: 16, opaque: false },
+  { filename: "favicon-32x32.png", size: 32, opaque: false },
+  { filename: "favicon-48x48.png", size: 48, opaque: false },
+  { filename: "favicon-96x96.png", size: 96, opaque: false },
+
+  // Favicons - Dark mode (transparent, full-bleed: no outer padding)
+  { filename: "favicon-dark-16x16.png", size: 16, opaque: false },
+  { filename: "favicon-dark-32x32.png", size: 32, opaque: false },
+  { filename: "favicon-dark-48x48.png", size: 48, opaque: false },
+  { filename: "favicon-dark-96x96.png", size: 96, opaque: false },
+
+  // Apple Touch Icons (opaque themeColors.retro.ink canvas)
+  { filename: "apple-icon-57x57.png", size: 57, opaque: true },
+  { filename: "apple-icon-60x60.png", size: 60, opaque: true },
+  { filename: "apple-icon-72x72.png", size: 72, opaque: true },
+  { filename: "apple-icon-76x76.png", size: 76, opaque: true },
+  { filename: "apple-icon-114x114.png", size: 114, opaque: true },
+  { filename: "apple-icon-120x120.png", size: 120, opaque: true },
+  { filename: "apple-icon-144x144.png", size: 144, opaque: true },
+  { filename: "apple-icon-152x152.png", size: 152, opaque: true },
+  { filename: "apple-icon-180x180.png", size: 180, opaque: true },
+  { filename: "apple-icon.png", size: 192, opaque: true },
+  { filename: "apple-icon-precomposed.png", size: 192, opaque: true },
+
+  // Android Icons (opaque themeColors.retro.ink canvas)
+  { filename: "android-icon-36x36.png", size: 36, opaque: true },
+  { filename: "android-icon-48x48.png", size: 48, opaque: true },
+  { filename: "android-icon-72x72.png", size: 72, opaque: true },
+  { filename: "android-icon-96x96.png", size: 96, opaque: true },
+  { filename: "android-icon-144x144.png", size: 144, opaque: true },
+  { filename: "android-icon-192x192.png", size: 192, opaque: true },
+  { filename: "android-512x512.png", size: 512, opaque: true, maskable: true },
+
+  // Microsoft Tile Icons (opaque themeColors.retro.ink canvas)
+  { filename: "ms-icon-70x70.png", size: 70, opaque: true },
+  { filename: "ms-icon-144x144.png", size: 144, opaque: true },
+  { filename: "ms-icon-150x150.png", size: 150, opaque: true },
+  { filename: "ms-icon-310x310.png", size: 310, opaque: true },
+];
+
+export const SVG_TARGETS = ["favicon.svg", "logo-light.svg", "logo-dark.svg"];
+
+export const ICO_SIZES = [16, 32, 48];
+
 // Multi-resolution ICO builder
-function buildIcoBuffer(pngBuffers, sizes) {
+export function buildIcoBuffer(pngBuffers, sizes) {
   const header = Buffer.alloc(6);
   header.writeUInt16LE(0, 0); // Reserved
   header.writeUInt16LE(1, 2); // 1 = ICO
@@ -65,68 +107,291 @@ function buildIcoBuffer(pngBuffers, sizes) {
   return Buffer.concat([header, ...directoryEntries, ...pngBuffers]);
 }
 
-async function generateFavicons() {
-  console.log("Generating favicons and touch icons...");
+export function verifyIcoBuffer(buffer, expectedSizes = ICO_SIZES) {
+  if (!Buffer.isBuffer(buffer)) {
+    throw new Error("ICO verification failed: output is not a Buffer");
+  }
+  const minLength = 6 + expectedSizes.length * 16;
+  if (buffer.length < minLength) {
+    throw new Error(
+      `ICO verification failed: buffer too small (${buffer.length} bytes)`
+    );
+  }
+  const reserved = buffer.readUInt16LE(0);
+  const type = buffer.readUInt16LE(2);
+  const count = buffer.readUInt16LE(4);
 
-  // 1. Write updated favicon.svg
-  const svgPath = path.join(PUBLIC_DIR, "favicon.svg");
-  fs.writeFileSync(svgPath, DYNAMIC_SVG.trim() + "\n");
-  console.log("  ✓ Updated favicon.svg (dynamic CSS: #F34F29 light / #FFFFFF dark, transparent)");
-
-  const lightSvgBuffer = Buffer.from(createSvg({ fillColor: "#F34F29" }));
-  const darkSvgBuffer = Buffer.from(createSvg({ fillColor: "#FFFFFF" }));
-  const touchSvgBuffer = Buffer.from(createSvg({ fillColor: "#FFFFFF", bgColor: "#000000" }));
-
-  // 2. Generate Light-Mode Transparent PNGs (#F34F29)
-  const lightTargets = [
-    { filename: "favicon-16x16.png", size: 16 },
-    { filename: "favicon-32x32.png", size: 32 },
-    { filename: "favicon-48x48.png", size: 48 },
-    { filename: "favicon-96x96.png", size: 96 },
-  ];
-  for (const t of lightTargets) {
-    await sharp(lightSvgBuffer).resize(t.size, t.size).png().toFile(path.join(PUBLIC_DIR, t.filename));
-    console.log(`  ✓ Generated ${t.filename} (transparent, #F34F29)`);
+  if (reserved !== 0)
+    throw new Error(`ICO reserved field is ${reserved}, expected 0`);
+  if (type !== 1) throw new Error(`ICO type field is ${type}, expected 1`);
+  if (count !== expectedSizes.length) {
+    throw new Error(
+      `ICO image count is ${count}, expected ${expectedSizes.length}`
+    );
   }
 
-  // 3. Generate Dark-Mode Transparent PNGs (#FFFFFF)
-  const darkTargets = [
-    { filename: "favicon-dark-16x16.png", size: 16 },
-    { filename: "favicon-dark-32x32.png", size: 32 },
-    { filename: "favicon-dark-48x48.png", size: 48 },
-    { filename: "favicon-dark-96x96.png", size: 96 },
-  ];
-  for (const t of darkTargets) {
-    await sharp(darkSvgBuffer).resize(t.size, t.size).png().toFile(path.join(PUBLIC_DIR, t.filename));
-    console.log(`  ✓ Generated ${t.filename} (transparent, #FFFFFF)`);
+  const pngMagic = Buffer.from([
+    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
+  ]);
+
+  for (let i = 0; i < count; i++) {
+    const entryOffset = 6 + i * 16;
+    const width = buffer.readUInt8(entryOffset) || 256;
+    const height = buffer.readUInt8(entryOffset + 1) || 256;
+    const planes = buffer.readUInt16LE(entryOffset + 4);
+    const bpp = buffer.readUInt16LE(entryOffset + 6);
+    const size = buffer.readUInt32LE(entryOffset + 8);
+    const offset = buffer.readUInt32LE(entryOffset + 12);
+
+    const expectedSize = expectedSizes[i];
+    if (width !== expectedSize || height !== expectedSize) {
+      throw new Error(
+        `ICO entry ${i} dimensions ${width}x${height} mismatch expected ${expectedSize}x${expectedSize}`
+      );
+    }
+    if (planes !== 1)
+      throw new Error(`ICO entry ${i} planes is ${planes}, expected 1`);
+    if (bpp !== 32)
+      throw new Error(`ICO entry ${i} bits-per-pixel is ${bpp}, expected 32`);
+    if (offset + size > buffer.length) {
+      throw new Error(
+        `ICO entry ${i} out of bounds: offset ${offset} + size ${size} > buffer length ${buffer.length}`
+      );
+    }
+    if (!buffer.subarray(offset, offset + 8).equals(pngMagic)) {
+      throw new Error(`ICO entry ${i} does not start with valid PNG signature`);
+    }
   }
 
-  // 4. Generate Multi-Resolution favicon.ico (16, 32, 48 transparent)
-  const icoSizes = [16, 32, 48];
-  const icoPngBuffers = await Promise.all(
-    icoSizes.map((size) => sharp(lightSvgBuffer).resize(size, size).png().toBuffer())
-  );
-  const icoBuffer = buildIcoBuffer(icoPngBuffers, icoSizes);
-  fs.writeFileSync(path.join(PUBLIC_DIR, "favicon.ico"), icoBuffer);
-  console.log(`  ✓ Generated favicon.ico (multi-res: ${icoSizes.join(", ")}px transparent)`);
-
-  // 5. Generate Apple Touch & Mobile Icons (Solid #000000 background, White #FFFFFF mark)
-  const touchTargets = [
-    { filename: "apple-icon-180x180.png", size: 180 },
-    { filename: "apple-icon.png", size: 192 },
-    { filename: "apple-icon-precomposed.png", size: 192 },
-    { filename: "android-icon-192x192.png", size: 192 },
-    { filename: "android-512x512.png", size: 512 },
-  ];
-  for (const t of touchTargets) {
-    await sharp(touchSvgBuffer).resize(t.size, t.size).png().toFile(path.join(PUBLIC_DIR, t.filename));
-    console.log(`  ✓ Generated ${t.filename} (solid #000000, white IK mark)`);
-  }
-
-  console.log("All assets generated successfully!");
+  return true;
 }
 
-generateFavicons().catch((err) => {
-  console.error("Failed to generate favicons:", err);
-  process.exit(1);
-});
+export async function verifyAssets() {
+  console.log("Running runnable asset consistency check...");
+
+  const inkRgb = hexToRgb(themeColors.retro.ink);
+
+  // 1. Verify ICO
+  const icoPath = path.join(PUBLIC_DIR, "favicon.ico");
+  if (!fs.existsSync(icoPath)) {
+    throw new Error(`Missing favicon.ico at ${icoPath}`);
+  }
+  const icoBuffer = fs.readFileSync(icoPath);
+  verifyIcoBuffer(icoBuffer);
+  console.log(
+    `  ✓ favicon.ico: valid directory entries for ${ICO_SIZES.join(", ")}px frames (${icoBuffer.length} bytes)`
+  );
+
+  // 2. Verify SVGs
+  for (const svgFile of SVG_TARGETS) {
+    const filePath = path.join(PUBLIC_DIR, svgFile);
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Missing SVG asset: ${svgFile}`);
+    }
+    const content = fs.readFileSync(filePath, "utf-8");
+    if (!content.includes(IK_LOGO_PATH)) {
+      throw new Error(`SVG ${svgFile} does not contain canonical IK_LOGO_PATH`);
+    }
+    if (
+      !content.includes(themeColors.retro.pink) ||
+      !content.includes(themeColors.retro.ink) ||
+      !content.includes(themeColors.retro.paper)
+    ) {
+      throw new Error(`SVG ${svgFile} does not contain canonical theme tokens`);
+    }
+    // Verify full-bleed viewBox (no padding around the artwork)
+    if (!content.includes(`viewBox="${IK_TIGHT_VIEWBOX}"`)) {
+      throw new Error(
+        `SVG ${svgFile} must use the tight viewBox "${IK_TIGHT_VIEWBOX}" (full-bleed, no padding)`
+      );
+    }
+    // Verify transparent canvas padding (no full-canvas background rect)
+    if (
+      content.includes('<rect width="44"') ||
+      content.includes('<rect width="70"') ||
+      content.includes('<rect width="38"')
+    ) {
+      throw new Error(
+        `SVG ${svgFile} must have transparent outer padding without full canvas rect`
+      );
+    }
+    console.log(`  ✓ ${svgFile}: canonical geometry & theme tokens verified`);
+  }
+
+  // 3. Verify PNG dimensions, format, opacity, and transparent padding
+  for (const target of PNG_TARGETS) {
+    const filePath = path.join(PUBLIC_DIR, target.filename);
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Missing PNG asset: ${target.filename}`);
+    }
+    const meta = await sharp(filePath).metadata();
+    if (meta.width !== target.size || meta.height !== target.size) {
+      throw new Error(
+        `Asset ${target.filename} dimensions ${meta.width}x${meta.height} do not match expected ${target.size}x${target.size}`
+      );
+    }
+    if (meta.format !== "png") {
+      throw new Error(
+        `Asset ${target.filename} format is ${meta.format}, expected png`
+      );
+    }
+
+    const stats = await sharp(filePath).stats();
+    const { data } = await sharp(filePath)
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+
+    const cornerIndices = [
+      0, // top-left
+      (target.size - 1) * 4, // top-right
+      (target.size - 1) * target.size * 4, // bottom-left
+      (target.size * target.size - 1) * 4, // bottom-right
+    ];
+
+    if (target.opaque) {
+      // Must be opaque across the whole canvas
+      if (!stats.isOpaque) {
+        throw new Error(
+          `Asset ${target.filename} must be opaque across the whole canvas, but stats.isOpaque is false`
+        );
+      }
+
+      // Check all 4 corners are opaque canonical retro.ink
+      for (const idx of cornerIndices) {
+        const r = data[idx];
+        const g = data[idx + 1];
+        const b = data[idx + 2];
+        const a = data[idx + 3];
+        if (a !== 255 || r !== inkRgb.r || g !== inkRgb.g || b !== inkRgb.b) {
+          throw new Error(
+            `Opaque asset ${target.filename} corner mismatch at index ${idx}: expected rgba(${inkRgb.r}, ${inkRgb.g}, ${inkRgb.b}, 255), got rgba(${r}, ${g}, ${b}, ${a})`
+          );
+        }
+      }
+
+      // Check every pixel has alpha === 255
+      for (let p = 3; p < data.length; p += 4) {
+        if (data[p] !== 255) {
+          throw new Error(
+            `Opaque asset ${target.filename} has non-opaque pixel (alpha ${data[p]}) at byte index ${p}`
+          );
+        }
+      }
+
+      console.log(
+        `  ✓ ${target.filename}: ${meta.width}x${meta.height} PNG verified (opaque ${themeColors.retro.ink} canvas)`
+      );
+    } else {
+      // Favicon targets are transparent but FULL-BLEED: the artwork must touch all four edges
+      if (stats.isOpaque) {
+        throw new Error(
+          `Favicon asset ${target.filename} must keep transparent rounded corners, but stats.isOpaque is true`
+        );
+      }
+
+      const alphaAt = (x, y) => data[(y * target.size + x) * 4 + 3];
+      const mid = Math.floor(target.size / 2);
+
+      // Full-bleed check: midpoint of every edge must be (almost) fully opaque => no padding
+      const edges = {
+        top: alphaAt(mid, 0),
+        bottom: alphaAt(mid, target.size - 1),
+        left: alphaAt(0, mid),
+        right: alphaAt(target.size - 1, mid),
+      };
+      for (const [edge, a] of Object.entries(edges)) {
+        if (a < 200) {
+          throw new Error(
+            `Favicon asset ${target.filename} is not full-bleed: ${edge} edge midpoint alpha is ${a} (expected >= 200)`
+          );
+        }
+      }
+
+      // Rounded corners / shadow notches stay transparent (tolerate tiny anti-aliasing at small sizes)
+      for (const idx of cornerIndices) {
+        const a = data[idx + 3];
+        if (a > 32) {
+          throw new Error(
+            `Favicon asset ${target.filename} corner at byte index ${idx} should be transparent (got alpha ${a})`
+          );
+        }
+      }
+
+      console.log(
+        `  ✓ ${target.filename}: ${meta.width}x${meta.height} PNG verified (transparent, full-bleed)`
+      );
+    }
+  }
+
+  console.log(
+    `\n[generate-favicons] All ${SVG_TARGETS.length + PNG_TARGETS.length + 1} brand assets verified successfully.`
+  );
+}
+
+// helper: render big, trim transparent padding, then fit to exact size
+async function renderTight(svgBuffer, size) {
+  const trimmed = await sharp(svgBuffer, { density: 1024 })
+    .trim() // removes the transparent outer padding
+    .png()
+    .toBuffer();
+
+  return sharp(trimmed)
+    .resize(size, size, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png()
+    .toBuffer();
+}
+
+export async function generateFavicons() {
+  console.log("Generating brand assets from canonical IkIcon mark...");
+
+  const canonicalSvgBuffer = Buffer.from(CANONICAL_SVG);
+  const opaqueSvgBuffer = Buffer.from(OPAQUE_SVG);
+
+  // 1. Write SVG assets
+  for (const svgFile of SVG_TARGETS) {
+    fs.writeFileSync(path.join(PUBLIC_DIR, svgFile), CANONICAL_SVG);
+    console.log(`  ✓ Written ${svgFile}`);
+  }
+
+  // 2. Generate PNG assets
+  for (const target of PNG_TARGETS) {
+    const out = path.join(PUBLIC_DIR, target.filename);
+    if (target.opaque) {
+      await sharp(opaqueSvgBuffer)
+        .resize(target.size, target.size)
+        .png()
+        .toFile(out);
+    } else {
+      fs.writeFileSync(out, await renderTight(canonicalSvgBuffer, target.size));
+    }
+    console.log(`  ✓ Generated ${target.filename}`);
+  }
+
+  // 3. favicon.ico (also tight)
+  const icoPngBuffers = await Promise.all(
+    ICO_SIZES.map((size) => renderTight(canonicalSvgBuffer, size))
+  );
+
+  const icoBuffer = buildIcoBuffer(icoPngBuffers, ICO_SIZES);
+  fs.writeFileSync(path.join(PUBLIC_DIR, "favicon.ico"), icoBuffer);
+  console.log(`  ✓ Generated favicon.ico (${ICO_SIZES.join(", ")}px)`);
+
+  // 4. Run automated self-check
+  await verifyAssets();
+}
+
+// Entrypoint
+if (process.argv.includes("--check") || process.argv.includes("-c")) {
+  verifyAssets().catch((err) => {
+    console.error("[generate-favicons] Verification failed:", err.message);
+    process.exit(1);
+  });
+} else {
+  generateFavicons().catch((err) => {
+    console.error("[generate-favicons] Generation failed:", err);
+    process.exit(1);
+  });
+}

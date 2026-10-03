@@ -47,12 +47,8 @@ export default function BlogPage() {
       <section className="relative pt-10 pb-20 sm:pt-16 sm:pb-28 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Bar */}
         <div className="mb-12 pb-6 border-b-2 border-retro-ink">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-retro-pink text-retro-ink text-xs font-bold border border-retro-ink mb-4">
+          <h1 className="inline-flex items-center gap-2 px-3.5 py-1 bg-retro-pink text-retro-ink text-xs font-bold border border-retro-ink rounded-full -rotate-1 mb-4">
             <span>Writing</span>
-          </div>
-
-          <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-retro-ink mb-3">
-            Writing
           </h1>
 
           <p className="text-base sm:text-lg text-retro-muted max-w-xl">
@@ -63,9 +59,9 @@ export default function BlogPage() {
         {/* Featured Post (Typographic & Open) */}
         {featuredPost && (
           <div className="mb-16">
-            <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg p-8 sm:p-10">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 text-xs text-retro-muted">
-                <span className="inline-block px-2.5 py-0.5 bg-retro-pink border border-retro-ink text-[11px] font-bold text-retro-ink w-fit">
+            <div className="border-2 border-retro-ink bg-retro-pink bg-print-grid shadow-retro-lg p-8 sm:p-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 text-xs text-retro-ink">
+                <span className="inline-block px-2.5 py-0.5 bg-retro-bg border border-retro-ink text-[11px] font-bold text-retro-ink w-fit">
                   Featured article
                 </span>
                 <div className="flex items-center gap-1.5 font-medium">
@@ -89,7 +85,7 @@ export default function BlogPage() {
                 </h2>
               </Link>
 
-              <p className="text-base text-retro-body leading-relaxed mb-6 max-w-3xl">
+              <p className="text-base text-retro-ink leading-relaxed mb-6 max-w-3xl">
                 {featuredPost.description}
               </p>
 
@@ -98,7 +94,7 @@ export default function BlogPage() {
                   {featuredPost.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-bold bg-white text-retro-ink border border-retro-ink shadow-retro-xs"
+                      className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono font-bold bg-retro-bg text-retro-ink border border-retro-ink shadow-retro-xs"
                     >
                       {tag}
                     </span>
@@ -106,7 +102,7 @@ export default function BlogPage() {
                 </div>
 
                 <Link
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-retro-pink hover:bg-retro-pink-hover text-retro-ink font-bold text-xs border-2 border-retro-ink shadow-retro-sm hover:shadow-retro-xs hover:translate-x-[1px] hover:translate-y-[1px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-retro-bg hover:bg-retro-paper text-retro-ink font-bold text-xs border-2 border-retro-ink shadow-retro-sm hover:shadow-retro-xs hover:translate-x-[1px] hover:translate-y-[1px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-retro-ink"
                   href={`/blog/${featuredPost.slug}`}
                 >
                   <span>Read article</span>
@@ -128,7 +124,7 @@ export default function BlogPage() {
               {regularPosts.map((post, idx) => (
                 <article key={post.slug} className="py-8 first:pt-2 last:pb-0">
                   <div className="flex items-center gap-3 text-xs text-retro-muted mb-3">
-                    <span className="font-bold text-retro-ink">
+                    <span className="inline-flex items-center px-2 py-0.5 bg-retro-bg border border-retro-ink text-[11px] font-mono font-bold text-retro-ink shadow-retro-xs">
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                     <div className="flex items-center gap-1.5">

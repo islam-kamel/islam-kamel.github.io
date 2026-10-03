@@ -4,8 +4,8 @@
   "start_url": "https://islamkamel.com",
   "id": "islam-kamel",
   "description": "Islam Kamel - Software Engineer CV",
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#111111",
+  "background_color": "#FAF8F5",
   "display": "fullscreen",
   "scope": "https://islamkamel.com",
   "icons": [

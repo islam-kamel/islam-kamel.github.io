@@ -25,6 +25,16 @@ import {
 } from "lucide-react";
 
 import { IconSvgProps } from "@/types";
+import {
+  IK_ICON_RX,
+  IK_ICON_SIZE,
+  IK_LOGO_OFFSET,
+  IK_LOGO_PATH,
+  IK_LOGO_SIZE,
+  IK_LOGO_STROKE_WIDTH,
+  IK_LOGO_VIEWBOX,
+  IK_SHADOW_OFFSET,
+} from "@/lib/ik-icon-data.mjs";
 
 export type { LucideIcon, LucideProps };
 
@@ -57,16 +67,16 @@ export const Logo: React.FC<IconSvgProps> = (props) => {
       className={"logo"}
       fill="none"
       height={size ?? width}
-      viewBox="0 0 154 154"
+      viewBox={IK_LOGO_VIEWBOX}
       width={size ?? width}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         className={"draw"}
-        d="M29 18V136M67 18V76.75M67 136V76.75M125 27.5L67 76.75M67 76.75C84.3333 74.3333 122.1 78.8 120.5 116V136"
+        d={IK_LOGO_PATH}
         stroke="currentColor"
         strokeLinejoin="round"
-        strokeWidth="25"
+        strokeWidth={IK_LOGO_STROKE_WIDTH}
       />
     </svg>
   );
@@ -76,36 +86,36 @@ export const IkIcon = () => (
   <svg
     className="group overflow-visible"
     fill="none"
-    height={36}
-    viewBox="0 0 36 36"
-    width={36}
+    height={IK_ICON_SIZE}
+    viewBox={`0 0 ${IK_ICON_SIZE} ${IK_ICON_SIZE}`}
+    width={IK_ICON_SIZE}
     xmlns="http://www.w3.org/2000/svg"
   >
     {/* Shadow */}
     <rect
       className="fill-retro-pink group-hover:fill-retro-ink transition-colors"
-      height={36}
-      rx={8}
-      width={36}
-      x={2}
-      y={2}
+      height={IK_ICON_SIZE}
+      rx={IK_ICON_RX}
+      width={IK_ICON_SIZE}
+      x={IK_SHADOW_OFFSET}
+      y={IK_SHADOW_OFFSET}
     />
 
     {/* Background */}
     <rect
       className="fill-retro-ink group-hover:fill-retro-pink transition-colors"
-      height={36}
-      rx={8}
-      width={36}
+      height={IK_ICON_SIZE}
+      rx={IK_ICON_RX}
+      width={IK_ICON_SIZE}
     />
 
     <g
       className="text-retro-bg group-hover:text-retro-ink"
-      transform="translate(7 7)"
+      transform={`translate(${IK_LOGO_OFFSET} ${IK_LOGO_OFFSET})`}
     >
       <Logo
         className="group-hover:scale-105 transition-transform origin-center"
-        size={22}
+        size={IK_LOGO_SIZE}
       />
     </g>
   </svg>

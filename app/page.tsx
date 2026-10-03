@@ -1,11 +1,11 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 
 import { siteConfig } from "@/config/site";
 import { LD_JSON } from "@/config/ld_json";
 import { getAllPosts } from "@/lib/blog";
+import { RetroPixelPC } from "@/components/retro-pixel-pc";
 import {
   ArrowUpRightIcon,
   CalendarIcon,
@@ -163,7 +163,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Main Display Lead (Left 7 cols) */}
           <div className="lg:col-span-7 flex flex-col items-start gap-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-retro-pink text-retro-ink text-xs font-bold border border-retro-ink">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-retro-pink text-retro-ink text-xs font-bold border border-retro-ink rounded-full -rotate-1">
               <span>Software engineer</span>
             </div>
 
@@ -215,18 +215,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Abstract Print Collage Artwork (Right 5 cols) */}
+          {/* Retro Pixel-Art CRT Computer (Right 5 cols) */}
           <div className="lg:col-span-5 w-full flex items-center justify-center">
-            <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg overflow-hidden w-full max-w-[460px]">
-              <Image
-                unoptimized
-                alt="Abstract retro print collage with pink clouds, halftone textures, and geometric forms"
-                className="w-full h-auto object-cover"
-                height={1254}
-                loading="eager"
-                src="/retro-cloud-collage.webp"
-                width={1254}
-              />
+            <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg overflow-hidden w-full max-w-[460px] p-6 sm:p-8 flex items-center justify-center">
+              <RetroPixelPC className="w-full max-w-[340px] h-auto" />
             </div>
           </div>
         </div>
@@ -467,7 +459,7 @@ export default function Home() {
         id="contact"
       >
         <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg p-8 sm:p-14 text-center">
-          <div className="inline-block px-3 py-1 bg-retro-pink border border-retro-ink text-xs font-bold text-retro-ink mb-6">
+          <div className="inline-block px-3.5 py-1 bg-retro-pink border border-retro-ink text-xs font-bold text-retro-ink rounded-full -rotate-1 mb-6">
             Say hello
           </div>
 
