@@ -81,6 +81,20 @@ export const metadata: Metadata = {
         media: "(prefers-color-scheme: dark)",
       },
       {
+        url: "/favicon-dark-32x32.png",
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/favicon-dark-16x16.png",
+        rel: "icon",
+        type: "image/png",
+        sizes: "16x16",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
         url: "/favicon-96x96.png",
         rel: "icon",
         type: "image/png",
@@ -95,16 +109,18 @@ export const metadata: Metadata = {
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/favicon-96x96.png",
+        url: "/favicon-32x32.png",
         rel: "icon",
         type: "image/png",
-        sizes: "96x96",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/favicon-48x48.png",
+        url: "/favicon-16x16.png",
         rel: "icon",
         type: "image/png",
-        sizes: "48x48",
+        sizes: "16x16",
+        media: "(prefers-color-scheme: light)",
       },
       {
         url: "/favicon.ico",

@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="3 3 38 38" width="38" height="38" fill="none">
-  <rect x="5" y="5" width="36" height="36" rx="8" fill="#5da271"/>
-  <rect x="3" y="3" width="36" height="36" rx="8" fill="#111111"/>
-  <g transform="translate(10 10)">
-    <svg width="22" height="22" viewBox="0 0 154 154" fill="none">
-      <path d="M29 18V136M67 18V76.75M67 136V76.75M125 27.5L67 76.75M67 76.75C84.3333 74.3333 122.1 78.8 120.5 116V136" stroke="#FFFFFF" stroke-width="25" stroke-linejoin="round"/>
-    </svg>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="8 8 138 138" width="138" height="138" fill="none">
+  <style>
+    path { stroke: #5da271; }
+    @media (prefers-color-scheme: dark) {
+      path { stroke: #FFFFFF; }
+    }
+  </style>
+  <path d="M29 18V136M67 18V76.75M67 136V76.75M125 27.5L67 76.75M67 76.75C84.3333 74.3333 122.1 78.8 120.5 116V136" stroke="#5da271" stroke-width="25" stroke-linejoin="round"/>
 </svg>
