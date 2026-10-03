@@ -5,66 +5,76 @@ description: "Tell callers what to fix when JSON is broken, too large, or missin
 tags: ["Node.js", "HTTP", "JSON", "Backend", "API Architecture"]
 ---
 
-Your API gets a request with broken JSON. The caller needs a useful error, not a blank response.
+Your API receives broken JSON. The caller needs a useful error, not a blank response.
 
-An API (application programming interface) lets two programs exchange data over a network. HTTP is the protocol used to deliver request and response messages. JSON is a plain text format for sending structured data as key-value pairs.
+An API (application programming interface) lets two programs exchange data over a network. HTTP carries requests and responses between them. JSON is a text format for sending structured data as key-value pairs.
 
-When building an HTTP service in Node.js without an extra web framework, reading JSON is one of your first tasks. If you call `JSON.parse` directly on incoming data, you quickly run into edge cases. The caller might send plain text instead of JSON. They might send a body ten megabytes long. They might leave off a closing brace, or send an empty object when your code expects a person name.
+When you build an HTTP service in Node.js without a web framework, you need to read JSON yourself. Calling `JSON.parse` on incoming data can expose several problems. The caller might send plain text instead of JSON, send a body ten megabytes long, leave out a closing brace, or send an empty object when your code needs a person name.
 
-If you do not handle these mistakes on purpose, your server will crash, hang the connection, or return confusing responses.
+If you do not handle these cases, your server can crash, leave the caller waiting, or return a confusing response.
 
 ## Why raw Node.js needs explicit error handling
 
-Frameworks like Express hide body reading inside a built-in request helper. When you write a raw `http.createServer` handler, Node.js gives you a readable stream for the request body.
+Frameworks like Express handle body reading through request helpers. With a raw `http.createServer` handler, Node.js gives you the request body as a readable stream.
 
-Three things can surprise developers:
+Three details matter:
 
-First, `JSON.parse` throws a `SyntaxError` when it encounters broken JSON text. It does not return `null` or an error object. In a native Node.js HTTP server, an unhandled error inside an event callback crashes the server or leaves the caller waiting until a timeout. Plain `node:http` does not catch that error and convert it into an HTTP 500 for you.
+First, `JSON.parse` throws a `SyntaxError` when the JSON text is broken. It does not return `null` or an error object. In a native Node.js HTTP server, an unhandled error in an event callback can crash the server or leave the caller waiting until a timeout. `node:http` does not catch the error and turn it into an HTTP 500 response for you.
 
-Second, streams deliver data in chunks. Without a limit, many large requests can use more memory than you expect. If callers send large bodies simultaneously, buffering every chunk into memory puts unnecessary pressure on your process.
+Second, streams deliver data in chunks. Without a size limit, large requests can use more memory than expected. If several callers send large bodies at once, keeping all their chunks at once can use too much memory.
 
-Third, closing the connection too early prevents the caller from reading your response. If you call `req.destroy()` while the client is still sending data, the underlying network socket sends an abrupt reset. The client sees a connection error instead of your HTTP status code and message.
+Third, closing the connection too soon can stop the caller from receiving your response. If you call `req.destroy()` while the client is still sending data, the network connection closes abruptly. The client gets a connection error instead of your HTTP status code and message.
 
-## The five checks every JSON endpoint needs
+## Four checks, then the success response
 
-Whenever my server receives a POST request expecting JSON, I run these five checks in order:
+Run these four checks in order, then send a success response:
 
-1. **Check the media type (HTTP 415):** Make sure the `Content-Type` header is `application/json`. If someone sends XML or plain text, reject it immediately before reading the body.
-2. **Limit the body size (HTTP 413):** Count bytes as they arrive. If the request body is larger than your limit, such as 10 kilobytes, stop saving data and send back an HTTP 413 Payload Too Large response.
-3. **Parse the JSON syntax (HTTP 400):** Wrap `JSON.parse` in a `try/catch` block. If parsing fails, send back an HTTP 400 Bad Request response with a simple message. Never send the raw JavaScript stack trace back to the user.
-4. **Validate the fields (HTTP 422):** Check that the parsed data is an object and that required fields exist and have the right types. If a required field is missing or has a negative number when you need a positive integer, return HTTP 422 Unprocessable Content.
-5. **Send the success response (HTTP 200):** Once the data passes all four checks, run your app code and return a clean JSON response.
+1. **Check the media type (HTTP 415):** Make sure the `Content-Type` header says `application/json`. If someone sends XML or plain text, reject the request before reading its body.
+2. **Limit the body size (HTTP 413):** Count bytes as they arrive. If the request body is larger than your limit, such as 10 kilobytes, stop saving data and send an HTTP 413 Content Too Large response.
+3. **Parse the JSON syntax (HTTP 400):** Put `JSON.parse` inside a `try/catch` block. If parsing fails, send an HTTP 400 Bad Request response with a simple message. Do not send the raw JavaScript stack trace to the caller.
+4. **Validate the fields (HTTP 422):** Check that the parsed data is an object and that required fields are present and have the right types. If a required field is missing or a number is negative when it must be a positive integer, return HTTP 422 Unprocessable Content.
+5. **Send the success response (HTTP 200):** After the data passes all four checks, run your app code and return a clear JSON response.
+
+RFC 9110 uses the renamed labels 413 [Content Too Large](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.14) and 422 [Unprocessable Content](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.21), while some tools still print older names for the same numbers.
 
 ## Checking the Content-Type header
 
-Callers should declare what kind of data they are sending. The `Content-Type` header tells you if you are receiving JSON.
+Callers should say what kind of data they are sending. The `Content-Type` header tells you whether the request contains JSON.
 
-You cannot just check if the header includes the word `json`, because a client could send `text/application/json-evil`. Instead, isolate the media type part before any parameters like `charset=utf-8`. If the header is missing or does not match `application/json`, return HTTP 415 Unsupported Media Type.
+Do not just check whether the header contains the word `json`. A client could send `text/application/json-evil`. Read the media type before any parameters, such as `charset=utf-8`. If the header is missing or the media type is not `application/json`, return HTTP 415 Unsupported Media Type.
 
 ## Limiting memory without dropping the connection
 
-To prevent large request bodies from filling up memory, we count the bytes of each chunk. But we must be careful about how we close the connection.
+To keep large request bodies from using too much memory, we count the bytes in each chunk. We also need to close the connection in a way that lets the caller receive the error.
 
-If we immediately destroy the request socket, the client will never see our HTTP 413 response. Instead, we write the 413 response with a `Connection: close` header. Then, we listen for the response `finish` event before cleaning up the socket. While the response is sending, we drain and discard any remaining incoming chunks so our memory stays protected.
+If we destroy the request socket right away, the client may never receive the HTTP 413 response. Instead, we send the 413 response with a `Connection: close` header. We wait for the response `finish` event before closing the socket. While the response is being sent, we drain and discard any remaining chunks so we do not store them in memory.
+
+If `Content-Length` is greater than the limit, the server sends 413 before reading any body chunk. It still counts bytes as chunks arrive because chunked requests have no `Content-Length` header.
 
 ## Catching syntax errors safely
 
-When `JSON.parse` fails, it throws a `SyntaxError`. Do not pass this raw error message to the client. Different versions of Node.js format error messages differently, and stack traces reveal your internal file paths. Instead, catch the error and return a plain, fixed message explaining that the request body had malformed JSON.
+When `JSON.parse` fails, it throws a `SyntaxError`. Do not send the raw error message to the client. Node.js versions can format these messages differently, and stack traces can reveal internal file paths. Catch the error and return a short, fixed message that says the request body contains invalid JSON.
+
+In this example, a request body that starts with a UTF-8 BOM returns HTTP 400 Bad Request.
 
 ## Separating syntax errors from validation errors
 
-Many APIs use HTTP 400 for everything that goes wrong. But there is a useful difference between broken syntax and missing data:
+Many APIs use HTTP 400 for every error. But broken JSON syntax and missing or invalid data are different problems:
 
 - Use **HTTP 400 Bad Request** when the text itself cannot be parsed as JSON.
 - Use **HTTP 422 Unprocessable Content** when the JSON parsed fine, but the data does not make sense for your application rules.
 
-For example, if a client sends `{ "name": "Apples", "quantity": -5 }`, the JSON syntax is completely valid. But a negative quantity cannot be processed. Returning 422 tells the client developer that their JSON was received, but they need to correct their field values.
+For example, `{ "name": "Apples", "quantity": -5 }` is valid JSON, but the server cannot accept a negative quantity. Returning 422 tells the caller that the JSON was read, but a field value needs to be fixed.
 
-We also use `Number.isSafeInteger` when checking integer fields. In JavaScript, numbers larger than `Number.MAX_SAFE_INTEGER` lose precision, which can cause unexpected values in your code.
+We also use `Number.isSafeInteger` to check integer fields. In JavaScript, integers outside the safe range can lose precision, which can lead to unexpected values.
 
 ## Complete runnable server
 
-Here is the complete server in a single file. You can save this as `server.mjs` and run it directly with Node.js using `node server.mjs`:
+The complete server is in one file. Save it as `server.mjs` and run it with Node.js using `node server.mjs`:
+
+Tested with Node.js v24.14.1.
+
+The server matches the pathname, so a query string such as `?x=1` does not change the `/api/records` route.
 
 ```bash
 node server.mjs
@@ -111,7 +121,7 @@ export function validateRecordSchema(data) {
 
 export function createJsonServer() {
   return http.createServer((req, res) => {
-    if (req.url !== "/api/records") {
+    if (new URL(req.url, "http://localhost").pathname !== "/api/records") {
       return sendJson(res, 404, {
         error: "Not Found",
         message: "Endpoint not found",
@@ -141,7 +151,7 @@ export function createJsonServer() {
       });
       res.end(
         JSON.stringify({
-          error: "Payload Too Large",
+          error: "Content Too Large",
           message: `Payload exceeds limit of ${MAX_BYTES} bytes`,
         })
       );
@@ -166,7 +176,7 @@ export function createJsonServer() {
         });
         res.end(
           JSON.stringify({
-            error: "Payload Too Large",
+            error: "Content Too Large",
             message: `Payload exceeds limit of ${MAX_BYTES} bytes`,
           })
         );
@@ -226,9 +236,9 @@ if (
 
 ## How to test each response
 
-You can test these five paths from your terminal using curl:
+Use these five curl requests to see the five responses:
 
-First, send a request with no Content-Type header. Pass `-H 'Content-Type:'` so curl does not add a default header:
+First, send a request with no `Content-Type` header. The `-H 'Content-Type:'` option stops curl from adding a default header:
 
 ```bash
 curl -i -X POST http://localhost:3001/api/records \
@@ -236,21 +246,21 @@ curl -i -X POST http://localhost:3001/api/records \
   -d '{"name":"item"}'
 ```
 
-The server rejects the call and asks for `application/json`.
+The server rejects the request and says it expects `application/json`.
 
-Second, send a request body that exceeds 10 kilobytes. You can create a temporary test file with Node, run curl, and clean it up:
+Second, send a request body larger than 10 kilobytes. This command creates a temporary file with Node, sends it with curl, and removes the file:
 
 ```bash
-node -e 'fs.writeFileSync("large.json", JSON.stringify({ name: "large", quantity: 1, padding: "x".repeat(11000) }))'
+node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync("large.json", JSON.stringify({ name: "large", quantity: 1, padding: "x".repeat(11000) }))'
 curl -i -X POST http://localhost:3001/api/records \
   -H "Content-Type: application/json" \
   -d @large.json
 rm -f large.json
 ```
 
-The server stops reading chunks and returns HTTP 413 Payload Too Large.
+The server stops saving new chunks and returns HTTP 413 Content Too Large.
 
-Third, send broken JSON syntax:
+Third, send broken JSON:
 
 ```bash
 curl -i -X POST http://localhost:3001/api/records \
@@ -258,9 +268,9 @@ curl -i -X POST http://localhost:3001/api/records \
   -d '{"name": "missing quote}'
 ```
 
-The server catches the syntax error and returns HTTP 400 Bad Request.
+The server catches the parse error and returns HTTP 400 Bad Request.
 
-Fourth, send valid JSON with invalid fields or numbers outside safe bounds:
+Fourth, send valid JSON with an invalid field value:
 
 ```bash
 curl -i -X POST http://localhost:3001/api/records \
@@ -268,7 +278,7 @@ curl -i -X POST http://localhost:3001/api/records \
   -d '{"name": "Widget", "quantity": -3}'
 ```
 
-The server returns HTTP 422 Unprocessable Content.
+The server returns HTTP 422 Unprocessable Content because the quantity must be a positive integer.
 
 Finally, send a valid record:
 
@@ -278,4 +288,12 @@ curl -i -X POST http://localhost:3001/api/records \
   -d '{"name": "Widget", "quantity": 10}'
 ```
 
-The server returns HTTP 200 with the validated data. The sample returns the checked data and does not save it. It does not write to a database or keep state.
+The server returns HTTP 200 with the checked data. This example does not save the data, write to a database, or keep state.
+
+This extra request confirms that a query string still reaches the handler. It is separate from the five response examples above.
+
+```bash
+curl -i -X POST 'http://localhost:3001/api/records?x=1' \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Widget", "quantity": 10}'
+```

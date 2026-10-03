@@ -65,6 +65,7 @@
 
 **Content/writing style**
 
+- Use approachable, easy-to-follow narration with familiar, commonly used words and natural sentences. Prefer plain language over formal, obscure, or inflated wording; explain necessary technical terms briefly without losing accuracy.
 10. In example code, clean up anything registered on connect (event listeners, subscriptions) in the matching teardown/disconnect handler — an example that leaks a listener undercuts a post that's specifically about doing this reliably in production.
 11. If a post raises a specific design question rhetorically (e.g. "full snapshot or a diff on reconnect?"), answer it or state which way you went and why — don't leave it hanging right as it gets interesting.
 

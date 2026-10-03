@@ -204,7 +204,19 @@ try {
     console.log("✓ HTTP 200 (application/json; charset=utf-8) verified");
   }
 
-  // 5. HTTP 413 Oversized Content-Length
+  // 5. Query strings still reach the records handler
+  {
+    const res = await sendRequest({
+      path: "/api/records?x=1",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Widget", quantity: 1 }),
+    });
+    assert.equal(res.statusCode, 200, "Query string must not change the route");
+    assert.equal(res.json?.data?.name, "Widget");
+    console.log("✓ /api/records?x=1 reaches the records handler");
+  }
+
+  // 6. HTTP 413 Oversized Content-Length
   {
     const largeBody = JSON.stringify({
       name: "Large",
@@ -225,7 +237,7 @@ try {
       413,
       "Content-Length > MAX_BYTES must return 413"
     );
-    assert.equal(res.json?.error, "Payload Too Large");
+    assert.equal(res.json?.error, "Content Too Large");
     assert(
       res.json?.message?.includes("exceeds limit"),
       "413 response body must contain expected message"
@@ -233,7 +245,7 @@ try {
     console.log("✓ HTTP 413 (Declared Content-Length) verified");
   }
 
-  // 6. HTTP 413 Oversized Chunked Stream (Transfer-Encoding: chunked without Content-Length)
+  // 7. HTTP 413 Oversized Chunked Stream (Transfer-Encoding: chunked without Content-Length)
   {
     const chunk1 = Buffer.alloc(MAX_BYTES / 2, "a");
     const chunk2 = Buffer.alloc(MAX_BYTES / 2 + 1024, "b");
@@ -250,11 +262,11 @@ try {
       413,
       "Chunked stream > MAX_BYTES must return 413"
     );
-    assert.equal(res.json?.error, "Payload Too Large");
+    assert.equal(res.json?.error, "Content Too Large");
     console.log("✓ HTTP 413 (Chunked stream) verified");
   }
 
-  // 7. HTTP 400 Malformed JSON Syntax
+  // 8. HTTP 400 Malformed JSON Syntax
   {
     const res = await sendRequest({
       headers: { "Content-Type": "application/json" },
@@ -266,7 +278,29 @@ try {
     console.log("✓ HTTP 400 (Malformed JSON) verified");
   }
 
-  // 8. HTTP 422 Missing required field
+  // 9. HTTP 400 Empty body
+  {
+    const res = await sendRequest({
+      headers: { "Content-Type": "application/json" },
+      body: "",
+    });
+    assert.equal(res.statusCode, 400, "Empty body must return 400");
+    assert.equal(res.json?.message, "Malformed JSON payload");
+    console.log("✓ HTTP 400 (Empty body) verified");
+  }
+
+  // 10. HTTP 400 UTF-8 BOM
+  {
+    const res = await sendRequest({
+      headers: { "Content-Type": "application/json" },
+      body: `\uFEFF${JSON.stringify({ name: "Widget", quantity: 1 })}`,
+    });
+    assert.equal(res.statusCode, 400, "UTF-8 BOM must return 400");
+    assert.equal(res.json?.message, "Malformed JSON payload");
+    console.log("✓ HTTP 400 (UTF-8 BOM) verified");
+  }
+
+  // 11. HTTP 422 Missing required field
   {
     const res = await sendRequest({
       headers: { "Content-Type": "application/json" },
@@ -277,7 +311,7 @@ try {
     console.log("✓ HTTP 422 (Missing field) verified");
   }
 
-  // 9. HTTP 422 Invalid field type / value
+  // 12. HTTP 422 Invalid field type / value
   {
     const res = await sendRequest({
       headers: { "Content-Type": "application/json" },
@@ -288,7 +322,7 @@ try {
     console.log("✓ HTTP 422 (Invalid value) verified");
   }
 
-  // 10. HTTP 422 Unsafe integer (outside Number.isSafeInteger range)
+  // 13. HTTP 422 Unsafe integer (outside Number.isSafeInteger range)
   {
     const res = await sendRequest({
       headers: { "Content-Type": "application/json" },
@@ -302,7 +336,7 @@ try {
     console.log("✓ HTTP 422 (Unsafe integer) verified");
   }
 
-  // 11. HTTP 422 Non-object root (Array)
+  // 14. HTTP 422 Non-object root (Array)
   {
     const res = await sendRequest({
       headers: { "Content-Type": "application/json" },
@@ -313,7 +347,7 @@ try {
     console.log("✓ HTTP 422 (Array root) verified");
   }
 
-  // 12. HTTP 422 Non-object root (JSON null)
+  // 15. HTTP 422 Non-object root (JSON null)
   {
     const res = await sendRequest({
       headers: { "Content-Type": "application/json" },
@@ -324,7 +358,7 @@ try {
     console.log("✓ HTTP 422 (JSON null root) verified");
   }
 
-  // 13. HTTP 404 Endpoint Not Found
+  // 16. HTTP 404 Endpoint Not Found
   {
     const res = await sendRequest({
       path: "/api/unknown",
@@ -335,7 +369,7 @@ try {
     console.log("✓ HTTP 404 (Unknown path) verified");
   }
 
-  // 14. HTTP 405 Method Not Allowed with Allow header
+  // 17. HTTP 405 Method Not Allowed with Allow header
   {
     const res = await sendRequest({
       method: "GET",

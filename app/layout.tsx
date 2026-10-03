@@ -17,8 +17,6 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
   },
-  keywords:
-    "Islam Kamel, Software Engineer, Senior Software Engineer, Full-Stack Developer, Next.js, React, TypeScript, Python, LLM Orchestration, Multi-Agent Systems, WebSockets, Real-time Systems, ECharts, react-pdf, Docker, Django, PostgreSQL, Software Architecture, High-Performance Web",
   description: siteConfig.description,
   appleWebApp: {
     title: "Islam Kamel",
