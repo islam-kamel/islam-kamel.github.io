@@ -8,6 +8,8 @@ import {
   ArrowUpRightIcon,
   CalendarIcon,
   BookOpenIcon,
+  Pencil,
+  King,
 } from "@/components/icons";
 
 const title = `Blog - ${siteConfig.name}`;
@@ -48,6 +50,7 @@ export default function BlogPage() {
         {/* Header Bar */}
         <div className="mb-12 pb-6 border-b-2 border-retro-ink">
           <h1 className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-4">
+            <Pencil className={"-rotate-2"} size={16} />
             <span>Writing</span>
           </h1>
 
@@ -61,9 +64,14 @@ export default function BlogPage() {
           <div className="mb-16">
             <div className="border-2 border-retro-ink bg-retro-pink bg-print-grid shadow-retro-lg p-8 sm:p-10">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 text-xs text-retro-ink">
-                <span className="retro-sticker-badge px-3 py-0.5 bg-retro-bg text-[11px] -rotate-1">
-                  Featured article
-                </span>
+                <div
+                  className={
+                    "retro-sticker-badge px-3 py-0.5 bg-retro-bg text-[11px] -rotate-1"
+                  }
+                >
+                  <King className={"-rotate-2"} size={16} />
+                  <span>Featured article</span>
+                </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <CalendarIcon size={14} />
                   <time dateTime={featuredPost.date}>

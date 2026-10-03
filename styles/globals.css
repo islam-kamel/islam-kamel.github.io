@@ -60,6 +60,7 @@ html {
   /* Coordinated vintage print/sticker eyebrow badge */
   .retro-sticker-badge {
     display: inline-flex;
+    gap: 0.25rem;
     align-items: center;
     font-size: 0.75rem;
     line-height: 1rem;

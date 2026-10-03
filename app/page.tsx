@@ -8,10 +8,19 @@ import { getAllPosts } from "@/lib/blog";
 import { RetroPixelPC } from "@/components/retro-pixel-pc";
 import {
   ArrowUpRightIcon,
+  Broadcast,
   CalendarIcon,
+  Computer,
+  CursorClick,
+  Database,
+  Eduction,
+  Factory,
   GithubIcon,
   LinkedinIcon,
+  Pencil,
+  Robot,
   SendIcon,
+  Website,
 } from "@/components/icons";
 
 export const metadata: Metadata = {
@@ -56,6 +65,7 @@ export default function Home() {
     {
       num: "01",
       title: "Frontend Architecture",
+      icon: Website,
       description:
         "I build web pages with React and Next.js. I want people to find what they need without waiting on the page.",
       outcome: "You get: pages that are clear and easy to use.",
@@ -66,6 +76,7 @@ export default function Home() {
     {
       num: "02",
       title: "Backend & Systems",
+      icon: Database,
       description:
         "I check incoming data so people get clear errors when something is wrong.",
       outcome: "You get: data that is checked before work continues.",
@@ -76,6 +87,7 @@ export default function Home() {
     {
       num: "03",
       title: "AI & LLM Integration",
+      icon: Robot,
       description:
         "I connect AI tools to web apps and check what they return. I want people to get useful answers and know when something went wrong.",
       outcome: "You get: AI features that check answers before using them.",
@@ -87,6 +99,7 @@ export default function Home() {
     {
       num: "04",
       title: "Real-Time & Data Engineering",
+      icon: Broadcast,
       description:
         "I build screens that update as new data arrives. I move heavy work away from the page so people can keep using it.",
       outcome: "You get: dashboards that stay smooth while the data moves.",
@@ -145,6 +158,7 @@ export default function Home() {
           {/* Main Display Lead (Left 7 cols) */}
           <div className="lg:col-span-7 flex flex-col items-start gap-6">
             <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1">
+              <Computer className={"-rotate-2"} size={16} />
               <span>Software engineer</span>
             </div>
 
@@ -221,9 +235,14 @@ export default function Home() {
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 sm:mb-16 border-b-2 border-retro-ink pb-6">
             <div>
-              <span className="retro-sticker-badge px-3 py-1 bg-retro-bg rotate-1 mb-3">
-                What I build
-              </span>
+              <div
+                className={
+                  "retro-sticker-badge px-3 py-1 bg-retro-bg rotate-1 mb-3"
+                }
+              >
+                <Factory className={"-rotate-2"} size={16} />
+                <span>What I build</span>
+              </div>
               <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-retro-ink leading-tight text-balance">
                 Engineering Focus
               </h2>
@@ -247,8 +266,14 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-bold text-retro-ink tracking-tight mb-3">
-                    {item.title}
+                  <h3 className="text-2xl sm:text-3xl font-bold text-retro-ink tracking-tight mb-3 flex items-center gap-3">
+                    <item.icon
+                      aria-hidden="true"
+                      className="shrink-0 text-retro-ink -rotate-3"
+                      focusable="false"
+                      size={28}
+                    />
+                    <span>{item.title}</span>
                   </h3>
 
                   <p className="text-sm sm:text-base text-retro-ink leading-relaxed font-normal pb-2">
@@ -289,9 +314,14 @@ export default function Home() {
       <section className="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 pb-4 border-b-2 border-retro-ink">
           <div>
-            <span className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-3">
-              Writing
-            </span>
+            <div
+              className={
+                "retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-3"
+              }
+            >
+              <Pencil className={"-rotate-2"} size={16} />
+              <span>Writing</span>
+            </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-retro-ink">
               Recent Articles
             </h2>
@@ -359,9 +389,14 @@ export default function Home() {
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 pb-6 border-b-2 border-retro-ink">
             <div>
-              <span className="retro-sticker-badge px-3 py-1 bg-retro-bg -rotate-1 mb-3">
-                Education
-              </span>
+              <div
+                className={
+                  "retro-sticker-badge px-3 py-1 bg-retro-bg -rotate-1 mb-3"
+                }
+              >
+                <Eduction className={"-rotate-2"} size={16} />
+                <span>Education</span>
+              </div>
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-retro-ink leading-tight">
                 Education &amp; Certifications
               </h2>
@@ -446,7 +481,8 @@ export default function Home() {
       >
         <div className="border-2 border-retro-ink bg-retro-bg shadow-retro-lg p-8 sm:p-12 text-center">
           <div className="retro-sticker-badge px-3.5 py-1 bg-retro-pink -rotate-1 mb-4">
-            Say hello
+            <CursorClick className={"rotate-2"} size={16} />
+            <span>Get in touch</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-retro-ink mb-3">

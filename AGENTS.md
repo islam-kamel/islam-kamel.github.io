@@ -117,8 +117,11 @@ These rules apply to all user-facing application copy and controls.
 
 ### Supplied visual references and asset sources
 
-- Current concept phase: explore how supplied assets could be used across the website. Make no website or code changes during this phase; this AGENTS.md reference update is the requested exception.
-- Prefer SVG assets where available. Inspect each source project's showcases for ideas, select suitable assets, and recolor them to match the website palette before any later implementation.
+- Approved implementation state: four 32x32 pixel icons are implemented in the Engineering Focus section next to each discipline title using exact naming `Pixels{IconName}`: `PixelsWebsite` (Frontend Architecture), `PixelsDatabase` (Backend & Systems), `PixelsRobot` (AI & LLM Integration), and `PixelsBroadcast` (Real-Time & Data Engineering). Component exports in `components/icons.tsx` and source SVGs in `public/icons/` use exact `Pixels{IconName}` spelling with no hyphen.
+- Asset provenance and licensing:
+  - `PixelsDatabase` remains the native Figma export from the supplied Figma collection (selected frame `coding-apps-websites-database`, node `1128:25102`), preserving its 16 paths and clip geometry with fill adapted to `currentColor`.
+  - `PixelsWebsite`, `PixelsRobot`, and `PixelsBroadcast` are sourced from the public Streamline Pixel free icon collection ([Streamline Vectors](https://github.com/webalys-hq/streamline-vectors) / [Streamline](https://streamlinehq.com)), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), with source keys `ui-design-website`, `technology-robot-ai-signal-1`, and `coding-apps-websites-live-status`. Monochrome fills adapt to `currentColor`.
+  - No sticker or GIF is part of this implementation.
 - Figma asset collections:
   - [1,300 Free Pixel Icons – Vector Pixel icons (svg) (Community)](https://www.figma.com/design/EaInsHfhJWV9XvUAm6rI5U/1-300-Free-Pixel-Icons-%25E2%2580%2593-Vector-Pixel-icons--svg---Community-?node-id=813-1887&p=f&t=h0VXyerS5vURlaP7-0)
   - [Pixel Icon Library | 2300+ Pixelated Icons By HackerNoon (Community)](https://www.figma.com/design/LIj9CdXfSkELlZJPE6RDFK/Pixel-Icon-Library-%257C-2300--Pixelated-Icons-By-HackerNoon--Community-?node-id=0-1&p=f&t=vuDzKoAEBUPqeJ2B-0)
