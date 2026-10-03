@@ -290,10 +290,24 @@ html {
   font-weight: 600 !important;
 }
 
+.prose-blog .mermaid-block svg .nodeLabel p,
+.prose-blog .mermaid-block svg .edgeLabel p {
+  margin: 0;
+  line-height: 1.5;
+}
+
 .prose-blog .mermaid-block svg .edgePath path,
 .prose-blog .mermaid-block svg .flowchart-link {
   stroke: theme(colors.retro.ink) !important;
   stroke-width: 1.5px !important;
+  stroke-dasharray: 2px 10px !important;
+  animation: mermaid-edge-flow 1.5s steps(6, end) infinite;
+}
+
+@keyframes mermaid-edge-flow {
+  to {
+    stroke-dashoffset: -12px;
+  }
 }
 
 .prose-blog .mermaid-block svg .marker,
@@ -329,5 +343,12 @@ html {
   .crt-terminal-cursor {
     animation: none !important;
     visibility: hidden !important;
+  }
+
+  .prose-blog .mermaid-block svg .edgePath path,
+  .prose-blog .mermaid-block svg .flowchart-link {
+    animation: none !important;
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
   }
 }

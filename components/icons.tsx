@@ -417,7 +417,6 @@ export const PixelsPencil = ({
     width={size || width}
     {...props}
   >
-    <title>design-pencil</title>
     <g>
       <path
         d="M21.335 9.14h1.52v9.15h-1.52Z"

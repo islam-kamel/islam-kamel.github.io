@@ -27,6 +27,9 @@ export function MermaidRenderer() {
         mermaid.initialize({
           startOnLoad: false,
           theme: "base",
+          htmlLabels: true,
+          themeCSS:
+            ".nodeLabel p, .edgeLabel p { margin: 0; line-height: 1.5; }",
           themeVariables: {
             darkMode: false,
             fontFamily:
@@ -67,7 +70,6 @@ export function MermaidRenderer() {
             tertiaryTextColor: themeColors.retro.ink,
           },
           flowchart: {
-            htmlLabels: true,
             curve: "basis",
             padding: 15,
           },
