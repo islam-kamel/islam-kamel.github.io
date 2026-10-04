@@ -1,0 +1,249 @@
+---
+title: "Building a Small Native SPA Library"
+date: "2026-10-04"
+description: "How to build a lightweight single-page application library using vanilla JavaScript ES modules, hash routing, and AbortSignal cleanup."
+tags: ["JavaScript", "Architecture", "Web Development"]
+---
+
+I see building a small framework as a way to understand what existing tools handle. When building a client-side interface like a searchable book catalog, you quickly face three core browser problems: synchronizing the visible screen with URL changes, swapping DOM content without leftover elements, and detaching event listeners when a screen unmounts. To follow this tutorial, you only need familiarity with fundamental JavaScript and DOM APIs.
+
+In this tutorial, you will build a minimal single-page application library in plain JavaScript with zero external dependencies. The project consists of three files:
+
+1. `index.html`: The HTML shell that mounts the application.
+2. `spa.js`: A lightweight native router library that manages routes and screen lifecycles.
+3. `app.js`: The application code, defining a searchable book catalog and an About page.
+
+## The HTML shell
+
+Start with a clean HTML document. Create a file named `index.html`:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Catalog SPA</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="#/">Catalog</a>
+        <a href="#/about">About</a>
+      </nav>
+    </header>
+    <main id="app"></main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
+```
+
+The document provides a basic navigation header with hash links (`#/` and `#/about`), an empty `<main id="app">` element to hold active views, and a module script tag.
+
+Using [JavaScript modules in the browser](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) provides scoped files and native `import` and `export` statements without requiring a bundler. Hash-based navigation simplifies routing on static web servers: because the browser does not send the fragment identifier (the `#` portion) in HTTP requests, direct links like `index.html#/about` avoid server-side path routing, provided the static host is configured to serve `index.html` at the application base URL.
+
+## The routing library
+
+Next, build the router in `spa.js`. The library needs to resolve the current URL hash, find the matching view, replace the container content, and provide each view with an `AbortSignal` for cleanup:
+
+```javascript
+// spa.js
+export function createRouter({ routes, container, fallback }) {
+  let currentController = null;
+  let isRunning = false;
+
+  function resolvePath() {
+    const hash = window.location.hash;
+    return hash.startsWith("#") ? hash.slice(1) || "/" : "/";
+  }
+
+  function render() {
+    if (!isRunning) return;
+
+    if (currentController) {
+      currentController.abort();
+      currentController = null;
+    }
+
+    const controller = new AbortController();
+    currentController = controller;
+
+    try {
+      const path = resolvePath();
+      const view = routes.get(path) ?? fallback;
+      const content = view({ signal: controller.signal });
+      container.replaceChildren(content);
+
+      const heading = container.querySelector("h1");
+      if (heading) {
+        heading.setAttribute("tabindex", "-1");
+        heading.focus();
+      }
+    } catch (error) {
+      controller.abort();
+      if (currentController === controller) {
+        currentController = null;
+      }
+      container.replaceChildren();
+      throw error;
+    }
+  }
+
+  function onHashChange() {
+    render();
+  }
+
+  function start() {
+    if (isRunning) return;
+    isRunning = true;
+    window.addEventListener("hashchange", onHashChange);
+    render();
+  }
+
+  function stop() {
+    if (!isRunning) return;
+    isRunning = false;
+    window.removeEventListener("hashchange", onHashChange);
+    if (currentController) {
+      currentController.abort();
+      currentController = null;
+    }
+  }
+
+  return { start, stop };
+}
+```
+
+This router coordinates browser primitives through five focused mechanisms:
+
+- **Hash-based navigation**: The library listens to the [`hashchange`](https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event) event on `window`. When the user clicks a hash link or uses the browser Back and Forward buttons, the URL hash updates without triggering a full page reload. The `resolvePath` helper normalizes empty hashes, bare `#` symbols, or direct visits so that initial page loads without a hash mount the root catalog view (`"/"`) automatically.
+- **Route resolution with Map**: The route table uses a JavaScript [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map). Unlike a plain object, `Map.prototype.get()` only checks its own entries. This prevents unintended matches on inherited prototype properties such as `constructor` or `__proto__`, directing unmapped paths straight to the fallback view.
+- **Atomic container replacement**: The router calls [`Element.replaceChildren()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/replaceChildren) on the container element. This native DOM method empties previous children and mounts the new view node in a single call, avoiding raw HTML string concatenation and eliminating manual DOM tree teardown loops.
+- **Accessible focus transitions**: After a route mounts, moving keyboard focus to that view's heading in a deliberate accessible way (`tabindex="-1"` on the `h1`, then `.focus()`) informs assistive technologies and keyboard users of the screen change. This is a practical navigation transition behavior, not a universal framework rule.
+- **Teardown signaling and error cleanup**: When switching routes, the router creates a fresh [`AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) and passes its `signal` to the view. Calling `currentController.abort()` signals to the departing view that it should stop work and detach its event listeners. If a view throws during synchronous rendering, the `catch` block aborts the new controller, clears active-controller bookkeeping, empties the container to avoid displaying a broken partial view, and rethrows the error transparently. The `stop()` method removes the global listener and aborts the active view, and calling it repeatedly is safe.
+
+## The application views
+
+Now create `app.js`. This file defines a book catalog with live search, an About view, and a fallback view for unknown paths:
+
+```javascript
+// app.js
+import { createRouter } from "./spa.js";
+
+const books = [
+  { title: "Browser Notes" },
+  { title: "Café JavaScript" },
+  { title: "Routes & Views" },
+];
+
+function catalogView({ signal }) {
+  const section = document.createElement("section");
+
+  const heading = document.createElement("h1");
+  heading.textContent = "Book Catalog";
+  section.appendChild(heading);
+
+  const label = document.createElement("label");
+  label.htmlFor = "search-input";
+  label.textContent = "Search books";
+  section.appendChild(label);
+
+  const searchBox = document.createElement("input");
+  searchBox.id = "search-input";
+  searchBox.type = "search";
+  searchBox.placeholder = "Filter by title...";
+  section.appendChild(searchBox);
+
+  const list = document.createElement("ul");
+  section.appendChild(list);
+
+  function renderList(query = "") {
+    list.replaceChildren();
+    const clean = query.trim().toLowerCase();
+    const matches = books.filter((b) => b.title.toLowerCase().includes(clean));
+
+    if (matches.length === 0) {
+      const empty = document.createElement("li");
+      empty.textContent = "No books found.";
+      list.appendChild(empty);
+      return;
+    }
+
+    for (const book of matches) {
+      const item = document.createElement("li");
+      item.textContent = book.title;
+      list.appendChild(item);
+    }
+  }
+
+  renderList("");
+
+  searchBox.addEventListener(
+    "input",
+    (event) => renderList(event.target.value),
+    { signal }
+  );
+
+  return section;
+}
+
+function aboutView() {
+  const section = document.createElement("section");
+  const heading = document.createElement("h1");
+  heading.textContent = "About This SPA";
+  const desc = document.createElement("p");
+  desc.textContent =
+    "A minimal single-page application built with plain JavaScript ES modules, hash routing, and AbortSignal cleanup.";
+  section.appendChild(heading);
+  section.appendChild(desc);
+  return section;
+}
+
+function notFoundView() {
+  const section = document.createElement("section");
+  const heading = document.createElement("h1");
+  heading.textContent = "Page Not Found";
+  const message = document.createElement("p");
+  message.textContent = "The requested page does not exist.";
+  const link = document.createElement("a");
+  link.href = "#/";
+  link.textContent = "Return to Catalog";
+  section.appendChild(heading);
+  section.appendChild(message);
+  section.appendChild(link);
+  return section;
+}
+
+const routes = new Map([
+  ["/", catalogView],
+  ["/about", aboutView],
+]);
+
+const router = createRouter({
+  routes,
+  container: document.getElementById("app"),
+  fallback: notFoundView,
+});
+
+router.start();
+```
+
+Notice how `catalogView` coordinates with the router contracts:
+
+- **Automatic listener cleanup**: Passing `{ signal }` into [`addEventListener`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) tells the browser to automatically remove the `input` listener when the router aborts the active view signal. When the user navigates from the catalog to the About page, the search listener detaches without requiring manual bookkeeping or custom destructor functions.
+- **Data text rendering**: Each list item assigns book data using [`Node.textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent). Because strings are set directly as text nodes rather than parsed HTML markup, the browser renders the exact string characters without evaluating them as markup.
+- **Narrow substring filtering**: The search filter trims surrounding whitespace with `trim()`, converts both the query and the title to lowercase with `toLowerCase()`, and checks for matches using `.includes()`. This matches exact character substrings, but does not perform accent normalization or canonical-equivalence matching. For instance, searching for `café` matches `Café JavaScript`, whereas searching for `cafe` without the acute accent does not.
+
+## Running the application
+
+Because browser ES modules are subject to CORS restrictions on local `file://` URLs, serve the directory over HTTP. Open your terminal in the project directory and start a local HTTP server:
+
+```bash
+python3 -m http.server 3000 --bind 127.0.0.1
+```
+
+This command binds the server to loopback (`127.0.0.1`), limiting access strictly to your local machine. Open `http://127.0.0.1:3000/` in your browser.
+
+You can click between the Catalog and About links, use the browser Back and Forward buttons, and type into the search box to filter the titles. If you change the URL hash to an unknown path like `#/unknown` or `#__proto__`, the router cleanly renders the not-found view.
+
+One direct consequence of this architecture is that route changes remount the view from scratch. When you navigate from the catalog to the About page and back, the router creates a fresh view instance, which resets the search box and restores the full list. For an educational library, that boundary keeps DOM ownership straightforward: the router decides when a view mounts and unmounts, while each view owns its local controls and initial state.
