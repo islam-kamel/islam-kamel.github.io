@@ -1,0 +1,124 @@
+---
+title: "Organizing a React App by Feature Folders"
+date: "2026-10-04"
+description: "How to group React files by user capability, protect feature boundaries with clean exports, and avoid scattering changes across technical folders."
+tags: ["React", "Architecture", "JavaScript"]
+---
+
+Say you're adding search to a product catalog. In a type-based tree, the input might sit in `components/`, its state logic in `hooks/`, and filtering in `services/`. One catalog change now sends you across folders because each file is grouped by what it does, not by the feature it serves.
+
+I wouldn’t start every app with a `features/` hierarchy. I’d group by feature when a change regularly crosses those folders; then the catalog's related work is easier to find together.
+
+## A catalog with search
+
+For this example, the catalog keeps its search and list together:
+
+```text
+src/
+├── App.jsx
+└── features/
+    └── catalog/
+        ├── Catalog.jsx
+        ├── ProductList.jsx
+        └── index.js
+```
+
+The feature's `index.js` exports the component other screens need:
+
+```javascript
+// src/features/catalog/index.js
+export { Catalog } from "./Catalog.jsx";
+```
+
+Other screens can render `Catalog` without depending on `ProductList` directly.
+
+In `Catalog.jsx`, the search state sits beside the input. The visible products are derived from that query on each render:
+
+```jsx
+// src/features/catalog/Catalog.jsx
+import React, { useState } from "react";
+import { ProductList } from "./ProductList.jsx";
+
+const initialProducts = [
+  { id: "p1", name: "Desk Lamp" },
+  { id: "p2", name: "Café Mug" },
+  { id: "p3", name: "Drafts & Notes" },
+];
+
+export function Catalog() {
+  const [query, setQuery] = useState("");
+
+  const clean = query.trim().toLowerCase();
+  const visible = initialProducts.filter((product) =>
+    product.name.toLowerCase().includes(clean)
+  );
+
+  return (
+    <section className="catalog-feature">
+      <h2>Products</h2>
+      <label htmlFor="catalog-search">Search products</label>
+      <input
+        id="catalog-search"
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+      />
+      <ProductList products={visible} />
+    </section>
+  );
+}
+```
+
+The input is controlled: React stores its value in `query`, and `onChange` updates it as you type. Trimming and lowercasing the query means leading or trailing spaces and letter case don't change the match.
+
+`ProductList.jsx` only needs the filtered products. It also owns the no-results message:
+
+```jsx
+// src/features/catalog/ProductList.jsx
+import React from "react";
+
+export function ProductList({ products }) {
+  if (products.length === 0) {
+    return <p>No products found.</p>;
+  }
+
+  return (
+    <ul>
+      {products.map((product) => (
+        <li key={product.id}>{product.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+At the app root, import the feature through its entry point. `App.jsx` does not need to know how search works or which child renders the list:
+
+```jsx
+// src/App.jsx
+import React from "react";
+import { Catalog } from "./features/catalog";
+
+export default function App() {
+  return (
+    <main>
+      <h1>Online Store</h1>
+      <Catalog />
+    </main>
+  );
+}
+```
+
+## A folder is a convention, not a lock
+
+React doesn't prescribe a folder layout; its [archived structure FAQ](https://legacy.reactjs.org/docs/faq-structure.html) says the same. The `index.js` export makes the intended interface clear, but it doesn't hide `ProductList.jsx`: other code can still import it by path. If you need that boundary enforced, add import-boundary tooling. Before moving or removing a file, search for its imports.
+
+## Keep state with the components that coordinate it
+
+The folder doesn't decide where state lives. React's [Thinking in React](https://react.dev/learn/thinking-in-react) and [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components) guides recommend keeping shared component state in the closest common parent. Here, `Catalog` owns `query` because it renders both the input and the list.
+
+## Share code when another feature needs the same job
+
+Keep a helper in its feature until another one needs the same job. If catalog and orders format currency by the same rules, move that function to shared code. Buttons and modal shells can live in shared UI too, as long as they don't depend on catalog or order rules.
+
+Last checked: October 2026.
