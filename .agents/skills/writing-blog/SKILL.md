@@ -96,7 +96,7 @@ If a fact cannot be verified, delete the sentence or label it clearly as unverif
 
 - Do not write "latest" or "new". Write the version or the date: "As of <Month Year>, Node.js 22 is...".
 - For fast-changing details, link to the official docs page instead of copying the details.
-- Add a "Last checked" line with the month and year at the end, and name the versions you used.
+- Never add a "Last checked," "Last reviewed," "Verified on," or equivalent freshness stamp to public article prose unless the owner explicitly asks for that specific stamp. Keep research dates and exact tested versions in unpublished verification notes; retain the version-truth requirements above.
 
 ## Phase 4: Verify (this is what makes it error-free)
 
