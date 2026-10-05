@@ -67,8 +67,7 @@ export default function Home() {
       title: "Frontend Architecture",
       icon: Website,
       description:
-        "I build web pages with React and Next.js. I want people to find what they need without waiting on the page.",
-      outcome: "You get: pages that are clear and easy to use.",
+        "Navigation and rendering shape how a page feels. I keep expensive data processing from blocking the interface.",
       tools: "TypeScript / Next.js / React / Tailwind CSS",
       articleTitle: "Moving Data Processing Off React's Main Thread",
       articleHref: "/blog/moving-data-processing-off-react-main-thread",
@@ -78,8 +77,7 @@ export default function Home() {
       title: "Backend & Systems",
       icon: Database,
       description:
-        "I check incoming data so people get clear errors when something is wrong.",
-      outcome: "You get: data that is checked before work continues.",
+        "Invalid input should get a useful error. I validate requests before passing their data through the system.",
       tools: "Python / Django / PostgreSQL / Docker",
       articleTitle: "Returning Useful Errors for Invalid JSON in a Node.js API",
       articleHref: "/blog/returning-useful-errors-for-invalid-json",
@@ -89,8 +87,7 @@ export default function Home() {
       title: "AI & LLM Integration",
       icon: Robot,
       description:
-        "I connect AI tools to web apps and check what they return. I want people to get useful answers and know when something went wrong.",
-      outcome: "You get: AI features that check answers before using them.",
+        "I connect language models to app tools, check the responses, and handle calls that fail.",
       tools:
         "LLM Orchestration / Multi-Agent Systems / Tool Execution / Structured Output",
       articleTitle: "Building Reliable LLM Pipelines",
@@ -101,8 +98,7 @@ export default function Home() {
       title: "Real-Time & Data Engineering",
       icon: Broadcast,
       description:
-        "I build screens that update as new data arrives. I move heavy work away from the page so people can keep using it.",
-      outcome: "You get: dashboards that stay smooth while the data moves.",
+        "As new data arrives, the screen updates. Web Workers handle heavier processing so the page stays responsive.",
       tools: "WebSockets / Apache ECharts / Web Workers / react-pdf",
       articleTitle: "REST Polling vs WebSockets for Real-Time Interfaces",
       articleHref: "/blog/why-i-moved-from-rest-to-websockets",
@@ -282,10 +278,6 @@ export default function Home() {
                 </div>
 
                 <div className="pt-4 border-t border-retro-ink space-y-2 mt-auto md:min-h-[144px] lg:min-h-[112px]">
-                  <p className="text-xs sm:text-sm font-medium text-retro-ink">
-                    {item.outcome}
-                  </p>
-
                   <div className="font-mono text-xs text-retro-ink">
                     Works with: {item.tools}
                   </div>

@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-10-03T14:38:59.113Z",
         "reason": "Orchestrator review: existing semantic blockquote border denotes quoted article text, not a card accent; outside Mermaid patch."
+      },
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "files": [
+          "docs/drafts/domain-vs-application-logic/diagram-preview.html"
+        ],
+        "createdAt": "2026-10-05T11:22:10.032Z",
+        "reason": "Agent: Arial is the native font for surrounding text in an unpublished Mermaid test harness; diagram labels preserve the site monospace typography."
       }
     ]
   }
