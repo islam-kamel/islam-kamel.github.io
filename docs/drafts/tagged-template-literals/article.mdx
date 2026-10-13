@@ -1,0 +1,62 @@
+---
+title: "Tagged Template Literals in JavaScript"
+date: "2026-10-13"
+description: "Learn how tagged template literals pass static text and values to a function, then build a small regex tag that safely matches dynamic literal text."
+tags: ["JavaScript", "Regular Expressions", "Web APIs"]
+---
+
+If a string contains both syntax and user-provided text, ordinary interpolation puts them together before your code can tell them apart. A tagged template keeps the literal pieces separate from the values, so a function can decide how to process each one. This article uses that distinction to build a small regular-expression tag that treats substitutions as literal text.
+
+A **tagged template literal** is a template literal preceded by a function name. The tag receives an array of literal string segments followed by each interpolated value, and its return value can be any JavaScript value. That makes a tag useful for parsing, formatting, or building a library-specific representation, not just producing a string. [MDN explains the call shape and return value](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates).
+
+## What does a tag function receive?
+
+For a template with two substitutions, the call is equivalent in shape to `tag(strings, firstValue, secondValue)`. `strings` has one more segment than there are substitutions: one before, between, and after them. The template array is reused when execution reaches the same template literal site again, which lets libraries associate cached work with that site. [The ECMAScript specification defines this template object behavior](https://tc39.es/ecma262/2024/multipage/ecmascript-language-expressions.html#sec-gettemplateobject).
+
+The array also has a `raw` property. `strings[0]` contains the cooked segment, where escapes such as `\n` become a newline; `strings.raw[0]` preserves the source spelling. The distinction matters when the tag is interpreting source syntax rather than ordinary text. `String.raw` uses the raw segments to construct a string, but a custom tag can use them for a different purpose. See [MDN's template literal reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) and [`String.raw`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/raw).
+
+## Use a tag to keep regex syntax separate from literal input
+
+Suppose a pattern needs regex operators around a dynamic product code. If the code is `C++`, putting it directly into a regular expression changes the meaning of the plus signs. The tag below keeps the handwritten pattern as regex syntax and escapes each substitution as literal text with the built-in `RegExp.escape()`.
+
+```js
+function rx(strings, ...values) {
+  const source = strings.raw.reduce((pattern, segment, index) => {
+    if (index === values.length) return pattern + segment;
+
+    if (typeof values[index] !== "string") {
+      throw new TypeError("rx substitutions must be strings");
+    }
+
+    return pattern + segment + RegExp.escape(values[index]);
+  }, "");
+
+  return new RegExp(source, "u");
+}
+
+const code = "C++";
+const pattern = rx`^\d+:\s${code}$`;
+console.log(pattern.test("12: C++"));
+console.log(pattern.test("12: C"));
+```
+
+The output is `true` followed by `false`. The `\d+` and `\s` portions come from the raw template source and remain regex operators. The `code` value is escaped, so its plus signs match plus signs rather than repeating the previous token. `RegExp.escape()` is the standard built-in for escaping text inserted literally into a regular expression; do not replace it with a hand-written character replacement. [MDN documents the method and its behavior](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape).
+
+MDN marks `RegExp.escape()` Baseline 2025, so older runtimes may not provide it. Check the [compatibility data and polyfill links on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape#browser_compatibility) before using this example in an older browser or runtime.
+
+This tag deliberately accepts strings only. That makes its contract clear and avoids silently treating an absent value or an object as intended pattern text. A non-string substitution throws a `TypeError`; callers should convert a value explicitly if that conversion is what they want.
+
+## Where do tagged templates help in real libraries?
+
+Tags work well when a library needs to inspect the template structure instead of receiving one already-concatenated string. Lit's `html` tag turns a template into a structured result that Lit can render and update. Drizzle's `sql` tag handles interpolations by type: table and column objects become escaped SQL identifiers, while scalar values become parameters that the driver binds separately. Read the libraries' [Lit rendering design](https://github.com/lit/lit/blob/main/dev-docs/design/how-lit-html-works.md) and [Drizzle SQL documentation](https://orm.drizzle.team/docs/sql) for their exact APIs.
+
+The tag syntax itself does not sanitize HTML or parameterize SQL. Those properties come from the implementation: Lit controls how values enter a render result, and Drizzle's SQL builder creates parameterized queries. A homemade `html` or `sql` tag has no such protection unless its implementation provides it. Use the library's documented tag when you need that library's safety and rendering behavior.
+
+For text that contains escape-heavy source, `String.raw` keeps backslashes from template text in the resulting string. For example, this preserves a Windows-style path and a placeholder-looking sequence without turning `\t` into a tab:
+
+```js
+const path = String.raw`C:\temp\${name}`;
+console.log(path);
+```
+
+The output is `C:\temp\${name}`. `String.raw` returns text using the raw template segments; it does not escape substitutions for regex, HTML, or SQL. Choose a tag based on the operation you need, and check what it does with both literal segments and inserted values.
