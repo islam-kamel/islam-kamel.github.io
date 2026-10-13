@@ -102,3 +102,28 @@ Owner requested high-level function-call visualization immediately after runnabl
 
 Owner cancelled lifecycle visualization and explicitly requested push. execute_article delegated removal restoring verified pre-viz MDX and cleanup. push_article integrator delegated preflight then scoped commit/push: article, verifier, keywords deletion, only newly requested one-line writing rule in AGENTS.md. Preserve preexisting appended AGENTS rules, board and .agents unstaged. No deployment commands.
 Cancelled visualization removed; parent cmp verifies exact pre-viz snapshot and prior tested layout/verifier. Integrator scoped commit 824e01de4d76fe156f7b2690f19d33b4a603d713 pushed origin/main exit0; postfetch HEAD==origin/main. Four committed files only including one-line AGENTS rule; preexisting AGENTS appendedrules, board and .agents remain local. No visualization in article; no deployment commands executed. Status completed.
+
+## Tagged Template Literals article draft, 2026-10-13
+
+| Item | Owner | Status | Dependencies | Evidence |
+| --- | --- | --- | --- | --- |
+| Read site format, overlap, and research official semantics/search results | COO | completed | None | Nine published articles checked; no topic overlap. MDN, ECMAScript, Lit, Drizzle, and RegExp.escape references reviewed. Web results reviewed; Google browser search was blocked. Node.js v24.14.1. |
+| Create draft, research notes, and verification evidence | tagged_template_draft | completed | Research | Article H1 removed; verifier covers two ordered regex substitutions separated by static text. Worker Prettier and Node checks passed; parent reran both. |
+| Independently inspect diff and validate snippets/gates | COO / tagged_template_review | completed | Draft complete | Reviewer approved delta. Parent reran Node v24.14.1 verifier, targeted Prettier, ESLint, `tsc --noEmit`, `npm run build` (27 static pages, export verification passed), and `git diff --check`. |
+| Close Obsidian plan with outcome and evidence | COO | completed with status-field limitation | Verification | Completion record appended in Obsidian; frontmatter remains `planned` because connector patch API requires an unavailable `Markdown-Patch-Version` header. |
+
+
+## Local commit and untracked cleanup, 2026-10-13
+
+| Item | Owner | Status | Dependencies | Evidence |
+| --- | --- | --- | --- | --- |
+| Commit the tagged-template draft locally | local_commit_cleanup / COO verification | completed | Owner approved local commit, no push | Commit `b9ecba21e6f3039d5f604e9a23fa332e47cf20ea`; independent `git show --name-status HEAD` confirms exactly the four draft files; branch is ahead of origin by one. |
+| Inspect untracked items and remove only unnecessary artifacts | local_commit_cleanup | completed | Draft commit | Kept three pre-existing draft directories and `.impeccable/live/`, whose config references an app injection and may be active. No untracked item was confirmed safe to delete. |
+
+
+## Tagged template literals article publication, 2026-10-13
+
+| Item | Owner | Status | Dependencies | Evidence |
+| --- | --- | --- | --- | --- |
+| Promote approved article into published blog source | tagged_template_draft | completed | Owner approval received | Added the approved, byte-identical article at `content/blog/tagged-template-literals.mdx`; stable slug/date/frontmatter. No other site source changed. |
+| Verify article route, head, JSON-LD, OG image, and sitemap | COO / tagged_template_review | completed | Promotion | Parent reran example verifier, Prettier, ESLint, `tsc --noEmit`, `npm run build` (29 static pages, export invariants passed); export asserts route-specific head/JSON-LD/robots/sitemap lastmod/OG image 1200x630; 1440x1000 and 390x844 browser snapshots showed one H1 and no page horizontal overflow; independent review approved. |

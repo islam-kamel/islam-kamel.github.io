@@ -17,6 +17,7 @@ Past articles had small errors: a name that did not match the real output, an ed
 4. Never write "latest", a version, a default value, or a status name without checking it today.
 5. Never copy text from other sites. Read, understand, and write fresh in your own words.
 6. Do not publish a new article without the user's OK; keep new work as a draft. When maintaining an already-published article, keep it published unless the user explicitly asks to change its status.
+7. People-first Google SEO with real Information Gain: optimize for how real engineers search on Google (clear search intent, target problem queries, fast time-to-value). Never write for search engines at the expense of human readers. Strictly no keyword stuffing, no AI filler, and no robotic headings. Every article must provide original value (Information Gain) that competing search results lack.
 
 ## Language
 
@@ -27,18 +28,31 @@ Past articles had small errors: a name that did not match the real output, an ed
 ## Phase 0: Understand what is needed
 
 1. Find the repo's article format. Open two existing articles and read how they are built: file location, frontmatter, date handling, components, how tags and meta are generated.
-2. Check the existing articles for overlap. Do not write a topic that already exists, and do not create a page that would compete with another page for the same search.
+2. Check the existing articles for overlap. Do not write a topic that already exists, and do not create a page that would compete with another page for the same search query (prevent keyword cannibalization).
 3. If something important is missing, ask. Questions are a numbered list, max 5. Each has: السؤال, ليه محتاج ده, مثال للإجابة, and options (أ / ب / ج) when it is a choice. Read the code and articles first so you do not ask what you can find yourself.
 4. For an existing article, read the whole article and its code before editing. Treat it as maintenance: preserve its published status, slug/URL/canonical/publish date/title/description/Open Graph metadata/layout/styles, and other articles unless the user explicitly unlocks a specific item. Ask before optional additions and skip them if the user does not answer.
 5. If prose claims the author routinely does something, confirm it with the user; use neutral wording if they do not answer.
 6. If the user requests Jev for a relevant structured judgment, follow the repository's Jev instructions.
 
-## Phase 1: Choose the angle
+## Phase 1: Choose the angle and map search intent
 
 - One article = one problem the reader has, in the reader's own words ("my PDF looks different on every machine").
 - Write the problem in one sentence. If you cannot, the topic is too wide.
 - Pick a topic that is useful to search for and does not need private details about the author's past work.
 - Decide the reader level and say it in the article's first lines through the way you explain terms.
+
+### Map search intent and queries
+
+1. **Classify the search intent:**
+   - **Troubleshooting / Error fix:** The searcher hits an exact error or broken state and needs immediate relief.
+   - **How-To / Pattern:** The searcher wants to implement a specific architecture or feature with clean, minimal code.
+   - **Decision / Comparison:** The searcher is evaluating trade-offs between two tools, specs, or designs.
+2. **Formulate the search queries:**
+   - **Primary query (focus phrase):** The natural 3-6 word query a developer types into Google (e.g., `invalid json body nodejs error handling`, `deterministic pdf generation react-pdf`).
+   - **Secondary queries and long-tail variants:** 2-4 related queries (exact error strings such as `SyntaxError: Unexpected token`, CLI flags, specific library methods, RFC numbers).
+   - **Discover real developer search patterns:** Use Google autocomplete, "People Also Ask" (PAA), Google Trends, and GitHub issues / Stack Overflow phrasing.
+3. **Define the Information Gain:**
+   - Name the concrete fact, reproduction, benchmark, edge case, or recent standard update this article provides that currently ranking search results omit. If Google can find the exact same answer on the official docs or the top 3 results, it has no reason to rank this article.
 
 ## Phase 2: Research (required)
 
@@ -59,6 +73,8 @@ Get today's real date from the machine (`date`) and use it for every freshness d
 4. Every non-trivial claim needs one primary source. A claim that matters a lot (security, data loss, performance numbers) needs two independent sources.
 5. When sources disagree, run a small experiment or say clearly that they disagree. Do not pick silently.
 6. Keep a research notes file next to the draft with a table: claim | source URL | date read | version. This is for the final report. Do not publish it.
+7. Inspect the SERP landscape: Search the primary query on Google. Review the top 3-5 ranking results. Note what they explain well, what they omit (e.g. unhandled edge cases, lack of memory bounds, outdated syntax), and confirm the exact gap where our article wins on E-E-A-T and technical depth.
+8. Mine searcher sub-questions: Gather common sub-problems and questions from Google suggestions, "People Also Ask", and issue trackers to structure your section headings.
 
 If a fact cannot be verified, delete the sentence or label it clearly as unverified. Never guess.
 
@@ -98,6 +114,30 @@ If a fact cannot be verified, delete the sentence or label it clearly as unverif
 - For fast-changing details, link to the official docs page instead of copying the details.
 - Never add a "Last checked," "Last reviewed," "Verified on," or equivalent freshness stamp to public article prose unless the owner explicitly asks for that specific stamp. Keep research dates and exact tested versions in unpublished verification notes; retain the version-truth requirements above.
 
+### On-page SEO and Google formatting
+
+- **Fast time-to-value (inverted pyramid):** Deliver the direct answer, fix, or architecture in the first 1-2 paragraphs. Never open with generic definitions ("JSON is widely used...") or preamble. Fast value reduces bounce rate and signals immediate relevance to Google.
+- **Search-aligned heading hierarchy:**
+  - Exactly one `<h1>` containing the primary query and core benefit.
+  - Phrase `<h2>` and `<h3>` headings to mirror search sub-queries and developer questions (e.g. "Checking the Content-Type header", "Limiting memory without dropping the connection"), never vague labels ("Implementation", "Details"). Never skip heading levels.
+- **Featured snippet and direct answer optimization:**
+  - When an `<h2>` or `<h3>` answers a specific question or problem, provide a concise, direct 40-60 word explanation or clean code block immediately after the heading before expanding.
+  - Use structured formats that Google extracts: numbered lists for sequential steps, bullet lists for conditions, and markdown tables for status codes or comparison metrics.
+- **Natural semantic keyword placement:**
+  - Place the primary query naturally in: title, URL slug, opening paragraph, at least one `<h2>`, and meta description.
+  - Weave in secondary keywords, exact error strings, and technical terms across the body copy.
+  - Strict anti-stuffing rule: if any sentence feels forced or awkward when read aloud, rewrite it immediately.
+- **Internal linking and topic clusters:**
+  - Link to 1-3 relevant existing articles on the site where applicable.
+  - Use descriptive, keyword-rich anchor text (e.g. `[deterministic PDF rendering](/blog/making-react-pdf-output-deterministic)`) instead of generic anchors ("here", "link", "read more"). This builds topical authority.
+- **Media and diagram optimization:**
+  - Provide descriptive, informative `alt` text explaining what the visual proves, naturally including relevant technical concepts.
+- **Frontmatter metadata for search:**
+  - `title`: Keep under 60 characters where practical. Place the core search topic near the beginning. Compelling CTR without clickbait.
+  - `description`: 140-160 characters. Clear summary of the solution, naturally containing the target query, with a compelling reason for a developer to click.
+  - `slug`: Short, lowercase, hyphenated, containing the primary search keywords.
+  - `tags`: 3-5 focused, relevant domain tags.
+
 ## Phase 4: Verify (this is what makes it error-free)
 
 Do all of these. Write down what you found.
@@ -115,11 +155,19 @@ Do all of these. Write down what you found.
 11. **Prose-only edits.** Snapshot protected frontmatter, metadata, and fenced code/commands; compare them exactly after editing and review the prose-only diff. If a specific field is explicitly unlocked, verify the remaining protected fields stayed unchanged.
 12. **Diagrams.** Add one when requested or when it clarifies real behavior. Match actual functions, repeated events, and early exits; inspect rendered labels at desktop and mobile sizes.
 13. **Runtime versions.** Get the exact interpreter, compiler, runtime, or library version with its version command. Add a “Tested with …” line only after verifying the final article code in its appropriate runtime environment with that exact version.
+14. **SEO and search intent audit.**
+    - Fast time-to-value: Core answer visible in the first 1-2 paragraphs without scrolling through filler.
+    - SERP snippet validation: Title under 60 characters, meta description 140-160 characters with an appealing search hook.
+    - Heading query mapping: Headings reflect search sub-queries and follow strict hierarchy (H1 -> H2 -> H3) with no skipped levels.
+    - Rich snippet readiness: Steps numbered, comparisons tabular, direct answers concise (40-60 words).
+    - Information Gain: Article contains verified facts, edge cases, or tests absent in top search results.
+    - Anti-stuffing verification: Text reads completely naturally to an experienced engineer, with zero forced repetition.
+    - Internal link anchors: Links use descriptive topical anchor text instead of generic words.
 
 ## Phase 5: Wire it into the site
 
 - Use the same file format, frontmatter, and date mechanism as existing articles. Do not make up a publish date: tell the user what the mechanism gave.
-- For a new article, use a unique title and plain, unique meta description (about 150 characters, no keyword stuffing), set its canonical to itself, omit `keywords`, and add it to the sitemap and blog list. Link it from a related card if there is one.
+- For a new article, use a unique title and plain, unique meta description (about 150 characters, no keyword stuffing), set its canonical to itself, omit `keywords`, ensure `BlogPosting`/`Article` JSON-LD structured data is present, and add it to the sitemap and blog list. Link it from a related card if there is one.
 - For a new article, save as a draft. If the blog does not support drafts, say so and keep it out of production. For maintenance, preserve an existing published article's status.
 - For an existing article, change protected metadata only when explicitly authorized. After any page edit, compare the built page head and confirm every protected, non-authorized title, description, canonical, Open Graph, and Twitter value stayed unchanged.
 - Run lint, type-check, and build. Nothing else on the site should change.
@@ -134,9 +182,18 @@ Do all of these. Write down what you found.
 6. أي حاجة ما اتأكدتش منها أو اتجربت جزئياً.
 7. "معلومات محتاجها منك": أسئلة مرقمة بسيطة عن تجارب حقيقية ممكن تخلي المقال شخصي أكتر.
 8. تاريخ مقترح لمراجعة المقال تاني (غالباً بعد 6 شهور).
+9. تفاصيل الـ SEO: الكلمة المفتاحية الأساسية (Primary Query)، الكلمات الفرعية (Secondary Queries)، نوع نية البحث (Search Intent)، والـ Information Gain المضاف مقارنة بنتائج بحث جوجل الحالية.
 
 ## Quick checklist before saying "done"
 
+- [ ] Search intent identified and answered in the first two paragraphs (fast time-to-value)
+- [ ] Primary and secondary search queries mapped and integrated naturally (no stuffing)
+- [ ] Information Gain verified against existing top search results
+- [ ] Headings (H2/H3) reflect search sub-queries and maintain strict hierarchy
+- [ ] Direct answers and steps formatted for rich snippets (lists/tables/concise definitions)
+- [ ] Title under ~60 chars, meta description 140-160 chars with compelling CTR hook
+- [ ] Internal links use descriptive keyword anchor text
+- [ ] Clean, keyword-focused URL slug and self-referencing canonical URL
 - [ ] Structure fits the material; no automatic intro, numbered recipe, or conclusion was added
 - [ ] No generic filler or repeated stock phrases remain
 - [ ] Personal stories are supplied or verified; examples have honest provenance and are runnable

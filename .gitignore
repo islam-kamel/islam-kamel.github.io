@@ -37,3 +37,7 @@ next-env.d.ts
 
 # ide / agent
 .claude/
+
+# User Config
+docs/drafts/
+.impeccable/live/config.json
