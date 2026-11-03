@@ -27,7 +27,7 @@ export function Footer() {
               aria-label="GitHub"
               className="text-retro-muted-light hover:text-retro-pink transition-colors"
               href={siteConfig.links.github}
-              rel="noopener noreferrer"
+              rel="noopener noreferrer me"
               target="_blank"
             >
               <GithubIcon size={18} />
@@ -36,7 +36,7 @@ export function Footer() {
               aria-label="LinkedIn"
               className="text-retro-muted-light hover:text-linkedin transition-colors"
               href={siteConfig.links.linkedin}
-              rel="noopener noreferrer"
+              rel="noopener noreferrer me"
               target="_blank"
             >
               <LinkedinIcon size={18} />

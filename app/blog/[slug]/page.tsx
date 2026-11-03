@@ -81,11 +81,13 @@ export default async function BlogPostPage({ params }: Props) {
       "@type": "Person",
       name: "Islam Kamel",
       url: siteConfig.url,
+      id: `${siteConfig.url}#person`,
     },
     publisher: {
       "@type": "Person",
       name: "Islam Kamel",
       url: siteConfig.url,
+      id: `${siteConfig.url}#person`,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
