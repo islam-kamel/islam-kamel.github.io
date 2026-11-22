@@ -1,30 +1,42 @@
-import {
-  Space_Grotesk as FontSans,
-  Space_Mono as FontMono,
-  Sacramento as FontLogo,
-} from "next/font/google";
+import localFont from "next/font/local";
 
-export const fontTitle = FontSans({
-  subsets: ["latin"],
+export const fontTitle = localFont({
+  src: "../public/fonts/space-grotesk/SpaceGrotesk-Variable.ttf",
+  weight: "300 700",
+  style: "normal",
   display: "swap",
   variable: "--font-title",
 });
 
-export const fontSans = FontSans({
-  subsets: ["latin"],
+export const fontSans = localFont({
+  src: "../public/fonts/space-grotesk/SpaceGrotesk-Variable.ttf",
+  weight: "300 700",
+  style: "normal",
   display: "swap",
   variable: "--font-sans",
 });
 
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
+export const fontMono = localFont({
+  src: [
+    {
+      path: "../public/fonts/space-mono/SpaceMono-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/space-mono/SpaceMono-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   display: "swap",
   variable: "--font-mono",
 });
 
-export const fontLogo = FontLogo({
+export const fontLogo = localFont({
+  src: "../public/fonts/sacramento/Sacramento-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
+  style: "normal",
+  display: "swap",
   variable: "--font-logo",
 });
