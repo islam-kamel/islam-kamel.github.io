@@ -243,6 +243,57 @@ assert.equal(
   "Blog index lastmod must equal the maximum lastmod across all post entries"
 );
 
+// 8b. Draft exclusion from the export
+const contentBlogDir = path.resolve(process.cwd(), "content/blog");
+const draftsDir = path.join(contentBlogDir, "drafts");
+
+const draftSlugs = fs.existsSync(draftsDir)
+  ? fs
+      .readdirSync(draftsDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .filter((slug) =>
+        fs.existsSync(path.join(draftsDir, slug, "article.mdx"))
+      )
+  : [];
+
+for (const slug of draftSlugs) {
+  assert(
+    !fs.existsSync(path.resolve(process.cwd(), `out/blog/${slug}.html`)),
+    `Draft "${slug}" must not be exported to out/blog/${slug}.html`
+  );
+  assert(
+    !fs.existsSync(path.resolve(process.cwd(), `out/blog/${slug}/index.html`)),
+    `Draft "${slug}" must not be exported to out/blog/${slug}/index.html`
+  );
+  assert(
+    !sitemapEntries.some((e) => e.loc.endsWith(`/blog/${slug}`)),
+    `Draft "${slug}" must not appear in the sitemap`
+  );
+  assert(
+    !blog.includes(`href="/blog/${slug}"`),
+    `Draft "${slug}" must not be linked from the blog index`
+  );
+}
+
+// 8c. Every published post appears in the sitemap
+const publishedSlugs = fs
+  .readdirSync(contentBlogDir, { withFileTypes: true })
+  .filter((entry) => entry.isFile() && entry.name.endsWith(".mdx"))
+  .map((entry) => entry.name.replace(/\.mdx$/, ""));
+
+assert(
+  publishedSlugs.length > 0,
+  "Expected at least one published post in content/blog"
+);
+
+for (const slug of publishedSlugs) {
+  assert(
+    sitemapEntries.some((e) => e.loc.endsWith(`/blog/${slug}`)),
+    `Published post "${slug}" must appear in the sitemap`
+  );
+}
+
 // 9. Robots sitemap reference
 assert(
   robots.includes("Sitemap: https://islamkamel.com/sitemap.xml"),

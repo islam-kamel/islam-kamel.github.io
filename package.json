@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "node scripts/check-theme-tokens.mjs && next build && node scripts/verify-export.mjs",
+    "build": "node scripts/check-theme-tokens.mjs && node scripts/check-drafts.mjs && next build && node scripts/verify-export.mjs",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
+    "check:drafts": "node scripts/check-drafts.mjs",
+    "test:drafts": "node --test scripts/check-drafts.test.mjs",
     "generate:favicons": "node scripts/generate-favicons.mjs",
     "test:export": "node scripts/verify-export.mjs"
   },

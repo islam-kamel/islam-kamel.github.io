@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diagram preview: A Software Factory Pipeline Using AI Agents</title>
+  </head>
+  <body>
+    <main>
+      <h1>Mermaid preview for the draft article</h1>
+      <p>
+        This page renders the mermaid block from article.mdx with the same
+        Mermaid 11 CDN build and the same theme tokens the live site uses, so
+        what you see here matches the published diagram.
+      </p>
+      <p>
+        Serve the repository root over HTTP, for example
+        <code>npx serve .</code> from the repository root, then open
+        <code
+          >/content/blog/drafts/software-factory-pipeline-ai-agents/diagram-preview.html</code
+        >. Check the diagram at 1440x900 and at 390x844. Labels must stay
+        readable with no overlap, and on the narrow width the diagram scrolls
+        horizontally inside its container.
+      </p>
+      <p id="error"></p>
+      <div class="article-body">
+        <div class="mermaid-block">
+          <pre class="mermaid" id="diagram"></pre>
+        </div>
+      </div>
+    </main>
+    <style>
+      body {
+        margin: 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          monospace;
+      }
+      main {
+        max-width: 768px;
+        margin: 0 auto;
+        padding: 32px 16px;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      .article-body {
+        max-width: 768px;
+        margin: 0 auto;
+      }
+      .mermaid-block {
+        margin: 32px 0;
+        overflow-x: auto;
+      }
+    </style>
+    <script type="module">
+      import { themeColors } from "../../../../styles/tokens.mjs";
+
+      document.body.style.background = themeColors.retro.bg;
+      document.body.style.color = themeColors.retro.ink;
+
+      const response = await fetch("./article.mdx");
+      const article = await response.text();
+      const match = article.match(/```mermaid\n([\s\S]*?)```/);
+      const errorBox = document.getElementById("error");
+
+      if (!match) {
+        errorBox.textContent = "No mermaid block found in article.mdx.";
+      } else {
+        const source = match[1].trim();
+        document.getElementById("diagram").textContent = source;
+
+        const importRemote = new Function("url", "return import(url);");
+        const { default: mermaid } = await importRemote(
+          "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+        );
+
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: "base",
+          htmlLabels: true,
+          themeCSS:
+            ".nodeLabel p, .edgeLabel p { margin: 0; line-height: 1.5; }",
+          themeVariables: {
+            darkMode: false,
+            background: themeColors.retro.bg,
+            mainBkg: themeColors.retro.bg,
+            primaryColor: themeColors.retro.paper,
+            primaryTextColor: themeColors.retro.ink,
+            primaryBorderColor: themeColors.retro.ink,
+            nodeBorder: themeColors.retro.ink,
+            nodeTextColor: themeColors.retro.ink,
+            clusterBkg: themeColors.retro.bg,
+            clusterBorder: themeColors.retro.ink,
+            titleColor: themeColors.retro.ink,
+            lineColor: themeColors.retro.ink,
+            defaultLinkColor: themeColors.retro.ink,
+            edgeLabelBackground: themeColors.retro.bg,
+            labelBackground: themeColors.retro.bg,
+            labelTextColor: themeColors.retro.ink,
+            textColor: themeColors.retro.ink,
+            secondaryColor: themeColors.retro.pink,
+            secondaryBorderColor: themeColors.retro.ink,
+            secondaryTextColor: themeColors.retro.ink,
+            tertiaryColor: themeColors.retro.sage,
+            tertiaryBorderColor: themeColors.retro.ink,
+            tertiaryTextColor: themeColors.retro.ink,
+          },
+          flowchart: {
+            curve: "basis",
+            padding: 15,
+          },
+        });
+
+        try {
+          const { svg } = await mermaid.render("preview-diagram", source);
+          document.getElementById("diagram").innerHTML = svg;
+        } catch (err) {
+          errorBox.textContent = `Mermaid failed to render the diagram: ${err.message}`;
+        }
+      }
+    </script>
+  </body>
+</html>
