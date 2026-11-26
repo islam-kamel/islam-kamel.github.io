@@ -300,6 +300,21 @@ assert(
   "robots.txt must reference sitemap.xml"
 );
 
+// 9b. Development-only review UI must not ship in the production export
+assert(
+  !fs.existsSync(path.resolve(process.cwd(), "out/blog/drafts.html")) &&
+    !fs.existsSync(path.resolve(process.cwd(), "out/blog/drafts/index.html")),
+  "No page may be exported at /blog/drafts, it must stay a 404"
+);
+assert(
+  !blog.includes('data-blog-tab="drafts"'),
+  "Production export must not include the development-only Drafts tab"
+);
+assert(
+  !fs.existsSync(path.resolve(process.cwd(), "out/api/drafts/publish")),
+  "Development-only draft publish endpoint must not be exported"
+);
+
 // 10. Tag Manager noscript fallback and executable script validation
 const pagesWithNoscript = [
   { name: "homepage", html: home },
